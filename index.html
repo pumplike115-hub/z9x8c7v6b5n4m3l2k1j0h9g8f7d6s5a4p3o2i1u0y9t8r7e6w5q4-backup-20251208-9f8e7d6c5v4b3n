@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #050505;
+            --bg-secondary: #0f0f0f;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #e8e8e8;
+            --text-secondary: #707070;
+            --card-bg: #111111;
+            --shadow: rgba(0, 0, 0, 0.6);
+            --shadow-hover: rgba(138, 43, 226, 0.3);
+            --border: #1f1f1f;
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.4);
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at top left, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at center, rgba(124, 58, 237, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            background: linear-gradient(to bottom, var(--bg-primary) 80%, transparent);
+            padding: 20px 0 40px;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #e8e8e8 0%, #a855f7 50%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 30px var(--accent-glow));
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: rgba(15, 15, 15, 0.8);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow), 0 0 30px var(--accent-glow);
+            background: var(--bg-tertiary);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Podium Section */
+        .podium-section {
+            margin-bottom: 50px;
+        }
+
+        .podium-title {
+            font-family: 'Space Grotesk', sans-serif;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.3);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 15px;
+            padding: 20px 0;
+        }
+
+        .podium-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .podium-card {
+            position: relative;
+            aspect-ratio: 380 / 540;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--card-bg);
+            transition: all 0.4s ease;
+        }
+
+        .podium-card img {
+            object-position: right top;
+        }
+
+        .podium-item:nth-child(1) .podium-card { width: 160px; }
+        .podium-item:nth-child(2) .podium-card { width: 200px; }
+        .podium-item:nth-child(3) .podium-card { width: 140px; }
+
+        .podium-item:nth-child(2) .podium-card {
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), 0 10px 40px var(--shadow);
+        }
+
+        .podium-item:nth-child(1) .podium-card {
+            border: 3px solid var(--silver);
+            box-shadow: 0 0 30px rgba(192, 192, 192, 0.3), 0 10px 30px var(--shadow);
+        }
+
+        .podium-item:nth-child(3) .podium-card {
+            border: 3px solid var(--bronze);
+            box-shadow: 0 0 25px rgba(205, 127, 50, 0.3), 0 10px 25px var(--shadow);
+        }
+
+        .podium-card:hover {
+            transform: scale(1.08) translateY(-10px);
+        }
+
+        .podium-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .podium-card .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px;
+        }
+
+        .podium-card:hover .card-overlay {
+            opacity: 1;
+        }
+
+        .rank-badge {
+            font-family: 'Space Grotesk', sans-serif;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .podium-item:nth-child(2) .rank-badge {
+            background: linear-gradient(135deg, #ffd700, #ffec8b);
+            color: #1a1a1a;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            width: 60px;
+            height: 60px;
+            font-size: 1.8rem;
+        }
+
+        .podium-item:nth-child(1) .rank-badge {
+            background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+            color: #1a1a1a;
+            box-shadow: 0 0 20px rgba(192, 192, 192, 0.5);
+        }
+
+        .podium-item:nth-child(3) .rank-badge {
+            background: linear-gradient(135deg, #cd7f32, #daa06d);
+            color: #1a1a1a;
+            box-shadow: 0 0 20px rgba(205, 127, 50, 0.5);
+        }
+
+        .podium-stand {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .podium-code {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .podium-item:nth-child(2) .podium-code { color: var(--gold); font-size: 1.5rem; }
+        .podium-item:nth-child(1) .podium-code { color: var(--silver); }
+        .podium-item:nth-child(3) .podium-code { color: var(--bronze); }
+
+        .podium-actress {
+            font-size: 1rem;
+            color: rgba(168, 139, 250, 0.7);
+        }
+
+        .section-divider {
+            font-family: 'Space Grotesk', sans-serif;
+            text-align: center;
+            margin: 40px 0 30px;
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .gallery { gap: 20px; }
+            .podium-item:nth-child(1) .podium-card { width: 180px; }
+            .podium-item:nth-child(2) .podium-card { width: 220px; }
+            .podium-item:nth-child(3) .podium-card { width: 160px; }
+        }
+
+        @media (min-width: 1200px) {
+            .gallery { gap: 24px; }
+            .podium-item:nth-child(1) .podium-card { width: 200px; }
+            .podium-item:nth-child(2) .podium-card { width: 260px; }
+            .podium-item:nth-child(3) .podium-card { width: 180px; }
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 380 / 540;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 0 1px rgba(139, 92, 246, 0.1);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 40%, var(--accent-glow) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .card:hover, .card:active {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.5), 0 0 40px rgba(139, 92, 246, 0.3);
+            border-color: var(--accent);
+        }
+
+        .card:hover::before, .card:active::before {
+            opacity: 0.3;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: right top;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover img, .card:active img {
+            transform: scale(1.1);
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.2) 70%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            z-index: 2;
+        }
+
+        .card:hover .card-overlay, .card:active .card-overlay {
+            opacity: 1;
+        }
+
+        .card-code {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 0 20px var(--accent-glow);
+            letter-spacing: 2px;
+        }
+
+        .card-actress {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(168, 139, 250, 0.9);
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+        }
+
+        .card-link {
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-top: 4px;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        .card-link:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        /* Code Only Section */
+        .code-only-section {
+            margin-top: 50px;
+        }
+
+        .code-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .code-item {
+            font-family: 'Space Grotesk', sans-serif;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+        }
+
+        .code-item:hover {
+            background: rgba(139, 92, 246, 0.25);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(10, 10, 10, 0.95);
+            color: #fff;
+            padding: 24px 48px;
+            border-radius: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--accent);
+            box-shadow: 0 0 60px var(--accent-glow);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 12px; }
+            .header { padding: 12px 0 30px; }
+            .gallery { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .card-code { font-size: 1rem; }
+            .card-actress { font-size: 0.75rem; }
+            .logo { font-size: 1.4rem; }
+            .podium { gap: 8px; }
+            .podium-item:nth-child(1) .podium-card { width: 100px; }
+            .podium-item:nth-child(2) .podium-card { width: 120px; }
+            .podium-item:nth-child(3) .podium-card { width: 90px; }
+            .rank-badge { width: 35px; height: 35px; font-size: 1rem; }
+            .podium-item:nth-child(2) .rank-badge { width: 45px; height: 45px; font-size: 1.2rem; }
+            .podium-code { font-size: 0.85rem; }
+            .podium-actress { font-size: 0.7rem; }
+            .podium-title { font-size: 1.2rem; }
+            .code-item { padding: 10px 14px; font-size: 0.85rem; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-top">
+                <div class="logo">🌙 GALLERY</div>
+            </div>
+            <div class="search-container">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" class="search-input" id="search" placeholder="ค้นหารหัสหรือชื่อนักแสดง..." oninput="filterCards()">
+            </div>
+        </header>
+
+        <section class="podium-section" id="podium-section">
+            <div class="podium-title">🏆 TOP 3 RANKING 🏆</div>
+            <div class="podium" id="podium"></div>
+        </section>
+
+        <div class="section-divider" id="gallery-divider">— ALL ITEMS —</div>
+        <div class="gallery" id="gallery"></div>
+
+        <section class="code-only-section" id="code-only-section">
+            <div class="section-divider">— CODE ONLY —</div>
+            <div class="code-list" id="code-list"></div>
+        </section>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script src="data.js"></script>
+    <script>
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playTing() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = 1200;
+            oscillator.type = 'sine';
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        async function copyCode(code) {
+            try {
+                await navigator.clipboard.writeText(code);
+                playTing();
+                showToast(`Copied: ${code}`);
+            } catch (err) {
+                showToast('Copy failed');
+            }
+        }
+
+        function openLink(url) {
+            if (url) window.open(url, '_blank');
+        }
+
+        function createPodiumItem(item, rank) {
+            const div = document.createElement('div');
+            div.className = 'podium-item';
+            div.innerHTML = `
+                <div class="podium-card" onclick="copyCode('${item.code}')">
+                    <img src="${item.cover}" alt="${item.code}" loading="lazy">
+                    <div class="card-overlay">
+                        <div class="card-code">${item.code}</div>
+                        <div class="card-actress">${item.actress || ''}</div>
+                        ${item.link ? `<a class="card-link" href="${item.link}" target="_blank" onclick="event.stopPropagation()">🔗 Link</a>` : ''}
+                    </div>
+                </div>
+                <div class="rank-badge">${rank}</div>
+                <div class="podium-stand">
+                    <div class="podium-code">${item.code}</div>
+                    <div class="podium-actress">${item.actress || ''}</div>
+                </div>
+            `;
+            return div;
+        }
+
+        function renderPodium() {
+            const podium = document.getElementById('podium');
+            const top3 = data.filter(d => d.rank).sort((a, b) => a.rank - b.rank);
+            // Order: 2nd, 1st, 3rd (podium style)
+            const order = [top3[1], top3[0], top3[2]];
+            order.forEach((item) => {
+                if (item) podium.appendChild(createPodiumItem(item, item.rank));
+            });
+        }
+
+        function createCard(item) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <img src="${item.cover}" alt="${item.code}" loading="lazy">
+                <div class="card-overlay">
+                    <div class="card-code">${item.code}</div>
+                    <div class="card-actress">${item.actress || ''}</div>
+                    ${item.link ? `<a class="card-link" href="${item.link}" target="_blank" onclick="event.stopPropagation()">🔗 Link</a>` : ''}
+                </div>
+            `;
+            card.addEventListener('click', () => copyCode(item.code));
+            return card;
+        }
+
+        function createCodeItem(item) {
+            const div = document.createElement('div');
+            div.className = 'code-item';
+            div.textContent = item.code;
+            div.addEventListener('click', () => copyCode(item.code));
+            return div;
+        }
+
+        function renderGallery(items) {
+            const gallery = document.getElementById('gallery');
+            const codeList = document.getElementById('code-list');
+            gallery.innerHTML = '';
+            codeList.innerHTML = '';
+
+            // แยกข้อมูล: มีรูป vs ไม่มีรูป
+            const withCover = items.filter(d => !d.rank && d.cover);
+            const codeOnly = items.filter(d => !d.rank && !d.cover);
+
+            if (withCover.length === 0 && codeOnly.length === 0) {
+                gallery.innerHTML = '<div class="no-results">ไม่พบผลลัพธ์</div>';
+                return;
+            }
+
+            withCover.forEach(item => gallery.appendChild(createCard(item)));
+            codeOnly.forEach(item => codeList.appendChild(createCodeItem(item)));
+
+            // ซ่อน/แสดง section ตามข้อมูล
+            document.getElementById('code-only-section').style.display = codeOnly.length > 0 ? 'block' : 'none';
+        }
+
+        function filterCards() {
+            const query = document.getElementById('search').value.toLowerCase().trim();
+            const podiumSection = document.getElementById('podium-section');
+            const galleryDivider = document.getElementById('gallery-divider');
+            const codeOnlySection = document.getElementById('code-only-section');
+            
+            if (query) {
+                podiumSection.style.display = 'none';
+                galleryDivider.style.display = 'none';
+                
+                const filtered = data.filter(item =>
+                    item.code.toLowerCase().includes(query) ||
+                    (item.actress && item.actress.toLowerCase().includes(query))
+                );
+                
+                const gallery = document.getElementById('gallery');
+                const codeList = document.getElementById('code-list');
+                gallery.innerHTML = '';
+                codeList.innerHTML = '';
+                
+                if (filtered.length === 0) {
+                    gallery.innerHTML = '<div class="no-results">ไม่พบผลลัพธ์</div>';
+                    codeOnlySection.style.display = 'none';
+                } else {
+                    const withCover = filtered.filter(d => d.cover);
+                    const codeOnly = filtered.filter(d => !d.cover);
+                    
+                    withCover.forEach(item => gallery.appendChild(createCard(item)));
+                    codeOnly.forEach(item => codeList.appendChild(createCodeItem(item)));
+                    
+                    codeOnlySection.style.display = codeOnly.length > 0 ? 'block' : 'none';
+                }
+            } else {
+                podiumSection.style.display = 'block';
+                galleryDivider.style.display = 'block';
+                renderGallery(data);
+            }
+        }
+
+        renderPodium();
+        renderGallery(data);
+    </script>
+</body>
+</html>
