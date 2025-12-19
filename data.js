@@ -9,7 +9,7 @@
 // ตัวอย่าง:
 // { code: "ABC-123", actress: "ชื่อนักแสดง", cover: "https://...", link: "https://...", rank: 1 },
 // { code: "XYZ-999", actress: "ชื่อนักแสดง", cover: "https://..." },
-// { code: "DEF-456" },  // มีแค่โค๊ด ไม่มีรูป ไม่มีนักแสดง
+// { code: "DEF-456" }, // มีแค่โค๊ด ไม่มีรูป ไม่มีนักแสดง
 
 const data = [
     // ===== TOP 3 RANKING =====
@@ -70,8 +70,3 @@ const data = [
     { code: "SKMJ-652", actress: "นักแสดงหลายคน", cover: "", link: "" },
     { code: "CWPBD-112", actress: "Mitsuki Akai", cover: "", link: "" },
 ];
-
-
-
-
-
