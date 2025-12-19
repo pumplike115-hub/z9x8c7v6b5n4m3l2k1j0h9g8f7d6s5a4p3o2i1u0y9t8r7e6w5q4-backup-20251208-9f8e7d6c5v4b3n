@@ -465,22 +465,51 @@
         }
 
         @media (max-width: 480px) {
-            .container { padding: 12px; }
-            .header { padding: 12px 0 30px; }
-            .gallery { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .card-code { font-size: 1rem; }
-            .card-actress { font-size: 0.75rem; }
-            .logo { font-size: 1.4rem; }
-            .podium { gap: 8px; }
-            .podium-item:nth-child(1) .podium-card { width: 130px; }
-            .podium-item:nth-child(2) .podium-card { width: 160px; }
-            .podium-item:nth-child(3) .podium-card { width: 115px; }
-            .rank-badge { width: 35px; height: 35px; font-size: 1rem; }
-            .podium-item:nth-child(2) .rank-badge { width: 45px; height: 45px; font-size: 1.2rem; }
-            .podium-code { font-size: 0.85rem; }
-            .podium-actress { font-size: 0.7rem; }
-            .podium-title { font-size: 1.2rem; }
-            .code-item { padding: 10px 14px; font-size: 0.85rem; }
+            .container { padding: 10px; }
+            .header { padding: 10px 0 20px; gap: 12px; }
+            .gallery { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .card { border-radius: 10px; }
+            .card-overlay { padding: 12px; }
+            .card-code { font-size: 0.85rem; letter-spacing: 1px; }
+            .card-actress { font-size: 0.7rem; }
+            .logo { font-size: 1.3rem; letter-spacing: 2px; }
+            .search-input { padding: 12px 16px 12px 42px; font-size: 0.9rem; }
+            .search-icon { left: 14px; width: 18px; height: 18px; }
+            .podium { gap: 6px; padding: 10px 0; }
+            .podium-section { margin-bottom: 30px; }
+            .podium-item:nth-child(1) .podium-card { width: 28vw; max-width: 110px; border-radius: 12px; }
+            .podium-item:nth-child(2) .podium-card { width: 34vw; max-width: 140px; border-radius: 12px; }
+            .podium-item:nth-child(3) .podium-card { width: 25vw; max-width: 100px; border-radius: 12px; }
+            .rank-badge { width: 30px; height: 30px; font-size: 0.9rem; margin-top: 10px; }
+            .podium-item:nth-child(2) .rank-badge { width: 38px; height: 38px; font-size: 1.1rem; }
+            .podium-stand { margin-top: 6px; }
+            .podium-code { font-size: 0.75rem; margin-bottom: 2px; }
+            .podium-item:nth-child(2) .podium-code { font-size: 0.85rem; }
+            .podium-actress { font-size: 0.6rem; }
+            .podium-title { font-size: 1rem; margin-bottom: 15px; letter-spacing: 2px; }
+            .section-divider { margin: 25px 0 20px; font-size: 0.75rem; letter-spacing: 2px; }
+            .code-item { padding: 8px 12px; font-size: 0.8rem; }
+            .code-list { gap: 6px; }
+            .code-only-section { margin-top: 30px; }
+            .toast { padding: 16px 28px; font-size: 1rem; border-radius: 14px; }
+            .age-box { padding: 28px 20px; border-radius: 20px; }
+            .age-icon { font-size: 3rem; margin-bottom: 14px; }
+            .age-title { font-size: 1.4rem; margin-bottom: 8px; }
+            .age-text { font-size: 0.9rem; margin-bottom: 20px; }
+            .age-buttons { flex-direction: column; gap: 10px; }
+            .age-btn { padding: 12px 28px; font-size: 0.9rem; width: 100%; }
+        }
+
+        /* สำหรับจอเล็กมาก */
+        @media (max-width: 360px) {
+            .container { padding: 8px; }
+            .logo { font-size: 1.1rem; }
+            .podium-item:nth-child(1) .podium-card { width: 26vw; }
+            .podium-item:nth-child(2) .podium-card { width: 32vw; }
+            .podium-item:nth-child(3) .podium-card { width: 24vw; }
+            .gallery { gap: 6px; }
+            .card-code { font-size: 0.75rem; }
+            .card-actress { font-size: 0.65rem; }
         }
 
         ::-webkit-scrollbar { width: 8px; }
