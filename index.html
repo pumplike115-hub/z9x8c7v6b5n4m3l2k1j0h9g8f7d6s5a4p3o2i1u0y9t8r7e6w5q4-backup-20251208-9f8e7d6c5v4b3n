@@ -65,11 +65,7 @@
             flex-direction: column;
             gap: 16px;
             margin-bottom: 30px;
-            position: sticky;
-            top: 0;
-            background: linear-gradient(to bottom, var(--bg-primary) 80%, transparent);
-            padding: 20px 0 40px;
-            z-index: 100;
+            padding: 20px 0 20px;
         }
 
         .header-top {
@@ -99,7 +95,7 @@
             width: 100%;
             padding: 16px 20px 16px 50px;
             border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 16px;
+            border-radius: 50px;
             font-size: 1rem;
             font-family: inherit;
             background: rgba(15, 15, 15, 0.8);
@@ -172,9 +168,9 @@
             object-position: right top;
         }
 
-        .podium-item:nth-child(1) .podium-card { width: 160px; }
-        .podium-item:nth-child(2) .podium-card { width: 200px; }
-        .podium-item:nth-child(3) .podium-card { width: 140px; }
+        .podium-item:nth-child(1) .podium-card { width: 200px; }
+        .podium-item:nth-child(2) .podium-card { width: 260px; }
+        .podium-item:nth-child(3) .podium-card { width: 180px; }
 
         .podium-item:nth-child(2) .podium-card {
             border: 3px solid var(--gold);
@@ -294,16 +290,16 @@
 
         @media (min-width: 768px) {
             .gallery { gap: 20px; }
-            .podium-item:nth-child(1) .podium-card { width: 180px; }
-            .podium-item:nth-child(2) .podium-card { width: 220px; }
-            .podium-item:nth-child(3) .podium-card { width: 160px; }
+            .podium-item:nth-child(1) .podium-card { width: 220px; }
+            .podium-item:nth-child(2) .podium-card { width: 280px; }
+            .podium-item:nth-child(3) .podium-card { width: 200px; }
         }
 
         @media (min-width: 1200px) {
             .gallery { gap: 24px; }
-            .podium-item:nth-child(1) .podium-card { width: 200px; }
-            .podium-item:nth-child(2) .podium-card { width: 260px; }
-            .podium-item:nth-child(3) .podium-card { width: 180px; }
+            .podium-item:nth-child(1) .podium-card { width: 260px; }
+            .podium-item:nth-child(2) .podium-card { width: 320px; }
+            .podium-item:nth-child(3) .podium-card { width: 240px; }
         }
 
         .card {
@@ -331,9 +327,12 @@
         }
 
         .card:hover, .card:active {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 30px rgba(0,0,0,0.5), 0 0 40px rgba(139, 92, 246, 0.3);
-            border-color: var(--accent);
+        transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.8), /* เงาลึก */
+                0 0 20px rgba(139, 92, 246, 0.4), /* แสงม่วงชั้นใน */
+                0 0 60px rgba(139, 92, 246, 0.2); /* แสงม่วงฟุ้งวงกว้าง */
+            border-color: rgba(139, 92, 246, 0.8);
         }
 
         .card:hover::before, .card:active::before {
@@ -473,9 +472,9 @@
             .card-actress { font-size: 0.75rem; }
             .logo { font-size: 1.4rem; }
             .podium { gap: 8px; }
-            .podium-item:nth-child(1) .podium-card { width: 100px; }
-            .podium-item:nth-child(2) .podium-card { width: 120px; }
-            .podium-item:nth-child(3) .podium-card { width: 90px; }
+            .podium-item:nth-child(1) .podium-card { width: 130px; }
+            .podium-item:nth-child(2) .podium-card { width: 160px; }
+            .podium-item:nth-child(3) .podium-card { width: 115px; }
             .rank-badge { width: 35px; height: 35px; font-size: 1rem; }
             .podium-item:nth-child(2) .rank-badge { width: 45px; height: 45px; font-size: 1.2rem; }
             .podium-code { font-size: 0.85rem; }
@@ -488,10 +487,182 @@
         ::-webkit-scrollbar-track { background: var(--bg-primary); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .animate-fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animate-fade-scale {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .animate-fade-scale.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .animate-slide-down {
+            animation: slideDown 0.5s ease forwards;
+        }
+
+        /* Age Verification Modal */
+        .age-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+
+        .age-modal.hidden {
+            display: none;
+        }
+
+        .age-box {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 2px solid var(--accent);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 0 80px var(--accent-glow);
+            animation: fadeInScale 0.4s ease;
+        }
+
+        .age-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .age-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .age-text {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .age-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .bg-noise {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .age-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            padding: 14px 36px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .age-btn-yes {
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            color: white;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .age-btn-yes:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .age-btn-no {
+            background: transparent;
+            border: 2px solid var(--text-secondary);
+            color: var(--text-secondary);
+        }
+
+        .age-btn-no:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* Hide content until verified */
+        .content-hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Age Verification Modal -->
+    <div class="age-modal" id="ageModal">
+        <div class="age-box">
+            <div class="age-icon">🔞</div>
+            <h2 class="age-title">ยืนยันอายุ</h2>
+            <p class="age-text">เว็บไซต์นี้มีเนื้อหาสำหรับผู้ใหญ่<br>คุณมีอายุ 18 ปีขึ้นไปหรือไม่?</p>
+            <div class="age-buttons">
+                <button class="age-btn age-btn-yes" onclick="verifyAge(true)">ใช่ ฉันอายุ 18+</button>
+                <button class="age-btn age-btn-no" onclick="verifyAge(false)">ไม่</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent">
         <header class="header">
             <div class="header-top">
                 <div class="logo">🌙 GALLERY</div>
@@ -522,6 +693,36 @@
 
     <script src="data.js"></script>
     <script>
+        // Age Verification
+        function verifyAge(isAdult) {
+            const modal = document.getElementById('ageModal');
+            const content = document.getElementById('mainContent');
+            
+            if (isAdult) {
+                modal.classList.add('hidden');
+                content.classList.remove('content-hidden');
+                localStorage.setItem('ageVerified', 'true');
+                initPage();
+            } else {
+                window.location.href = 'https://www.google.com';
+            }
+        }
+
+        // Check if already verified
+        function checkAgeVerification() {
+            const verified = localStorage.getItem('ageVerified');
+            const modal = document.getElementById('ageModal');
+            const content = document.getElementById('mainContent');
+            
+            if (verified === 'true') {
+                modal.classList.add('hidden');
+                content.classList.remove('content-hidden');
+                initPage();
+            } else {
+                content.classList.add('content-hidden');
+            }
+        }
+
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
         function playTing() {
@@ -558,9 +759,10 @@
             if (url) window.open(url, '_blank');
         }
 
-        function createPodiumItem(item, rank) {
+        function createPodiumItem(item, rank, index) {
             const div = document.createElement('div');
-            div.className = 'podium-item';
+            div.className = 'podium-item animate-fade-up';
+            div.style.transitionDelay = `${index * 0.1}s`;
             div.innerHTML = `
                 <div class="podium-card" onclick="copyCode('${item.code}')">
                     <img src="${item.cover}" alt="${item.code}" loading="lazy">
@@ -584,14 +786,14 @@
             const top3 = data.filter(d => d.rank).sort((a, b) => a.rank - b.rank);
             // Order: 2nd, 1st, 3rd (podium style)
             const order = [top3[1], top3[0], top3[2]];
-            order.forEach((item) => {
-                if (item) podium.appendChild(createPodiumItem(item, item.rank));
+            order.forEach((item, index) => {
+                if (item) podium.appendChild(createPodiumItem(item, item.rank, index));
             });
         }
 
         function createCard(item) {
             const card = document.createElement('div');
-            card.className = 'card';
+            card.className = 'card animate-fade-up';
             card.innerHTML = `
                 <img src="${item.cover}" alt="${item.code}" loading="lazy">
                 <div class="card-overlay">
@@ -606,7 +808,7 @@
 
         function createCodeItem(item) {
             const div = document.createElement('div');
-            div.className = 'code-item';
+            div.className = 'code-item animate-fade-scale';
             div.textContent = item.code;
             div.addEventListener('click', () => copyCode(item.code));
             return div;
@@ -627,11 +829,14 @@
                 return;
             }
 
-            withCover.forEach(item => gallery.appendChild(createCard(item)));
-            codeOnly.forEach(item => codeList.appendChild(createCodeItem(item)));
+            withCover.forEach((item) => gallery.appendChild(createCard(item)));
+            codeOnly.forEach((item) => codeList.appendChild(createCodeItem(item)));
 
             // ซ่อน/แสดง section ตามข้อมูล
             document.getElementById('code-only-section').style.display = codeOnly.length > 0 ? 'block' : 'none';
+            
+            // Setup scroll observer
+            setupScrollObserver();
         }
 
         function filterCards() {
@@ -661,10 +866,11 @@
                     const withCover = filtered.filter(d => d.cover);
                     const codeOnly = filtered.filter(d => !d.cover);
                     
-                    withCover.forEach(item => gallery.appendChild(createCard(item)));
-                    codeOnly.forEach(item => codeList.appendChild(createCodeItem(item)));
+                    withCover.forEach((item) => gallery.appendChild(createCard(item)));
+                    codeOnly.forEach((item) => codeList.appendChild(createCodeItem(item)));
                     
                     codeOnlySection.style.display = codeOnly.length > 0 ? 'block' : 'none';
+                    setupScrollObserver();
                 }
             } else {
                 podiumSection.style.display = 'block';
@@ -673,8 +879,47 @@
             }
         }
 
-        renderPodium();
-        renderGallery(data);
+        // Intersection Observer for scroll animations
+        let scrollObserver;
+        
+        function setupScrollObserver() {
+            if (scrollObserver) scrollObserver.disconnect();
+            
+            scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // Add small delay for stagger effect
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 50);
+                        scrollObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            // Observe all animated elements
+            document.querySelectorAll('.animate-fade-up, .animate-fade-scale').forEach(el => {
+                scrollObserver.observe(el);
+            });
+        }
+
+        function initPage() {
+            // Add animation to header
+            document.querySelector('.header').classList.add('animate-slide-down');
+            document.querySelector('.podium-title').classList.add('animate-fade-scale');
+            
+            renderPodium();
+            renderGallery(data);
+            
+            // Initial trigger for visible elements
+            setTimeout(() => setupScrollObserver(), 100);
+        }
+
+        // Start
+        checkAgeVerification();
     </script>
 </body>
 </html>
