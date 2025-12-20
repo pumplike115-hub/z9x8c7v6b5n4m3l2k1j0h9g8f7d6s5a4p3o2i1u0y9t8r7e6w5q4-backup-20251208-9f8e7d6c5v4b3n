@@ -794,7 +794,7 @@
             div.style.transitionDelay = `${index * 0.1}s`;
             div.innerHTML = `
                 <div class="podium-card" onclick="copyCode('${item.code}')">
-                    <img src="${item.cover}" alt="${item.code}" loading="lazy">
+                    <img src="${item.cover}" alt="${item.code}" loading="lazy" referrerpolicy="no-referrer">
                     <div class="card-overlay">
                         <div class="card-code">${item.code}</div>
                         <div class="card-actress">${item.actress || ''}</div>
@@ -824,7 +824,7 @@
             const card = document.createElement('div');
             card.className = 'card animate-fade-up';
             card.innerHTML = `
-                <img src="${item.cover}" alt="${item.code}" loading="lazy">
+                <img src="${item.cover}" alt="${item.code}" loading="lazy" referrerpolicy="no-referrer">
                 <div class="card-overlay">
                     <div class="card-code">${item.code}</div>
                     <div class="card-actress">${item.actress || ''}</div>
