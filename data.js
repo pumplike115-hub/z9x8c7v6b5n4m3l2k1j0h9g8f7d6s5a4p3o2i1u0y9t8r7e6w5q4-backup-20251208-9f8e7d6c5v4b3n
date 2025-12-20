@@ -59,15 +59,16 @@ const data = [
 
     // ===== CODE ONLY (ไม่มีรูป) =====
     { code: "IKUIKU-012", actress: "Otori Miyu", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2023/02/pb_e_489ikuiku-012.jpg", link: "" },
-    { code: "OREC-473", actress: "", cover: "", link: "" },
+    { code: "OREC-473", actress: "Leona", cover: "https://image.avfhd.com/2020/cover/01/OREC-473.jpg", link: "" },
     { code: "MFCS-018", actress: "Fujii Ranran, Mitsumi An", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2022/05/pb_e_435mfcs-018.jpg", link: "" },
     { code: "SSNI-663", actress: "Miru", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2019/12/ssni663pl.jpg", link: "" },
     { code: "MDON-084", actress: "Meguri", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2025/10/mdon00084pl.jpg", link: "" },
     { code: "CAWD-044", actress: "Itou Mayuki", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2020/01/9cawd044pl.jpg", link: "" },
-    { code: "carribeancom 071415-920", actress: "", cover: "", link: "" },
+    { code: "carribeancom 071415-920", actress: "Mei Matsumoto", cover: "https://www.minnano-av.com/p_package/097/56004.jpg", link: "" },
     { code: "ran ichinose", actress: "ran ichinose", cover: "", link: "" },
     { code: "Momoka Sakai(酒井ももか) 080815_130", actress: "Momoka Sakai", cover: "", link: "" },
-    { code: "CWPBD-112", actress: "Mitsuki Akai", cover: "", link: "" },
+    { code: "CWPBD-112", actress: "Mitsuki Akai", cover: "https://cdn.javmiku.com/wp-content/uploads/2024/02/CWPBD-112.jpg", link: "" },
 ];
+
 
 
