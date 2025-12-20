@@ -58,12 +58,12 @@ const data = [
     { code: "SSIS-586", actress: "Saika Kawakita", cover: "https://img82.pixhost.to/images/0/330687764_i552068.jpg", link: "" },
 
     // ===== CODE ONLY (ไม่มีรูป) =====
-    { code: "IKUIKU-012", actress: "Otori Miyu", cover: "https://cdn.javmiku.com/wp-content/uploads/2023/02/pb_e_489ikuiku-012.jpg", link: "" },
+    { code: "IKUIKU-012", actress: "Otori Miyu", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2023/02/pb_e_489ikuiku-012.jpg", link: "" },
     { code: "OREC-473", actress: "", cover: "", link: "" },
-    { code: "MFCS-018", actress: "Fujii Ranran, Mitsumi An", cover: "https://cdn.javmiku.com/wp-content/uploads/2022/05/pb_e_435mfcs-018.jpg", link: "" },
-    { code: "SSNI-663", actress: "Miru", cover: "https://cdn.javmiku.com/wp-content/uploads/2019/12/ssni663pl.jpg", link: "" },
-    { code: "MDON-084", actress: "Meguri", cover: "https://cdn.javmiku.com/wp-content/uploads/2025/10/mdon00084pl.jpg", link: "" },
-    { code: "CAWD-044", actress: "Itou Mayuki", cover: "https://cdn.javmiku.com/wp-content/uploads/2020/01/9cawd044pl.jpg", link: "" },
+    { code: "MFCS-018", actress: "Fujii Ranran, Mitsumi An", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2022/05/pb_e_435mfcs-018.jpg", link: "" },
+    { code: "SSNI-663", actress: "Miru", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2019/12/ssni663pl.jpg", link: "" },
+    { code: "MDON-084", actress: "Meguri", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2025/10/mdon00084pl.jpg", link: "" },
+    { code: "CAWD-044", actress: "Itou Mayuki", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2020/01/9cawd044pl.jpg", link: "" },
     { code: "carribeancom 071415-920", actress: "", cover: "", link: "" },
     { code: "ran ichinose", actress: "ran ichinose", cover: "", link: "" },
     { code: "Momoka Sakai(酒井ももか) 080815_130", actress: "Momoka Sakai", cover: "", link: "" },
