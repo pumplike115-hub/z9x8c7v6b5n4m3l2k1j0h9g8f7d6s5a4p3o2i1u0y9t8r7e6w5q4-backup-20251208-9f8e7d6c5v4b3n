@@ -59,16 +59,16 @@ const data = [
 
     // ===== CODE ONLY (ไม่มีรูป) =====
     { code: "IKUIKU-012", actress: "Otori Miyu", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2023/02/pb_e_489ikuiku-012.jpg", link: "" },
-    { code: "OREC-473", actress: "Leona", cover: "https://image.avfhd.com/2020/cover/01/OREC-473.jpg", link: "" },
+    { code: "OREC-473", actress: "Reona Kirishima", cover: "https://www.gravurefit.com/images/fanzawebp/orec/orec473jp.webp", link: "" },
     { code: "MFCS-018", actress: "Fujii Ranran, Mitsumi An", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2022/05/pb_e_435mfcs-018.jpg", link: "" },
     { code: "SSNI-663", actress: "Miru", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2019/12/ssni663pl.jpg", link: "" },
     { code: "MDON-084", actress: "Meguri", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2025/10/mdon00084pl.jpg", link: "" },
     { code: "CAWD-044", actress: "Itou Mayuki", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2020/01/9cawd044pl.jpg", link: "" },
     { code: "carribeancom 071415-920", actress: "Mei Matsumoto", cover: "https://www.minnano-av.com/p_package/097/56004.jpg", link: "" },
-    { code: "ran ichinose", actress: "ran ichinose", cover: "", link: "" },
-    { code: "Momoka Sakai(酒井ももか) 080815_130", actress: "Momoka Sakai", cover: "", link: "" },
-    { code: "CWPBD-112", actress: "Mitsuki Akai", cover: "https://cdn.javmiku.com/wp-content/uploads/2024/02/CWPBD-112.jpg", link: "" },
+    { code: "ran ichinose", actress: "ran ichinose", cover: "https://www.adultdvdmarketplace.com/images/medium/363627.jpg", link: "" },
+    { code: "Momoka Sakai(酒井ももか) 080815_130", actress: "Momoka Sakai", cover: "https://ninjadvd.com/upload/save_image/Z-03807.jpg", link: "" },
+    { code: "CWPBD-112", actress: "Mitsuki Akai", cover: "https://www.springtowndvd.com/Images/Thumbs/875588361122f.jpg", link: "" },
+    { code: "SCUTE-944", actress: "Reona Kirishima", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTETtIycN99fW565KvJk7eeGxJ6u1CCqe1yHw&s", link: "" },
 ];
-
 
 
