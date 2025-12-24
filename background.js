@@ -2,14 +2,9 @@ class InteractiveGrid {
     constructor() {
         this.createCanvas();
         this.ctx = this.canvas.getContext('2d');
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
         this.mouse = { x: -1000, y: -1000 };
         this.gridSize = 35;
         this.time = 0;
-
-        // Array to store active "flashing" nodes
-        // Each node: { x, y, life, maxLife }
         this.activeNodes = [];
 
         this.init();
@@ -21,6 +16,7 @@ class InteractiveGrid {
 
         this.canvas = document.createElement('canvas');
         this.canvas.id = 'bg-canvas';
+        // Back to fixed to prevent document size expansion (infinite scroll bug)
         this.canvas.style.position = 'fixed';
         this.canvas.style.top = '0';
         this.canvas.style.left = '0';
@@ -35,79 +31,55 @@ class InteractiveGrid {
     init() {
         this.resize();
         window.addEventListener('resize', () => this.resize());
+
         window.addEventListener('mousemove', (e) => {
-            this.mouse.x = e.clientX;
-            this.mouse.y = e.clientY;
+            // Store World Coordinates (includes scroll)
+            this.mouse.x = e.pageX;
+            this.mouse.y = e.pageY;
         });
 
-        // Touch support for mobile interaction
         window.addEventListener('touchstart', (e) => {
-            this.mouse.x = e.touches[0].clientX;
-            this.mouse.y = e.touches[0].clientY;
+            this.mouse.x = e.touches[0].pageX;
+            this.mouse.y = e.touches[0].pageY;
         }, { passive: true });
+
         window.addEventListener('touchmove', (e) => {
-            this.mouse.x = e.touches[0].clientX;
-            this.mouse.y = e.touches[0].clientY;
+            this.mouse.x = e.touches[0].pageX;
+            this.mouse.y = e.touches[0].pageY;
         }, { passive: true });
 
         this.animate();
     }
 
     resize() {
+        // Canvas now matches Viewport, not Document (Performance + Bug fix)
         this.width = window.innerWidth;
         this.height = window.innerHeight;
         this.canvas.width = this.width;
         this.canvas.height = this.height;
     }
 
-    drawStar(x, y, size, alpha) {
-        this.ctx.save();
-        this.ctx.translate(x, y);
-        this.ctx.beginPath();
-
-        // Purple theme
-        this.ctx.fillStyle = `rgba(167, 139, 250, ${alpha})`;
-
-        const innerRadius = size * 0.15;
-        const outerRadius = size * 0.5;
-
-        this.ctx.moveTo(0, -outerRadius);
-        this.ctx.quadraticCurveTo(innerRadius, -innerRadius, outerRadius, 0);
-        this.ctx.quadraticCurveTo(innerRadius, innerRadius, 0, outerRadius);
-        this.ctx.quadraticCurveTo(-innerRadius, innerRadius, -outerRadius, 0);
-        this.ctx.quadraticCurveTo(-innerRadius, -innerRadius, 0, -outerRadius);
-
-        this.ctx.fill();
-
-        // Glow
-        if (alpha > 0.2) {
-            const gradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, size * 1.5);
-            gradient.addColorStop(0, `rgba(139, 92, 246, ${alpha * 0.6})`);
-            gradient.addColorStop(1, 'rgba(139, 92, 246, 0)');
-            this.ctx.fillStyle = gradient;
-            this.ctx.fill();
-        }
-
-        this.ctx.restore();
-    }
-
-    updateActiveNodes() {
-        // 1. Randomly spawn new active nodes (auto-play)
-        // Chance depends on screen size (more nodes on larger screens)
-        if (Math.random() < 0.1) { // 10% chance per frame
+    updateActiveNodes(scrollY) {
+        // Spawn based on current view
+        if (Math.random() < 0.1) {
             const gridX = Math.floor(Math.random() * (this.width / this.gridSize)) * this.gridSize;
-            const gridY = Math.floor(Math.random() * (this.height / this.gridSize)) * this.gridSize;
+
+            // Random Y within current viewport (World Coords)
+            // We want stars to spawn in the visible area + buffer
+            const minY = Math.floor(scrollY / this.gridSize) * this.gridSize;
+            const maxY = minY + this.height; // this.height is viewport height
+
+            const gridY = Math.floor(Math.random() * ((maxY - minY) / this.gridSize + 2)) * this.gridSize + minY - this.gridSize;
 
             this.activeNodes.push({
                 x: gridX,
                 y: gridY,
                 life: 0,
-                maxLife: 60 + Math.random() * 60, // 1-2 seconds at 60fps
-                scale: 1 + Math.random() * 1.5 // Random size boost
+                maxLife: 60 + Math.random() * 60,
+                scale: 1 + Math.random() * 1.5
             });
         }
 
-        // 2. Update existing nodes
         for (let i = this.activeNodes.length - 1; i >= 0; i--) {
             const node = this.activeNodes[i];
             node.life++;
@@ -120,9 +92,8 @@ class InteractiveGrid {
     getActiveNodeEffect(x, y) {
         for (const node of this.activeNodes) {
             if (node.x === x && node.y === y) {
-                // Sine wave for smooth fade in/out
                 const progress = node.life / node.maxLife;
-                const intensity = Math.sin(progress * Math.PI); // 0 -> 1 -> 0
+                const intensity = Math.sin(progress * Math.PI);
                 return {
                     sizeBoost: intensity * 15 * node.scale,
                     alphaBoost: intensity * 0.6
@@ -132,43 +103,83 @@ class InteractiveGrid {
         return null;
     }
 
+    drawBenzStar(x, y, size, alpha) {
+        this.ctx.beginPath();
+        this.ctx.fillStyle = `rgba(167, 139, 250, ${alpha})`;
+
+        const innerRadius = size * 0.15;
+        const outerRadius = size * 0.5;
+
+        this.ctx.moveTo(x + 0, y - outerRadius);
+        this.ctx.quadraticCurveTo(x + innerRadius, y - innerRadius, x + outerRadius, y + 0);
+        this.ctx.quadraticCurveTo(x + innerRadius, y + innerRadius, x + 0, y + outerRadius);
+        this.ctx.quadraticCurveTo(x - innerRadius, y + innerRadius, x - outerRadius, y + 0);
+        this.ctx.quadraticCurveTo(x - innerRadius, y - innerRadius, x + 0, y - outerRadius);
+
+        this.ctx.fill();
+
+        if (alpha > 0.2) {
+            const gradient = this.ctx.createRadialGradient(x, y, 0, x, y, size * 1.5);
+            gradient.addColorStop(0, `rgba(139, 92, 246, ${alpha * 0.6})`);
+            gradient.addColorStop(1, 'rgba(139, 92, 246, 0)');
+            this.ctx.fillStyle = gradient;
+            this.ctx.fill();
+        }
+    }
+
     drawGrid() {
+        const scrollY = window.scrollY; // Current scroll position
+
+        // 1. Clear Canvas (Viewport)
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        // Faint Grid
-        this.ctx.strokeStyle = 'rgba(139, 92, 246, 0.04)'; // Slightly increased visibility
+        // 2. Translate Context to simulate scrolling
+        // Moving the camera down means shifting the world up => -scrollY
+        this.ctx.translate(0, -scrollY);
+
+        this.updateActiveNodes(scrollY);
+
+        // 3. Draw Elements (Optimization: Only draw visible range)
+        // Convert Viewport range to World Y range
+        const startY = Math.floor(scrollY / this.gridSize) * this.gridSize - this.gridSize;
+        const endY = startY + this.height + (2 * this.gridSize);
+
+        // Draw Faint Grid Lines
+        this.ctx.strokeStyle = 'rgba(139, 92, 246, 0.04)';
         this.ctx.lineWidth = 1;
         this.ctx.beginPath();
+
+        // Vertical lines (Full world height? No, just visible part is enough for lines too)
+        // For lines, it's easier to draw efficient long lines.
+        // We simulate infinite vertical lines by just drawing from startY to endY
         for (let x = 0; x <= this.width; x += this.gridSize) {
-            this.ctx.moveTo(x, 0);
-            this.ctx.lineTo(x, this.height);
+            this.ctx.moveTo(x, startY);
+            this.ctx.lineTo(x, endY);
         }
-        for (let y = 0; y <= this.height; y += this.gridSize) {
+        // Horizontal lines
+        for (let y = startY; y <= endY; y += this.gridSize) {
             this.ctx.moveTo(0, y);
             this.ctx.lineTo(this.width, y);
         }
         this.ctx.stroke();
 
-        this.updateActiveNodes();
-
         // Draw Stars
         for (let x = 0; x <= this.width; x += this.gridSize) {
-            for (let y = 0; y <= this.height; y += this.gridSize) {
+            for (let y = startY; y <= endY; y += this.gridSize) {
 
-                // 1. Base Ambient Breathing (Increased base brightness for mobile)
                 const wave = Math.sin(this.time * 1.5 + (x * 0.02) + (y * 0.02));
                 const breathing = (wave + 1) / 2;
-                let alpha = 0.15 + (breathing * 0.1); // Base 0.15-0.25 (Brighter than before)
+                let alpha = 0.15 + (breathing * 0.1);
                 let size = this.gridSize * 0.3;
 
-                // 2. Autonomous "Playful" Flashes
                 const activeEffect = this.getActiveNodeEffect(x, y);
                 if (activeEffect) {
                     size += activeEffect.sizeBoost;
                     alpha += activeEffect.alphaBoost;
                 }
 
-                // 3. Mouse Interaction (Still kept for desktop)
+                // Mouse Interaction (Both in World Coords)
                 const dx = this.mouse.x - x;
                 const dy = this.mouse.y - y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
@@ -178,7 +189,7 @@ class InteractiveGrid {
                     alpha += factor * 0.4;
                 }
 
-                this.drawStar(x, y, size, alpha);
+                this.drawBenzStar(x, y, size, alpha);
             }
         }
     }
