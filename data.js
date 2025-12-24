@@ -66,7 +66,7 @@ const sourceData = [
     { code: "CAWD-044", actress: "Itou Mayuki", cover: "https://proxy.duckduckgo.com/iu/?u=https://cdn.javmiku.com/wp-content/uploads/2020/01/9cawd044pl.jpg", link: "" },
     { code: "carribeancom 071415-920", actress: "Mei Matsumoto", cover: "https://www.minnano-av.com/p_package/097/56004.jpg", link: "" },
     { code: "ran ichinose", actress: "ran ichinose", cover: "https://www.adultdvdmarketplace.com/images/medium/363627.jpg", link: "" },
-    { code: "Momoka Sakai(酒井ももか) 080815_130", actress: "Momoka Sakai", cover: "https://ninjadvd.com/upload/save_image/Z-03807.jpg", link: "" },
+    { code: "Momoka Sakai(酒井ももか) 080815_130", actress: "Momoka Sakai", cover: "https://ninjadvd.com/upload/save_image/Z-03807.jpg", link: "", flip: true },
     { code: "CWPBD-112", actress: "Mitsuki Akai", cover: "https://www.springtowndvd.com/Images/Thumbs/875588361122f.jpg", link: "" },
     { code: "SCUTE-944", actress: "Reona Kirishima", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTETtIycN99fW565KvJk7eeGxJ6u1CCqe1yHw&s", link: "" },
 ];
