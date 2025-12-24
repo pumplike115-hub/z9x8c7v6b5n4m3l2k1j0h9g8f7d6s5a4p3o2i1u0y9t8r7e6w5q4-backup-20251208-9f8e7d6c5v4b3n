@@ -11,7 +11,7 @@
 // { code: "XYZ-999", actress: "ชื่อนักแสดง", cover: "https://..." },
 // { code: "DEF-456" }, // มีแค่โค๊ด ไม่มีรูป ไม่มีนักแสดง
 
-const data = [
+const sourceData = [
     // ===== TOP 3 RANKING =====
     { code: "SSIS-402", actress: "Yamate Ria", cover: "https://img72.pixhost.to/images/45/283985539_i523757.jpg", link: "", rank: 1 },
     { code: "ROYD-002", actress: "Fukada Eimi", cover: "https://img41.pixhost.to/images/327/145626660_i431829.jpg", link: "", rank: 2 },
@@ -71,4 +71,17 @@ const data = [
     { code: "SCUTE-944", actress: "Reona Kirishima", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTETtIycN99fW565KvJk7eeGxJ6u1CCqe1yHw&s", link: "" },
 ];
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
+const top3 = sourceData.filter(item => item.rank && item.rank <= 3).sort((a, b) => a.rank - b.rank);
+const others = sourceData.filter(item => !item.rank || item.rank > 3);
+
+const shuffledOthers = shuffleArray(others);
+
+const data = [...top3, ...shuffledOthers];
