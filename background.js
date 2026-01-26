@@ -1,15 +1,11 @@
 class InteractiveGrid {
     constructor() {
-        // Better mobile detection for Safari
         this.isMobile = this.detectMobile();
-
-        // Debug: log to see if detection works
-        console.log('Device detected as:', this.isMobile ? 'MOBILE (static)' : 'DESKTOP (animated)');
-
         this.createCanvas();
         this.ctx = this.canvas.getContext('2d', { alpha: false });
         this.gridSize = 35;
         this.stars = [];
+        this.isVisible = true;
 
         this.lastWidth = window.innerWidth;
         this.lastHeight = 0;
@@ -21,23 +17,18 @@ class InteractiveGrid {
             this.time = 0;
             this.activeNodes = [];
             this.lastFrameTime = 0;
-            this.frameInterval = 1000 / 60;
+            this.frameInterval = 1000 / 45; // Reduced to 45fps for better performance
         }
 
         this.init();
     }
 
     detectMobile() {
-        // Multiple detection methods
         const userAgent = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         const touchPoints = navigator.maxTouchPoints > 1;
         const smallScreen = window.innerWidth <= 1024;
         const touchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-        // Safari on iOS specific
         const isSafariIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-        console.log('Detection details:', { userAgent, touchPoints, smallScreen, touchDevice, isSafariIOS });
 
         return userAgent || isSafariIOS || (touchDevice && smallScreen);
     }
@@ -105,6 +96,11 @@ class InteractiveGrid {
                 this.targetMouse.x = -1000;
                 this.targetMouse.y = -1000;
             }, { passive: true });
+
+            // Pause animation when tab is not visible
+            document.addEventListener('visibilitychange', () => {
+                this.isVisible = !document.hidden;
+            });
 
             this.animateDesktop(0);
         }
@@ -343,6 +339,12 @@ class InteractiveGrid {
     }
 
     animateDesktop(timestamp) {
+        // Skip animation when tab is hidden
+        if (!this.isVisible) {
+            requestAnimationFrame((t) => this.animateDesktop(t));
+            return;
+        }
+
         const elapsed = timestamp - this.lastFrameTime;
 
         if (elapsed >= this.frameInterval) {
