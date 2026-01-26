@@ -23,11 +23,15 @@
         :root {
             /* Colors */
             --bg-color: #050507;
-            --card-bg: rgba(20, 20, 22, 0.6);
+            --card-bg: rgba(20, 20, 25, 0.65);
+            --card-border: rgba(139, 92, 246, 0.15);
+            --card-border-hover: rgba(139, 92, 246, 0.5);
             --text-primary: #ffffff;
             --text-secondary: #a1a1aa;
+            --accent: #8b5cf6;
             --accent-color: #6366f1;
-            --accent-glow: rgba(99, 102, 241, 0.4);
+            --accent-glow: rgba(139, 92, 246, 0.4);
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
 
             /* Fonts */
             --font-primary: 'Outfit', sans-serif;
@@ -36,9 +40,16 @@
 
             /* Other Vars */
             --gold: #fbbf24;
+            --gold-glow: rgba(251, 191, 36, 0.4);
             --silver: #e2e8f0;
+            --silver-glow: rgba(226, 232, 240, 0.3);
             --bronze: #d97706;
+            --bronze-glow: rgba(217, 119, 6, 0.3);
             --spotlight-size: 400px;
+
+            /* Glass Effect */
+            --glass-bg: rgba(15, 15, 20, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
         body {
@@ -80,12 +91,25 @@
             font-family: var(--font-primary), sans-serif;
             font-size: 2.5rem;
             font-weight: 800;
-            background: linear-gradient(to right, #fff, #a78bfa);
+            background: linear-gradient(135deg, #fff 0%, #c4b5fd 40%, #a78bfa 70%, #8b5cf6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             letter-spacing: -1px;
-            filter: drop-shadow(0 0 20px rgba(167, 139, 250, 0.3));
+            filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.4));
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 20px rgba(167, 139, 250, 0.3));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 35px rgba(167, 139, 250, 0.6));
+            }
         }
 
         .search-container {
@@ -95,25 +119,57 @@
             margin: 0 auto;
         }
 
+        .search-clear {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(139, 92, 246, 0.2);
+            border: none;
+            color: var(--text-secondary);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .search-clear.visible {
+            display: flex;
+        }
+
+        .search-clear:hover {
+            background: rgba(139, 92, 246, 0.4);
+            color: #fff;
+            transform: translateY(-50%) scale(1.1);
+        }
+
         .search-input {
             width: 100%;
             padding: 18px 24px 18px 54px;
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
             font-size: 1rem;
             font-family: inherit;
-            background: rgba(10, 10, 12, 0.6);
+            background: var(--glass-bg);
             color: var(--text-primary);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .search-input:focus {
             outline: none;
             border-color: var(--accent);
-            background: rgba(15, 15, 20, 0.8);
-            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2), 0 0 30px rgba(139, 92, 246, 0.1);
+            background: rgba(20, 20, 28, 0.85);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15), 0 8px 40px rgba(139, 92, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
 
         .search-input::placeholder {
@@ -136,13 +192,15 @@
         /* Spotlight Effect Base */
         .spotlight-card {
             position: relative;
-            background: var(--card-bg);
+            background: var(--glass-bg);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .spotlight-card::before {
@@ -150,10 +208,10 @@
             position: absolute;
             inset: 0;
             background: radial-gradient(var(--spotlight-size) circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-                    rgba(255, 255, 255, 0.06),
+                    rgba(255, 255, 255, 0.08),
                     transparent 40%);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
             z-index: 2;
             pointer-events: none;
         }
@@ -166,19 +224,19 @@
             content: '';
             position: absolute;
             inset: 0;
-            border-radius: 16px;
+            border-radius: 20px;
             background: radial-gradient(var(--spotlight-size) circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-                    rgba(139, 92, 246, 0.4),
+                    rgba(139, 92, 246, 0.5),
                     transparent 40%);
             z-index: 1;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             mask-composite: exclude;
             -webkit-mask-composite: xor;
             pointer-events: none;
-            padding: 1px;
+            padding: 1.5px;
         }
 
         .spotlight-card:hover::after {
@@ -186,9 +244,9 @@
         }
 
         .spotlight-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.15);
+            border-color: var(--card-border-hover);
         }
 
         /* Podium Section */
@@ -262,9 +320,35 @@
             width: 100%;
             height: 100%;
             position: relative;
-            background: #111;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
             overflow: hidden;
-            border-radius: 15px;
+            border-radius: 18px;
+        }
+
+        .image-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(139, 92, 246, 0.08) 50%,
+                    transparent 100%);
+            animation: shimmer 2s infinite;
+            z-index: 1;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .image-container.loaded::before {
+            display: none;
         }
 
         .card-img {
@@ -272,8 +356,36 @@
             height: 100%;
             object-fit: cover;
             object-position: right top;
-            /* opacity: 0; removed for direct loading */
-            transition: transform 0.6s ease;
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.6s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-img.loaded {
+            opacity: 1;
+        }
+
+        .card-img.error {
+            opacity: 0;
+        }
+
+        .image-error {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            z-index: 3;
+        }
+
+        .image-error-icon {
+            font-size: 2rem;
+            opacity: 0.5;
         }
 
         .card-img.flipped {
@@ -340,8 +452,8 @@
         /* Rank Badge */
         .rank-badge {
             font-family: 'Space Grotesk', sans-serif;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -351,25 +463,41 @@
             margin-top: 15px;
             position: relative;
             z-index: 10;
+            transition: all 0.3s ease;
         }
 
         .podium-item:nth-child(2) .rank-badge {
-            background: var(--gold);
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
             color: #000;
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
-            width: 50px;
-            height: 50px;
+            box-shadow: 0 0 30px var(--gold-glow), 0 4px 15px rgba(0, 0, 0, 0.3);
+            width: 54px;
+            height: 54px;
             font-size: 1.5rem;
+            animation: goldPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes goldPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px var(--gold-glow), 0 4px 15px rgba(0, 0, 0, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 40px var(--gold-glow), 0 4px 20px rgba(0, 0, 0, 0.4);
+            }
         }
 
         .podium-item:nth-child(1) .rank-badge {
-            background: var(--silver);
-            color: #000;
+            background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+            color: #1e293b;
+            box-shadow: 0 0 20px var(--silver-glow), 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .podium-item:nth-child(3) .rank-badge {
-            background: var(--bronze);
-            color: #000;
+            background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+            color: #fff;
+            box-shadow: 0 0 20px var(--bronze-glow), 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .podium-stand {
@@ -447,21 +575,24 @@
 
         .code-item {
             font-family: 'Space Grotesk', sans-serif;
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            padding: 10px 18px;
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            padding: 12px 22px;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-size: 0.9rem;
             color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .code-item:hover {
-            background: rgba(139, 92, 246, 0.15);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.15) 100%);
             border-color: var(--accent);
             color: #fff;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+            transform: translateY(-3px) scale(1.05);
         }
 
         /* Toast */
@@ -469,23 +600,87 @@
             position: fixed;
             bottom: 40px;
             left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: rgba(255, 255, 255, 0.9);
-            color: #000;
-            padding: 12px 24px;
-            border-radius: 50px;
+            transform: translateX(-50%) translateY(20px) scale(0.9);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.95) 0%, rgba(99, 102, 241, 0.95) 100%);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 16px;
             font-weight: 600;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3);
             font-family: 'Space Grotesk', sans-serif;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .toast.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 54px;
+            height: 54px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(99, 102, 241, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+            font-size: 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .back-to-top.visible {
+            display: flex;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
+        }
+
+        .back-to-top:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* Results Counter */
+        .results-counter {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .results-counter span {
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .no-results {
@@ -571,6 +766,18 @@
                 width: 40px;
                 height: 40px;
                 font-size: 1.2rem;
+            }
+
+            .back-to-top {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .age-btn {
+                padding: 14px 32px;
+                font-size: 1.05rem;
             }
         }
 
@@ -693,30 +900,34 @@
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
-            border: none;
+            border: 2px solid transparent;
             font-size: 1rem;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            font-family: var(--font-primary);
         }
 
         .age-btn-yes {
             background: var(--accent);
             color: white;
             margin-right: 10px;
+            border: 2px solid var(--accent);
         }
 
         .age-btn-yes:hover {
             box-shadow: 0 0 20px var(--accent-glow);
+            transform: scale(1.05);
         }
 
         .age-btn-no {
             background: transparent;
             color: #666;
-            border: 1px solid #333;
+            border: 2px solid #333;
         }
 
         .age-btn-no:hover {
             border-color: #ef4444;
             color: #ef4444;
+            transform: scale(1.05);
         }
 
         .content-hidden {
@@ -752,6 +963,7 @@
                 </svg>
                 <input type="text" class="search-input" id="search" placeholder="ค้นหารหัสหรือชื่อนักแสดง..."
                     oninput="filterCards()">
+                <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
             </div>
         </header>
 
@@ -761,6 +973,7 @@
         </section>
 
         <div class="section-divider" id="gallery-divider">— ALL ITEMS —</div>
+        <div class="results-counter" id="resultsCounter"></div>
         <div class="gallery" id="gallery"></div>
 
         <section class="code-only-section" id="code-only-section">
@@ -769,6 +982,7 @@
         </section>
     </div>
     <div class="toast" id="toast"></div>
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
 
     <script src="data.js"></script>
     <script>
@@ -824,6 +1038,48 @@
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
+        function clearSearch() {
+            const searchInput = document.getElementById('search');
+            searchInput.value = '';
+            filterCards();
+            searchInput.focus();
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function updateSearchClear() {
+            const searchInput = document.getElementById('search');
+            const clearBtn = document.getElementById('searchClear');
+            if (searchInput.value.trim()) {
+                clearBtn.classList.add('visible');
+            } else {
+                clearBtn.classList.remove('visible');
+            }
+        }
+
+        function updateBackToTop() {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        }
+
+        function updateResultsCounter(count, total) {
+            const counter = document.getElementById('resultsCounter');
+            if (count === total) {
+                counter.textContent = '';
+            } else {
+                counter.textContent = `แสดง ${count} จาก ${total} รายการ`;
+            }
+        }
+
         async function copyCode(code) {
             try {
                 await navigator.clipboard.writeText(code);
@@ -857,9 +1113,10 @@
             card.onclick = () => copyCode(item.code);
             card.onmousemove = handleSpotlight;
 
+            const imgClass = item.flip ? 'flipped' : '';
             card.innerHTML = `
                 <div class="image-container">
-                    <img src="${item.cover}" alt="${item.code}" class="card-img ${item.flip ? 'flipped' : ''}" loading="lazy">
+                    <img src="${item.cover}" alt="${item.code}" class="card-img ${imgClass}" loading="lazy" onerror="handleImageError(this)" onload="handleImageLoad(this)">
                 </div>
                 <div class="card-overlay">
                     <div class="card-code">${item.code}</div>
@@ -901,9 +1158,10 @@
             card.onclick = () => copyCode(item.code);
             card.onmousemove = handleSpotlight;
 
+            const imgClass = item.flip ? 'flipped' : '';
             card.innerHTML = `
                 <div class="image-container">
-                    <img src="${item.cover}" alt="${item.code}" class="card-img ${item.flip ? 'flipped' : ''}" loading="lazy">
+                    <img src="${item.cover}" alt="${item.code}" class="card-img ${imgClass}" loading="lazy" onerror="handleImageError(this)" onload="handleImageLoad(this)">
                 </div>
                 <div class="card-info">
                     <div class="card-code">${item.code}</div>
@@ -934,6 +1192,7 @@
 
             if (withCover.length === 0 && codeOnly.length === 0) {
                 gallery.innerHTML = '<div class="no-results">ไม่พบผลลัพธ์</div>';
+                updateResultsCounter(0, data.length);
                 return;
             }
 
@@ -943,11 +1202,16 @@
             // ซ่อน/แสดง section ตามข้อมูล
             document.getElementById('code-only-section').style.display = codeOnly.length > 0 ? 'block' : 'none';
 
+            // Update counter
+            updateResultsCounter(withCover.length + codeOnly.length, data.length);
+
             // Setup scroll observer
             setupScrollObserver();
         }
 
         function filterCards() {
+            updateSearchClear();
+
             const query = document.getElementById('search').value.toLowerCase().trim();
             const podiumSection = document.getElementById('podium-section');
             const galleryDivider = document.getElementById('gallery-divider');
@@ -970,6 +1234,7 @@
                 if (filtered.length === 0) {
                     gallery.innerHTML = '<div class="no-results">ไม่พบผลลัพธ์</div>';
                     codeOnlySection.style.display = 'none';
+                    updateResultsCounter(0, data.length);
                 } else {
                     const withCover = filtered.filter(d => d.cover);
                     const codeOnly = filtered.filter(d => !d.cover);
@@ -978,6 +1243,7 @@
                     codeOnly.forEach((item) => codeList.appendChild(createCodeItem(item)));
 
                     codeOnlySection.style.display = codeOnly.length > 0 ? 'block' : 'none';
+                    updateResultsCounter(filtered.length, data.length);
                     setupScrollObserver();
                 }
             } else {
@@ -1014,6 +1280,27 @@
             });
         }
 
+        function handleImageLoad(img) {
+            img.classList.add('loaded');
+            // Stop shimmer animation on container
+            const container = img.parentElement;
+            if (container) container.classList.add('loaded');
+        }
+
+        function handleImageError(img) {
+            img.classList.add('error');
+            const container = img.parentElement;
+            if (!container.querySelector('.image-error')) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'image-error';
+                errorDiv.innerHTML = `
+                    <div class="image-error-icon">⚠️</div>
+                    <div>ไม่สามารถโหลดรูปได้</div>
+                `;
+                container.appendChild(errorDiv);
+            }
+        }
+
         function initPage() {
             // Add animation to header
             document.querySelector('.header').classList.add('animate-slide-down');
@@ -1024,6 +1311,9 @@
 
             // Initial trigger for visible elements
             setTimeout(() => setupScrollObserver(), 100);
+
+            // Back to top button
+            window.addEventListener('scroll', updateBackToTop, { passive: true });
         }
 
         // Start
