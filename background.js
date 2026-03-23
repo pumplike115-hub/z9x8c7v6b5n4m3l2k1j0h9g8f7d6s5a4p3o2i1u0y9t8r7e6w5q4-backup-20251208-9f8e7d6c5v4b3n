@@ -4,21 +4,22 @@ class InteractiveGrid {
         this.createCanvas();
         this.ctx = this.canvas.getContext('2d', { alpha: false });
         this.gridSize = 35;
-        this.stars = [];
         this.isVisible = true;
 
         this.lastWidth = window.innerWidth;
         this.lastHeight = 0;
 
-        // Desktop only
-        if (!this.isMobile) {
-            this.mouse = { x: -1000, y: -1000 };
-            this.targetMouse = { x: -1000, y: -1000 };
-            this.time = 0;
-            this.activeNodes = [];
-            this.lastFrameTime = 0;
-            this.frameInterval = 1000 / 45; // Reduced to 45fps for better performance
-        }
+        // Interactive state (Desktop only)
+        this.mouse = { x: -1000, y: -1000 };
+        this.targetMouse = { x: -1000, y: -1000 };
+        
+        // Animation state
+        this.time = 0;
+        this.activeNodes = [];
+        this.lastFrameTime = 0;
+        
+        // Optimize FPS for mobile to save battery
+        this.frameInterval = this.isMobile ? (1000 / 24) : (1000 / 45); 
 
         this.init();
     }
@@ -71,39 +72,19 @@ class InteractiveGrid {
         });
         resizeObserver.observe(document.body);
 
-        if (this.isMobile) {
-            // Mobile: static only, no animation loop
-            this.generateStars();
-            this.renderStaticStars();
-        } else {
-            // Desktop: interactive
+        if (!this.isMobile) {
             window.addEventListener('mousemove', (e) => {
                 this.targetMouse.x = e.pageX;
                 this.targetMouse.y = e.pageY;
             }, { passive: true });
-
-            window.addEventListener('touchstart', (e) => {
-                this.targetMouse.x = e.touches[0].pageX;
-                this.targetMouse.y = e.touches[0].pageY;
-            }, { passive: true });
-
-            window.addEventListener('touchmove', (e) => {
-                this.targetMouse.x = e.touches[0].pageX;
-                this.targetMouse.y = e.touches[0].pageY;
-            }, { passive: true });
-
-            window.addEventListener('touchend', () => {
-                this.targetMouse.x = -1000;
-                this.targetMouse.y = -1000;
-            }, { passive: true });
-
-            // Pause animation when tab is not visible
-            document.addEventListener('visibilitychange', () => {
-                this.isVisible = !document.hidden;
-            });
-
-            this.animateDesktop(0);
         }
+
+        document.addEventListener('visibilitychange', () => {
+            this.isVisible = !document.hidden;
+        });
+
+        // Start animation loop for BOTH mobile and desktop
+        this.animate(0);
     }
 
     resize(force = false) {
@@ -122,85 +103,13 @@ class InteractiveGrid {
         this.canvas.width = this.width;
         this.canvas.height = this.height;
         this.canvas.style.height = `${this.height}px`;
-
-        if (this.isMobile) {
-            this.generateStars();
-            this.renderStaticStars();
-        }
+        
+        // Draw once immediately on resize to avoid flash
+        this.drawGrid();
     }
 
-    // ===== MOBILE: Static Starfield =====
-    generateStars() {
-        this.stars = [];
-        const density = 0.0005;
-        const numStars = Math.floor(this.width * this.height * density);
-
-        for (let i = 0; i < numStars; i++) {
-            this.stars.push({
-                x: Math.random() * this.width,
-                y: Math.random() * this.height,
-                size: Math.random() * 1.8 + 0.5,
-                alpha: Math.random() * 0.5 + 0.2
-            });
-        }
-
-        // Accent stars with glow
-        const accentCount = Math.floor(numStars * 0.1);
-        for (let i = 0; i < accentCount; i++) {
-            this.stars.push({
-                x: Math.random() * this.width,
-                y: Math.random() * this.height,
-                size: Math.random() * 2.5 + 2,
-                alpha: Math.random() * 0.3 + 0.5,
-                glow: true
-            });
-        }
-    }
-
-    renderStaticStars() {
-        // Fill background
-        this.ctx.fillStyle = '#050507';
-        this.ctx.fillRect(0, 0, this.width, this.height);
-
-        // Subtle grid
-        this.ctx.strokeStyle = 'rgba(139, 92, 246, 0.03)';
-        this.ctx.lineWidth = 1;
-        this.ctx.beginPath();
-        for (let x = 0; x <= this.width; x += this.gridSize) {
-            this.ctx.moveTo(x, 0);
-            this.ctx.lineTo(x, this.height);
-        }
-        for (let y = 0; y <= this.height; y += this.gridSize) {
-            this.ctx.moveTo(0, y);
-            this.ctx.lineTo(this.width, y);
-        }
-        this.ctx.stroke();
-
-        // Draw all stars
-        for (const star of this.stars) {
-            if (star.glow) {
-                const gradient = this.ctx.createRadialGradient(
-                    star.x, star.y, 0,
-                    star.x, star.y, star.size * 3
-                );
-                gradient.addColorStop(0, `rgba(167, 139, 250, ${star.alpha})`);
-                gradient.addColorStop(0.4, `rgba(139, 92, 246, ${star.alpha * 0.4})`);
-                gradient.addColorStop(1, 'rgba(139, 92, 246, 0)');
-                this.ctx.fillStyle = gradient;
-                this.ctx.beginPath();
-                this.ctx.arc(star.x, star.y, star.size * 3, 0, Math.PI * 2);
-                this.ctx.fill();
-            }
-
-            this.ctx.beginPath();
-            this.ctx.fillStyle = `rgba(200, 180, 255, ${star.alpha})`;
-            this.ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-            this.ctx.fill();
-        }
-    }
-
-    // ===== DESKTOP: Interactive =====
     lerpMouse() {
+        if (this.isMobile) return;
         const lerp = 0.12;
         this.mouse.x += (this.targetMouse.x - this.mouse.x) * lerp;
         this.mouse.y += (this.targetMouse.y - this.mouse.y) * lerp;
@@ -212,20 +121,20 @@ class InteractiveGrid {
         this.ctx.beginPath();
         this.ctx.fillStyle = `rgba(167, 139, 250, ${alpha})`;
 
-        // 3-pointed star (Mercedes style)
+        // 3-pointed star
         for (let i = 0; i < 3; i++) {
             this.ctx.lineTo(0, size * -0.6);
-            this.ctx.rotate(Math.PI / 3); // 60 degrees
-            this.ctx.lineTo(0, size * -0.15); // Inner point
+            this.ctx.rotate(Math.PI / 3);
+            this.ctx.lineTo(0, size * -0.15);
             this.ctx.rotate(Math.PI / 3);
         }
 
         this.ctx.fill();
 
-        if (alpha > 0.35) {
+        // Glow is disabled on mobile for performance
+        if (!this.isMobile && alpha > 0.35) {
             this.ctx.beginPath();
             this.ctx.fillStyle = `rgba(139, 92, 246, ${alpha * 0.3})`;
-            // Larger glow star
             for (let i = 0; i < 3; i++) {
                 this.ctx.lineTo(0, size * -1.0);
                 this.ctx.rotate(Math.PI / 3);
@@ -238,7 +147,11 @@ class InteractiveGrid {
     }
 
     updateActiveNodes() {
-        if (Math.random() < 0.08 && this.activeNodes.length < 25) {
+        // Less active nodes on mobile
+        const chance = this.isMobile ? 0.02 : 0.08;
+        const maxNodes = this.isMobile ? 5 : 25;
+
+        if (Math.random() < chance && this.activeNodes.length < maxNodes) {
             const scrollY = window.scrollY;
             const viewH = window.innerHeight;
 
@@ -278,14 +191,17 @@ class InteractiveGrid {
         return null;
     }
 
-    drawGridDesktop() {
+    drawGrid() {
         const scrollY = window.scrollY;
         const viewH = window.innerHeight;
-        const viewTop = scrollY - 50;
-        const viewBottom = scrollY + viewH + 50;
+        // Optimization: Only draw what's visible on screen plus a small margin
+        const margin = this.isMobile ? 50 : 150; 
+        const viewTop = scrollY - margin;
+        const viewBottom = scrollY + viewH + margin;
 
+        // Clear only visible area
         this.ctx.fillStyle = '#050507';
-        this.ctx.fillRect(0, viewTop, this.width, viewH + 100);
+        this.ctx.fillRect(0, scrollY - margin, this.width, viewH + (margin * 2));
 
         this.ctx.strokeStyle = 'rgba(139, 92, 246, 0.04)';
         this.ctx.lineWidth = 1;
@@ -308,7 +224,9 @@ class InteractiveGrid {
 
         for (let x = 0; x <= this.width; x += this.gridSize) {
             for (let y = startY; y <= endY; y += this.gridSize) {
-                const wave = Math.sin(this.time * 1.2 + (x * 0.015) + (y * 0.015));
+                // Slower wave animation for mobile to look calmer
+                const waveSpeed = this.isMobile ? 0.6 : 1.2;
+                const wave = Math.sin(this.time * waveSpeed + (x * 0.015) + (y * 0.015));
                 const breathing = (wave + 1) * 0.5;
                 let alpha = 0.12 + (breathing * 0.08);
                 let size = this.gridSize * 0.28;
@@ -319,18 +237,21 @@ class InteractiveGrid {
                     alpha += activeEffect.alphaBoost;
                 }
 
-                const dx = this.mouse.x - x;
-                const dy = this.mouse.y - y;
-                const distSq = dx * dx + dy * dy;
-                const maxDist = 140;
-                const maxDistSq = maxDist * maxDist;
+                // Mouse interaction only on desktop
+                if (!this.isMobile) {
+                    const dx = this.mouse.x - x;
+                    const dy = this.mouse.y - y;
+                    const distSq = dx * dx + dy * dy;
+                    const maxDist = 140;
+                    const maxDistSq = maxDist * maxDist;
 
-                if (distSq < maxDistSq) {
-                    const dist = Math.sqrt(distSq);
-                    const t = 1 - (dist / maxDist);
-                    const factor = t * t * t;
-                    size += factor * 8;
-                    alpha += factor * 0.35;
+                    if (distSq < maxDistSq) {
+                        const dist = Math.sqrt(distSq);
+                        const t = 1 - (dist / maxDist);
+                        const factor = t * t * t;
+                        size += factor * 8;
+                        alpha += factor * 0.35;
+                    }
                 }
 
                 this.drawStar(x, y, size, Math.min(alpha, 1));
@@ -338,10 +259,9 @@ class InteractiveGrid {
         }
     }
 
-    animateDesktop(timestamp) {
-        // Skip animation when tab is hidden
+    animate(timestamp) {
         if (!this.isVisible) {
-            requestAnimationFrame((t) => this.animateDesktop(t));
+            requestAnimationFrame((t) => this.animate(t));
             return;
         }
 
@@ -351,10 +271,10 @@ class InteractiveGrid {
             this.lastFrameTime = timestamp - (elapsed % this.frameInterval);
             this.lerpMouse();
             this.time += 0.008;
-            this.drawGridDesktop();
+            this.drawGrid();
         }
 
-        requestAnimationFrame((t) => this.animateDesktop(t));
+        requestAnimationFrame((t) => this.animate(t));
     }
 }
 

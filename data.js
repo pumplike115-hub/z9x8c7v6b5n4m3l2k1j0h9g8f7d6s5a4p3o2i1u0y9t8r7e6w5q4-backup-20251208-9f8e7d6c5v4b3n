@@ -1,15 +1,19 @@
 // ===== DATA CONFIGURATION =====
 // วิธีใส่ข้อมูล:
 // - code: รหัสเรื่อง (จำเป็น)
-// - actress: ชื่อนักแสดง (ถ้าไม่มีใส่ "" หรือไม่ต้องใส่)
-// - cover: URL รูปปก (ถ้าไม่มีใส่ "" หรือไม่ต้องใส่)
-// - link: URL ลิงค์ไปหน้าอื่น (ถ้าไม่มีใส่ "" หรือไม่ต้องใส่)
-// - rank: อันดับ 1, 2, 3 (ใส่เฉพาะ 3 อันดับแรก)
+// - actress: ชื่อนักแสดง (ถ้าไม่มี ไม่ต้องใส่)
+// - cover: URL รูปปก (ใส่ลิงก์ตรงๆ ได้เลย ไม่ต้องผ่าน corsproxy ระบบจะจัดการให้เอง)
+// - link: URL ลิงก์ไปหน้าอื่น (ถ้าไม่มี ไม่ต้องใส่)
+// - rank: อันดับ 1, 2, 3 (ใส่เฉพาะ 3 อันดับแรกบน Podium)
+// 
+// 🌟 การปรับแต่งรูปปกขั้นสูง (ใส่เพิ่มเฉพาะรูปที่ต้องการปรับ):
+// - center: true     (บังคับให้รูปอยู่กึ่งกลางพอดี)
+// - position: "..."  (ปรับโฟกัสรูป เช่น "left top", "right 20%", "center 30%")
+// - zoom: "..."      (ซูมรูป เช่น "1.2" คือซูม 120%)
 //
-// ตัวอย่าง:
-// { code: "ABC-123", actress: "ชื่อนักแสดง", cover: "https://...", link: "https://...", rank: 1 },
-// { code: "XYZ-999", actress: "ชื่อนักแสดง", cover: "https://..." },
-// { code: "DEF-456" }, // มีแค่โค๊ด ไม่มีรูป ไม่มีนักแสดง
+// ตัวอย่างการใช้งาน:
+// { code: "ABC-123", actress: "น้องเอ", cover: "https://...", position: "center 20%", zoom: "1.1" },
+// { code: "XYZ-999", cover: "https://...", center: true },
 
 const sourceData = [
     // ===== TOP 3 RANKING =====
@@ -56,22 +60,32 @@ const sourceData = [
     { code: "ABP-123", actress: "Sakai Momoka", cover: "https://img10.pixhost.to/images/84/43564632_i233158.jpg", link: "" },
     { code: "GVH-549", actress: "Totsuki Ruisa", cover: "https://img87.pixhost.to/images/426/357610350_i567202.jpg", link: "" },
     { code: "SSIS-586", actress: "Saika Kawakita", cover: "https://img82.pixhost.to/images/0/330687764_i552068.jpg", link: "" },
-    { code: "NDRA-059", actress: "Mihara Honoka", cover: "https://corsproxy.io/?https%3A%2F%2Fpics.dmm.co.jp%2Fmono%2Fmovie%2Fadult%2Fndra059%2Fndra059pl.jpg", link: "" },
-    { code: "MXGS-705", actress: "Kinami Hina", cover: "https://corsproxy.io/?https%3A%2F%2Fpics.dmm.co.jp%2Fmono%2Fmovie%2Fadult%2Fh_068mxgs705%2Fh_068mxgs705pl.jpg", link: "" },
-    { code: "TOTTE-254", actress: "นักแสดงหลายคน", cover: "https://corsproxy.io/?https%3A%2F%2Fpics.dmm.co.jp%2Fdigital%2Fvideo%2F1totte00254%2F1totte00254pl.jpg", link: "" },
-
-    // ===== CODE ONLY (ไม่มีรูป) =====
-    { code: "IKUIKU-012", actress: "Otori Miyu", cover: "https://corsproxy.io/?https%3A%2F%2Fcdn.javmiku.com%2Fwp-content%2Fuploads%2F2023%2F02%2Fpb_e_489ikuiku-012.jpg", link: "" },
-    { code: "OREC-473", actress: "Reona Kirishima", cover: "https://www.gravurefit.com/images/fanzawebp/orec/orec473jp.webp", link: "" },
-    { code: "MFCS-018", actress: "Fujii Ranran, Mitsumi An", cover: "https://corsproxy.io/?https%3A%2F%2Fcdn.javmiku.com%2Fwp-content%2Fuploads%2F2022%2F05%2Fpb_e_435mfcs-018.jpg", link: "" },
-    { code: "SSNI-663", actress: "Miru", cover: "https://corsproxy.io/?https%3A%2F%2Fcdn.javmiku.com%2Fwp-content%2Fuploads%2F2019%2F12%2Fssni663pl.jpg", link: "" },
-    { code: "MDON-084", actress: "Meguri", cover: "https://corsproxy.io/?https%3A%2F%2Fcdn.javmiku.com%2Fwp-content%2Fuploads%2F2025%2F10%2Fmdon00084pl.jpg", link: "" },
-    { code: "CAWD-044", actress: "Itou Mayuki", cover: "https://corsproxy.io/?https%3A%2F%2Fcdn.javmiku.com%2Fwp-content%2Fuploads%2F2020%2F01%2F9cawd044pl.jpg", link: "" },
-    { code: "carribeancom 071415-920", actress: "Mei Matsumoto", cover: "https://www.minnano-av.com/p_package/097/56004.jpg", link: "" },
+    { code: "NDRA-059", actress: "Mihara Honoka", cover: "https://pics.dmm.co.jp/mono/movie/adult/ndra059/ndra059pl.jpg", link: "" },
+    { code: "MXGS-705", actress: "Kinami Hina", cover: "https://pics.dmm.co.jp/mono/movie/adult/h_068mxgs705/h_068mxgs705pl.jpg", link: "" },
+    { code: "TOTTE-254", actress: "นักแสดงหลายคน", cover: "https://pics.dmm.co.jp/digital/video/1totte00254/1totte00254pl.jpg", link: "" },
+    { code: "IKUIKU-012", actress: "Otori Miyu", cover: "https://cdn.javmiku.com/wp-content/uploads/2023/02/pb_e_489ikuiku-012.jpg", link: "" },
+    { code: "OREC-473", actress: "Reona Kirishima", cover: "https://media-cdn2.avjoy.me/media/avjoytmb/tmb/3748/default.jpg", link: "", position: "53% top" },
+    { code: "MFCS-018", actress: "Fujii Ranran, Mitsumi An", cover: "https://cdn.javmiku.com/wp-content/uploads/2022/05/pb_e_435mfcs-018.jpg", link: "" },
+    { code: "SSNI-663", actress: "Miru", cover: "https://cdn.javmiku.com/wp-content/uploads/2019/12/ssni663pl.jpg", link: "" },
+    { code: "MDON-084", actress: "Meguri", cover: "https://cdn.javmiku.com/wp-content/uploads/2025/10/mdon00084pl.jpg", link: "" },
+    { code: "CAWD-044", actress: "Itou Mayuki", cover: "https://cdn.javmiku.com/wp-content/uploads/2020/01/9cawd044pl.jpg", link: "" },
+    { code: "carribeancom 071415-920", actress: "Mei Matsumoto", cover: "https://caribbeancom.hiyopi.com/071415-920/movie_title.jpg", link: "", position: "25% top" },
     { code: "ran ichinose", actress: "ran ichinose", cover: "https://www.adultdvdmarketplace.com/images/medium/363627.jpg", link: "" },
     { code: "Momoka Sakai(酒井ももか) 080815_130", actress: "Momoka Sakai", cover: "https://ninjadvd.com/upload/save_image/Z-03807.jpg", link: "", flip: true },
     { code: "CWPBD-112", actress: "Mitsuki Akai", cover: "https://www.springtowndvd.com/Images/Thumbs/875588361122f.jpg", link: "" },
-    { code: "SCUTE-944", actress: "Reona Kirishima", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTETtIycN99fW565KvJk7eeGxJ6u1CCqe1yHw&s", link: "" },
+    { code: "SCUTE-944", actress: "Reona Kirishima", cover: "https://pics.dmm.co.jp/digital/amateur/scute944/scute944jp-001.jpg", link: "", position: "90% top" },
+    { code: "FJIN-073", actress: "Mizukawa Jun", cover: "https://pics.dmm.co.jp/mono/movie/adult/fjin073/fjin073pl.jpg", link: "" },
+    { code: "IPZZ-801", actress: "Hinano Kanon", cover: "https://pics.dmm.co.jp/mono/movie/adult/ipzz801/ipzz801pl.jpg", link: "" },
+    { code: "DVAJ-719", actress: "Marumo Rea", cover: "https://pics.dmm.co.jp/mono/movie/adult/dvaj719/dvaj719pl.jpg", link: "" },
+    { code: "WAAA-427", actress: "Itsukaichi Mei", cover: "https://pics.dmm.co.jp/mono/movie/adult/waaa427/waaa427pl.jpg", link: "" },
+    { code: "BOOBS-003", actress: "Honoka Ashina", cover: "https://cdn2.pvvstream.pro/videos/-228819579/456251752/preview_800.jpg", link: "" , position: "85% top" },
+    { code: "MIKR-031", actress: "Mori Hinako", cover: "https://cdn2.pvvstream.pro/videos/-228819579/456251752/preview_800.jpg", link: "" },
+    { code: "ROYD-295", actress: "Momonaga Sarina", cover: "https://pics.dmm.co.jp/mono/movie/adult/royd295/royd295pl.jpg", link: "" },
+    { code: "SONE-963", actress: "Azuma Mika", cover: "https://pics.dmm.co.jp/mono/movie/adult/sone963/sone963pl.jpg", link: "" },
+    { code: "SDMF-037", actress: "Aoi Mirei", cover: "https://pics.dmm.co.jp/mono/movie/adult/1sdmf037/1sdmf037pl.jpg", link: "" },
+    { code: "SSIS-887", actress: "Hongou Ai", cover: "https://pics.dmm.co.jp/mono/movie/adult/ssis887/ssis887pl.jpg", link: "" },
+    { code: "JUQ-969", actress: "Tachibana Mary", cover: "https://pics.dmm.co.jp/mono/movie/adult/juq969/juq969pl.jpg", link: "" },
+    { code: "WAAA-497", actress: "Mori Hinako", cover: "https://pics.dmm.co.jp/mono/movie/adult/waaa497/waaa497pl.jpg", link: "" },
 ];
 
 function shuffleArray(array) {
