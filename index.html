@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <link rel="preconnect" href="https://corsproxy.io">
+    <meta name="referrer" content="no-referrer">
+    <link rel="preconnect" href="https://cors.eu.org">
     <link rel="dns-prefetch" href="https://pics.dmm.co.jp">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🌙</text></svg>">
@@ -1257,19 +1257,20 @@
         function getProxiedUrl(url) {
             if (!url) return '';
             
-            // ใช้ proxy เฉพาะ dmm (pixhost ยังใช้ตรงปกติ เพราะเร็วและเสถียร)
-            if (url.includes('dmm.co.jp') || url.includes('pics.dmm')) {
-                // corsproxy.io + caching = เร็ว + ไม่ block
-                return `https://corsproxy.io/?${encodeURIComponent(url)}`;
-                
-                // ถ้าอยากลองตัวสำรอง (allorigins) ให้ comment บรรทัดบนแล้วเปิดบรรทัดล่าง
-                // return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-            }
+            // Debug: log ว่า URL ไหนถูก proxy
+            const isDMM = url.includes('dmm.co.jp') || url.includes('pics.dmm');
             
-            // ถ้าเป็น URL อื่นๆ ที่อาจมีปัญหา hotlink ก็ใช้ proxy ได้
-            // if (url.includes('domain-ที่มีปัญหา.com')) {
-            //     return `https://corsproxy.io/?${encodeURIComponent(url)}`;
-            // }
+            // ใช้ proxy เฉพาะ dmm (pixhost ยังใช้ตรงปกติ เพราะเร็วและเสถียร)
+            if (isDMM) {
+                // ใช้ proxy ที่ไม่ต้อง API key และไม่มี rate limit
+                // 1. cors.eu.org - เสถียรที่สุด ไม่ต้อง key
+                const proxied = `https://cors.eu.org/${url}`;
+                console.log('🔄 Proxying DMM via cors.eu.org:', url.substring(0, 50) + '...');
+                return proxied;
+                
+                // ตัวสำรอง (ถ้า cors.eu.org ล้ม):
+                // return `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
+            }
             
             return url;
         }
@@ -1524,27 +1525,45 @@
         }
 
         function showErrorBox(img) {
-            img.classList.add('error');
-            const container = img.parentElement;
-            
-            // ถ้ายังไม่เคยลอง proxy ให้ลองอีกครั้ง (fallback)
             const originalSrc = img.getAttribute('data-original-src');
             const currentSrc = img.src;
             
-            if (originalSrc && !currentSrc.includes('corsproxy.io')) {
-                // ลอง proxy ครั้งแรก
-                img.src = `https://corsproxy.io/?${encodeURIComponent(originalSrc)}`;
+            console.error('❌ Image failed:', {
+                code: img.alt,
+                original: originalSrc,
+                current: currentSrc,
+                retryCount: parseInt(img.getAttribute('data-retry-count') || '0')
+            });
+            
+            img.classList.add('error');
+            const container = img.parentElement;
+            
+            const retryCount = parseInt(img.getAttribute('data-retry-count') || '0');
+            
+            // Retry chain: cors.eu.org → codetabs → direct
+            if (originalSrc && retryCount === 0) {
+                img.setAttribute('data-retry-count', '1');
+                console.log('🔄 Retry 1: cors.eu.org...');
+                img.src = `https://cors.eu.org/${originalSrc}`;
                 return;
             }
             
-            // ถ้า proxy แรกล้ม ลอง allorigins
-            if (originalSrc && currentSrc.includes('corsproxy.io') && !img.hasAttribute('data-tried-allorigins')) {
-                img.setAttribute('data-tried-allorigins', 'true');
-                img.src = `https://api.allorigins.win/raw?url=${encodeURIComponent(originalSrc)}`;
+            if (originalSrc && retryCount === 1) {
+                img.setAttribute('data-retry-count', '2');
+                console.log('🔄 Retry 2: codetabs...');
+                img.src = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(originalSrc)}`;
+                return;
+            }
+            
+            if (originalSrc && retryCount === 2) {
+                img.setAttribute('data-retry-count', '3');
+                console.log('🔄 Retry 3: direct (last attempt)...');
+                img.src = originalSrc;
                 return;
             }
             
             // ถ้าลองหมดแล้ว แสดง error
+            console.error('💀 All proxies failed for:', img.alt);
             if (container && !container.querySelector('.image-error')) {
                 container.classList.add('error-state');
                 const errorDiv = document.createElement('div');
@@ -1552,7 +1571,7 @@
                 const svgImageOff = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><line x1="18" y1="12" x2="21" y2="15"></line><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.05-.22 1.41-.59"></path><path d="M21 15V5a2 2 0 0 0-2-2H9"></path></svg>`;
                 errorDiv.innerHTML = `
                     <div class="image-error-icon" style="opacity:0.5; margin-bottom:8px;">${svgImageOff}</div>
-                    <div>ไม่สามารถโหลดรูปได้</div>
+                    <div style="font-size:0.75rem;">ไม่สามารถโหลดรูปได้</div>
                 `;
                 container.appendChild(errorDiv);
             }
