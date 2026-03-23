@@ -1247,6 +1247,16 @@
         const svgCopy = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
         const svgLink = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
 
+        function getOptimizedImageUrl(url) {
+            if (!url) return '';
+            // ถ้ารู้ว่าเว็บไหนมีปัญหากับ iOS แน่ๆ (เช่น javmiku) ให้ยิงเข้าท่อ Proxy ตั้งแต่แรกเลย 
+            // จะได้โหลดพุ่งมาทีเดียว ไม่ต้องเสียเวลารอให้รูปขึ้น Error แล้วค่อยกู้ใหม่
+            if (url.includes('javmiku.com')) {
+                return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url);
+            }
+            return url;
+        }
+
         function getCardHTML(item, imgClass) {
             let styleVars = '';
             if (item.position) styleVars += `--custom-pos: ${item.position}; `;
@@ -1256,10 +1266,11 @@
             if (item.zoom) styleVars += `--custom-scale: ${item.zoom}; `;
 
             const styleAttr = styleVars ? `style="${styleVars}"` : '';
+            const optimizedUrl = getOptimizedImageUrl(item.cover);
 
             return `
                 <div class="image-container">
-                    <img src="${item.cover}" data-original-src="${item.cover}" alt="${item.code}" class="card-img ${imgClass}" ${styleAttr} loading="lazy" onerror="handleImageError(this)" onload="handleImageLoad(this)">
+                    <img src="${optimizedUrl}" data-original-src="${item.cover}" alt="${item.code}" class="card-img ${imgClass}" ${styleAttr} loading="lazy" onerror="handleImageError(this)" onload="handleImageLoad(this)">
                 </div>
                 <div class="copy-overlay">${svgCopy}</div>
                 <div class="card-info">
