@@ -348,7 +348,8 @@
             }
         }
 
-        .image-container.loaded::before {
+        .image-container.loaded::before,
+        .image-container.error-state::before {
             display: none;
         }
 
@@ -835,6 +836,24 @@
 
         /* Mobile / Small Tablets */
         @media (max-width: 768px) {
+            /* Disable expensive effects on mobile to prevent overheating */
+            .spotlight-card, 
+            .search-input, 
+            .code-item, 
+            .toast, 
+            .back-to-top,
+            .age-modal {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .spotlight-card {
+                background: rgba(20, 20, 25, 0.95);
+            }
+            .spotlight-card::before, 
+            .spotlight-card::after {
+                display: none !important;
+            }
+
             .gallery {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 16px;
@@ -1458,11 +1477,7 @@
         }
 
         // --- ระบบ Proxy Fallback ดึงรูปข้ามเว็บ ---
-        const PROXIES = [
-            'https://wsrv.nl/?url=', // โหลดเร็วสุด มีระบบ Cache ภาพ
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?'
-        ];
+        const PROXY = 'https://corsproxy.io/?'; // ใช้แบบเดียวพอ เพื่อไม่ให้โหลดซ้ำซ้อนจนเครื่องร้อน
 
         function handleImageLoad(img) {
             img.classList.add('loaded');
@@ -1476,34 +1491,29 @@
         }
 
         function handleImageError(img) {
-            let proxyIndex = parseInt(img.dataset.proxyIndex || '-1');
             const originalSrc = img.dataset.originalSrc;
             
-            if (!originalSrc) return;
-
-            proxyIndex++;
-            if (proxyIndex < PROXIES.length) {
-                img.dataset.proxyIndex = proxyIndex.toString();
-                let targetUrl = originalSrc;
-                if (PROXIES[proxyIndex].includes('wsrv.nl')) {
-                     targetUrl = targetUrl.replace(/^https?:\/\//, '');
-                }
-                img.src = PROXIES[proxyIndex] + encodeURIComponent(targetUrl);
-                img.classList.remove('error');
-            } else {
+            if (!originalSrc || img.dataset.triedProxy) {
                 img.classList.add('error');
                 const container = img.parentElement;
-                if (!container.querySelector('.image-error')) {
+                if (container && !container.querySelector('.image-error')) {
+                    container.classList.add('error-state');
                     const errorDiv = document.createElement('div');
                     errorDiv.className = 'image-error';
                     const svgImageOff = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><line x1="18" y1="12" x2="21" y2="15"></line><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.05-.22 1.41-.59"></path><path d="M21 15V5a2 2 0 0 0-2-2H9"></path></svg>`;
                     errorDiv.innerHTML = `
                         <div class="image-error-icon" style="opacity:0.5; margin-bottom:8px;">${svgImageOff}</div>
-                        <div>ไม่สามารถโหลดรูปได้<br><small style="font-size:10px; opacity:0.6;">(Origin & Proxy Failed)</small></div>
+                        <div>ไม่สามารถโหลดรูปได้</div>
                     `;
                     container.appendChild(errorDiv);
                 }
+                return;
             }
+
+            // ลองใช้ Proxy 1 ครั้ง ถ้ายอมแพ้เลย (เพื่อประหยัดเน็ตมือถือ)
+            img.dataset.triedProxy = 'true';
+            img.src = PROXY + encodeURIComponent(originalSrc);
+            img.classList.remove('error');
         }
 
         function initPage() {
