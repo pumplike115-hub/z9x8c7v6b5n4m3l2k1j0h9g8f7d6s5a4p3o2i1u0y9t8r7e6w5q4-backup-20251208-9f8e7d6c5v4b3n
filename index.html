@@ -1477,43 +1477,64 @@
         }
 
         // --- ระบบ Proxy Fallback ดึงรูปข้ามเว็บ ---
-        const PROXY = 'https://corsproxy.io/?'; // ใช้แบบเดียวพอ เพื่อไม่ให้โหลดซ้ำซ้อนจนเครื่องร้อน
-
         function handleImageLoad(img) {
             img.classList.add('loaded');
             img.classList.remove('error');
             const container = img.parentElement;
             if (container) container.classList.add('loaded');
             
-            // หากรูปที่โหลดสำเร็จ มีแจ้งเตือน Error ค้างอยู่ ให้ลบออก
             const errorDiv = container.querySelector('.image-error');
             if (errorDiv) errorDiv.remove();
         }
 
-        function handleImageError(img) {
+        function showErrorBox(img) {
+            img.classList.add('error');
+            const container = img.parentElement;
+            if (container && !container.querySelector('.image-error')) {
+                container.classList.add('error-state');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'image-error';
+                const svgImageOff = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><line x1="18" y1="12" x2="21" y2="15"></line><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.05-.22 1.41-.59"></path><path d="M21 15V5a2 2 0 0 0-2-2H9"></path></svg>`;
+                errorDiv.innerHTML = `
+                    <div class="image-error-icon" style="opacity:0.5; margin-bottom:8px;">${svgImageOff}</div>
+                    <div>ไม่สามารถโหลดรูปได้</div>
+                `;
+                container.appendChild(errorDiv);
+            }
+        }
+
+        async function handleImageError(img) {
             const originalSrc = img.dataset.originalSrc;
             
+            // ถ้าไม่มียูอาร์แอล หรือเคยลอง Proxy ไปแล้วพังอีก ให้แสดงกล่อง Error 
             if (!originalSrc || img.dataset.triedProxy) {
-                img.classList.add('error');
-                const container = img.parentElement;
-                if (container && !container.querySelector('.image-error')) {
-                    container.classList.add('error-state');
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'image-error';
-                    const svgImageOff = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><line x1="18" y1="12" x2="21" y2="15"></line><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.05-.22 1.41-.59"></path><path d="M21 15V5a2 2 0 0 0-2-2H9"></path></svg>`;
-                    errorDiv.innerHTML = `
-                        <div class="image-error-icon" style="opacity:0.5; margin-bottom:8px;">${svgImageOff}</div>
-                        <div>ไม่สามารถโหลดรูปได้</div>
-                    `;
-                    container.appendChild(errorDiv);
-                }
+                showErrorBox(img);
                 return;
             }
 
-            // ลองใช้ Proxy 1 ครั้ง ถ้ายอมแพ้เลย (เพื่อประหยัดเน็ตมือถือ)
             img.dataset.triedProxy = 'true';
-            img.src = PROXY + encodeURIComponent(originalSrc);
-            img.classList.remove('error');
+            
+            // ตัวเลือก Proxy สำรอง
+            const proxy1 = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(originalSrc);
+            const proxy2 = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(originalSrc);
+
+            try {
+                // แก้ปัญหา iOS Safari โหลดรูปไม่ขึ้นเพราะ Proxy บางตัวส่ง MIME Type ผิด (เช่น text/html)
+                // Chrome แอบแปลงให้เอง แต่ Safari จะบล็อกรูปทันที
+                // เราแก้โดยใช้ fetch โหลดไฟล์ดิบ แล้วบังคับเสกให้เป็น Blob ประเภท image/jpeg เสมอ!
+                const res = await fetch(proxy1);
+                if (!res.ok) throw new Error('Proxy 1 HTTP Error');
+                
+                const buffer = await res.arrayBuffer();
+                const imageBlob = new Blob([buffer], { type: 'image/jpeg' });
+                img.src = URL.createObjectURL(imageBlob);
+                img.classList.remove('error');
+            } catch (err) {
+                // ถ้าวิธี Blob ด้านบนพัง (เช่นติด CORS) ให้ลองใช้ proxy ที่ 2 เปลี่ยน src โดยตรงเป็นไม้ตายสุดท้าย
+                img.src = proxy2;
+                // ตั้ง callback ถ้าไม้ตายสุดท้ายพังอีก ก็ให้โชว์ error
+                img.onerror = () => showErrorBox(img);
+            }
         }
 
         function initPage() {
