@@ -201,7 +201,7 @@ class InteractiveGrid {
 
         // Clear only visible area
         this.ctx.fillStyle = '#050507';
-        this.ctx.fillRect(0, scrollY - margin, this.width, viewH + (margin * 2));
+        this.ctx.fillRect(0, viewTop, this.width, viewBottom - viewTop);
 
         this.ctx.strokeStyle = 'rgba(139, 92, 246, 0.04)';
         this.ctx.lineWidth = 1;
