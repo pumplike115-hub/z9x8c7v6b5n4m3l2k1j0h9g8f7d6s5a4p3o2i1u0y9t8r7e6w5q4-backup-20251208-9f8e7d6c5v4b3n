@@ -19,7 +19,7 @@ class InteractiveGrid {
         this.lastFrameTime = 0;
         
         // Optimize FPS for mobile to save battery
-        this.frameInterval = this.isMobile ? (1000 / 24) : (1000 / 45); 
+        this.frameInterval = this.isMobile ? (1000 / 24) : (1000 / 60); 
 
         this.init();
     }
@@ -110,7 +110,7 @@ class InteractiveGrid {
 
     lerpMouse() {
         if (this.isMobile) return;
-        const lerp = 0.12;
+        const lerp = 0.18; // Faster response for smoother feel
         this.mouse.x += (this.targetMouse.x - this.mouse.x) * lerp;
         this.mouse.y += (this.targetMouse.y - this.mouse.y) * lerp;
     }
@@ -270,7 +270,7 @@ class InteractiveGrid {
         if (elapsed >= this.frameInterval) {
             this.lastFrameTime = timestamp - (elapsed % this.frameInterval);
             this.lerpMouse();
-            this.time += 0.008;
+            this.time += 0.012; // Slightly faster animation
             this.drawGrid();
         }
 
