@@ -4,20 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="referrer" content="no-referrer">
-    <link rel="preconnect" href="https://cors.eu.org">
-
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+    <title>404 Not Found</title>
+    <meta name="theme-color" content="#ffffff">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🌐</text></svg>">
-    <title>Welcome to nginx!</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -1109,7 +1099,7 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <path d="m21 21-4.35-4.35"></path>
                 </svg>
-                <input type="text" class="search-input" id="search" aria-label="ค้นหารหัสอ้างอิง" placeholder="ค้นหารหัสอ้างอิง... (กด / เพื่อค้นหา)"
+                <input type="text" class="search-input" id="search" aria-label="Search" placeholder="Search... (press / to focus)"
                     oninput="filterCardsDebounced()">
                 <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
             </div>
@@ -1148,7 +1138,7 @@
     <script src="background.js"></script>
     <script>
         const SECRET_CODE = 'open';
-        let _buf = '', isUnlocked = sessionStorage.getItem('_sid') === '1';
+        let _buf = '', isUnlocked = sessionStorage.getItem('_sid') === '1', _swRegistered = false;
 
         // URL unlock: yoursite.com/#open  or  ?v=open  (works on mobile)
         (function() {
@@ -1168,6 +1158,8 @@
             if (isUnlocked) {
                 decoy.classList.add('hidden');
                 content.classList.remove('content-hidden');
+                _injectAssets();
+                if (window.startBackground) window.startBackground();
                 initPage();
                 resetInactivityTimer();
             } else {
@@ -1280,7 +1272,7 @@
             if (count === total) {
                 counter.textContent = '';
             } else {
-                counter.textContent = `แสดง ${count} จาก ${total} รายการ`;
+                counter.textContent = `Showing ${count} of ${total}`;
             }
         }
 
@@ -1324,7 +1316,7 @@
             if (!raw) return '';
             let url;
             try { url = atob(raw); } catch(e) { url = raw; }
-
+            // Use weserv for dmm (needs CORS fix) — others load direct first
             const needsProxy = url.includes('dmm.co.jp') || url.includes('pics.dmm') || url.startsWith('http://');
             if (needsProxy) {
                 return `https://images.weserv.nl/?url=${encodeURIComponent(url)}`;
@@ -1333,32 +1325,33 @@
         }
 
         function getCardHTML(item, imgClass) {
-            const proxiedSrc = getProxiedUrl(item.cover);
+            const proxiedSrc = getProxiedUrl(item.cv);
             
             let styleVars = '';
-            if (item.position) styleVars += `--custom-pos: ${item.position}; `;
+            if (item.p) styleVars += `--custom-pos: ${item.p}; `;
             else if (item.center) styleVars += `--custom-pos: center top; `;
             
-            if (item.zoom) styleVars += `--custom-scale: ${item.zoom}; `;
+            if (item.z) styleVars += `--custom-scale: ${item.z}; `;
 
             const styleAttr = styleVars ? `style="${styleVars}"` : '';
             return `
                 <div class="image-container">
                     <img src="${proxiedSrc}" 
-                         data-original-src="${item.cover}" 
-                         alt="${item.code}" 
+                         data-original-src="${item.cv}" 
+                         alt="${item.c}" 
                          class="card-img ${imgClass}" 
                          ${styleAttr} 
                          loading="lazy" 
                          decoding="async"
+                         referrerpolicy="no-referrer"
                          onerror="showErrorBox(this)" 
                          onload="handleImageLoad(this)">
                 </div>
                 <div class="copy-overlay">${svgCopy}</div>
                 <div class="card-info">
-                    <div class="card-code">${item.code}</div>
-                    <div class="card-actress">${item.actress || ''}</div>
-                    ${item.link ? `<a class="card-link" href="${item.link}" target="_blank" onclick="event.stopPropagation()">${svgLink} VIEW</a>` : ''}
+                    <div class="card-code">${item.c}</div>
+                    <div class="card-actress">${item.a || ''}</div>
+                    ${item.lk ? `<a class="card-link" href="${item.lk}" target="_blank" onclick="event.stopPropagation()">${svgLink} VIEW</a>` : ''}
                 </div>
             `;
         }
@@ -1370,10 +1363,10 @@
 
             const card = document.createElement('div');
             card.className = 'spotlight-card podium-card';
-            card.onclick = () => copyCode(item.code);
+            card.onclick = () => copyCode(item.c);
             card.onmousemove = handleSpotlight;
 
-            const imgClass = item.flip ? 'flipped' : '';
+            const imgClass = item.f ? 'flipped' : '';
             card.innerHTML = getCardHTML(item, imgClass);
             div.appendChild(card);
 
@@ -1385,8 +1378,8 @@
             const stand = document.createElement('div');
             stand.className = 'podium-stand';
             stand.innerHTML = `
-                <div class="podium-code">${item.code}</div>
-                <div class="podium-actress">${item.actress || ''}</div>
+                <div class="podium-code">${item.c}</div>
+                <div class="podium-actress">${item.a || ''}</div>
             `;
             div.appendChild(stand);
 
@@ -1395,21 +1388,21 @@
 
         function renderPodium() {
             const podium = document.getElementById('podium');
-            const top3 = data.filter(d => d.rank).sort((a, b) => a.rank - b.rank);
+            const top3 = data.filter(d => d.r).sort((a, b) => a.rank - b.rank);
             // Order: 2nd, 1st, 3rd (podium style)
             const order = [top3[1], top3[0], top3[2]];
             order.forEach((item, index) => {
-                if (item) podium.appendChild(createPodiumItem(item, item.rank, index));
+                if (item) podium.appendChild(createPodiumItem(item, item.r, index));
             });
         }
 
         function createCard(item) {
             const card = document.createElement('div');
             card.className = 'spotlight-card card animate-fade-up';
-            card.onclick = () => copyCode(item.code);
+            card.onclick = () => copyCode(item.c);
             card.onmousemove = handleSpotlight;
 
-            const imgClass = item.flip ? 'flipped' : '';
+            const imgClass = item.f ? 'flipped' : '';
             card.innerHTML = getCardHTML(item, imgClass);
             return card;
         }
@@ -1417,17 +1410,16 @@
         function createCodeItem(item) {
             const div = document.createElement('div');
             div.className = 'code-item animate-fade-scale';
-            div.onclick = () => copyCode(item.code);
+            div.onclick = () => copyCode(item.c);
             div.innerHTML = `
-                <div class="code-item-title">${item.code}</div>
-                <div class="code-item-subtitle">${item.actress || 'ไม่ระบุนักแสดง'}</div>
+                <div class="code-item-title">${item.c}</div>
+                <div class="code-item-subtitle">${item.a || 'Unknown'}</div>
                 <div class="copy-overlay">${svgCopy}</div>
             `;
             return div;
         }
 
-        // --- ระบบ Infinite Scroll และ Lazy Rendering ---
-        let currentRenderIndex = 0;
+                let currentRenderIndex = 0;
         const CHUNK_SIZE = 16;
         let activeData = [];
         let infiniteScrollObserver;
@@ -1436,16 +1428,15 @@
             const gallery = document.getElementById('gallery');
             const codeList = document.getElementById('code-list');
             
-            const withCover = activeData.filter(d => !d.rank && d.cover);
-            const codeOnly = activeData.filter(d => !d.rank && !d.cover);
+            const withCover = activeData.filter(d => !d.r && d.cv);
+            const codeOnly = activeData.filter(d => !d.r && !d.cv);
             
             const itemsToRender = withCover.slice(currentRenderIndex, currentRenderIndex + CHUNK_SIZE);
             itemsToRender.forEach(item => gallery.appendChild(createCard(item)));
             
             currentRenderIndex += CHUNK_SIZE;
             
-            // ถ้าโหลดมีรูปหมดแล้ว ให้แสดง Code Only ทีเดียว
-            if (currentRenderIndex >= withCover.length) {
+                        if (currentRenderIndex >= withCover.length) {
                 if (codeOnly.length > 0 && codeList.children.length === 0) {
                     codeOnly.forEach(item => codeList.appendChild(createCodeItem(item)));
                     document.getElementById('code-only-section').style.display = 'block';
@@ -1467,7 +1458,7 @@
             
             infiniteScrollObserver = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting) {
-                    const withCover = activeData.filter(d => !d.rank && d.cover);
+                    const withCover = activeData.filter(d => !d.r && d.cv);
                     if (currentRenderIndex < withCover.length) {
                         infiniteScrollObserver.disconnect();
                         renderGalleryChunk();
@@ -1490,8 +1481,8 @@
             activeData = items;
             currentRenderIndex = 0;
             
-            const withCover = items.filter(d => !d.rank && d.cover);
-            const codeOnly = items.filter(d => !d.rank && !d.cover);
+            const withCover = items.filter(d => !d.r && d.cv);
+            const codeOnly = items.filter(d => !d.r && !d.cv);
 
             if (withCover.length === 0 && codeOnly.length === 0) {
                 gallery.innerHTML = `
@@ -1502,7 +1493,7 @@
                             <line x1="9" y1="9" x2="13" y2="13"></line>
                             <line x1="13" y1="9" x2="9" y2="13"></line>
                         </svg>
-                        <div>ไม่พบรหัสหรือชื่อนักแสดงที่ค้นหา</div>
+                        <div>No results found</div>
                     </div>
                 `;
                 updateResultsCounter(0, data.length);
@@ -1532,8 +1523,8 @@
                 galleryDivider.style.display = 'none';
 
                 const filtered = data.filter(item =>
-                    item.code.toLowerCase().includes(query) ||
-                    (item.actress && item.actress.toLowerCase().includes(query))
+                    item.c.toLowerCase().includes(query) ||
+                    (item.a && item.a.toLowerCase().includes(query))
                 );
 
                 renderGallery(filtered);
@@ -1550,27 +1541,35 @@
         function setupScrollObserver() {
             if (scrollObserver) scrollObserver.disconnect();
 
+            // Mark elements already above viewport as visible immediately
+            document.querySelectorAll('.animate-fade-up, .animate-fade-scale').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.bottom < 0) {
+                    el.classList.add('visible');
+                }
+            });
+
             scrollObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
+                entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('visible');
-                        }, index * 50);
+                        // Add visible immediately — no setTimeout delay that breaks fast scroll
+                        entry.target.classList.add('visible');
                         scrollObserver.unobserve(entry.target);
                     }
                 });
             }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+                threshold: 0,
+                rootMargin: '0px 0px 60px 0px'  // Trigger 60px BEFORE entering viewport
             });
 
             document.querySelectorAll('.animate-fade-up, .animate-fade-scale').forEach(el => {
-                scrollObserver.observe(el);
+                if (!el.classList.contains('visible')) {
+                    scrollObserver.observe(el);
+                }
             });
         }
 
-        // --- ระบบ Proxy Fallback ดึงรูปข้ามเว็บ ---
-        function handleImageLoad(img) {
+                function handleImageLoad(img) {
             img.classList.add('loaded');
             img.classList.remove('error');
             const container = img.parentElement;
@@ -1579,6 +1578,14 @@
             const errorDiv = container.querySelector('.image-error');
             if (errorDiv) errorDiv.remove();
         }
+
+        // Proxy fallback chain for failed images
+        // retry 0: weserv (handles CORS + hotlink for most CDNs)
+        // retry 1: direct URL (works for weserv-blocked domains with no-referrer policy)
+        const _PROXIES = [
+            u => `https://images.weserv.nl/?url=${encodeURIComponent(u)}`,
+            u => u,
+        ];
 
         function showErrorBox(img) {
             const rawSrc = img.getAttribute('data-original-src');
@@ -1589,19 +1596,9 @@
             const container = img.parentElement;
             const retryCount = parseInt(img.getAttribute('data-retry-count') || '0');
 
-            if (originalSrc && retryCount === 0) {
-                img.setAttribute('data-retry-count', '1');
-                img.src = `https://images.weserv.nl/?url=${encodeURIComponent(originalSrc)}`;
-                return;
-            }
-            if (originalSrc && retryCount === 1) {
-                img.setAttribute('data-retry-count', '2');
-                img.src = `https://api.codetabs.com/v1/proxy?quest=${originalSrc}`;
-                return;
-            }
-            if (originalSrc && retryCount === 2) {
-                img.setAttribute('data-retry-count', '3');
-                img.src = originalSrc;
+            if (originalSrc && retryCount < _PROXIES.length) {
+                img.setAttribute('data-retry-count', String(retryCount + 1));
+                img.src = _PROXIES[retryCount](originalSrc);
                 return;
             }
 
@@ -1612,13 +1609,50 @@
                 const svgImageOff = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><line x1="18" y1="12" x2="21" y2="15"></line><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.05-.22 1.41-.59"></path><path d="M21 15V5a2 2 0 0 0-2-2H9"></path></svg>`;
                 errorDiv.innerHTML = `
                     <div class="image-error-icon" style="opacity:0.5; margin-bottom:8px;">${svgImageOff}</div>
-                    <div style="font-size:0.75rem;">ไม่สามารถโหลดรูปได้</div>
+                    <div style="font-size:0.75rem;">Image unavailable</div>
                 `;
                 container.appendChild(errorDiv);
             }
         }
 
+        function _injectAssets() {
+            // Inject Google Fonts (only after unlock)
+            if (!document.getElementById('_gf')) {
+                ['https://fonts.googleapis.com','https://fonts.gstatic.com'].forEach((h,i) => {
+                    const l = document.createElement('link');
+                    l.rel = 'preconnect'; l.href = h;
+                    if (i===1) l.crossOrigin = '';
+                    document.head.appendChild(l);
+                });
+                const f = document.createElement('link');
+                f.id = '_gf'; f.rel = 'stylesheet';
+                f.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap';
+                document.head.appendChild(f);
+            }
+            // Inject preconnect for image proxy (only after unlock)
+            if (!document.getElementById('_pc')) {
+                const pc = document.createElement('link');
+                pc.id = '_pc'; pc.rel = 'preconnect';
+                pc.href = 'https://images.weserv.nl';
+                document.head.appendChild(pc);
+            }
+            // Inject referrer policy (only after unlock)
+            if (!document.getElementById('_rf')) {
+                const m = document.createElement('meta');
+                m.id = '_rf'; m.name = 'referrer'; m.content = 'no-referrer';
+                document.head.appendChild(m);
+            }
+            // Register SW (only after unlock)
+            if ('serviceWorker' in navigator && !_swRegistered) {
+                _swRegistered = true;
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            }
+        }
+
+        let _pageInit = false;
         function initPage() {
+            if (_pageInit) return;
+            _pageInit = true;
             // Add animation to header
             document.querySelector('.header').classList.add('animate-slide-down');
             document.querySelector('.podium-title').classList.add('animate-fade-scale');
@@ -1655,11 +1689,6 @@
 
         // Start
         checkStealthMode();
-        
-        // Register Service Worker for PWA + Image Caching
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').catch(() => {});
-        }
     </script>
 </body>
 </html>

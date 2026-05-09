@@ -1,4 +1,4 @@
-const CACHE_NAME = 'static-v4';
+const CACHE_NAME = 'v4';
 const CACHE_URLS = ['./', './index.html', './data.js', './background.js'];
 
 self.addEventListener('install', (event) => {
@@ -15,9 +15,13 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Patterns for external image proxy/CDN requests to cache
+const _px = [/images\.weserv\.nl/,/pixhost\./,/avjoy\./,/javmiku\./,/dmm\.co\.jp/,/supjav\./,/pvvstream\./,/caribbeancom\./,/javdatabase\./,/xnxxx\./,/springtowndvd\./,/warashi-asian/,/adultdvdmarketplace\./];
+
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
-  if (url.includes('cors.eu.org') || url.includes('codetabs.com') || url.includes('pixhost.to') || url.includes('weserv.nl')) {
+  const isProxy = _px.some(r => r.test(url));
+  if (isProxy) {
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) =>
         cache.match(event.request).then((response) => {
@@ -37,3 +41,4 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
   }
 });
+
