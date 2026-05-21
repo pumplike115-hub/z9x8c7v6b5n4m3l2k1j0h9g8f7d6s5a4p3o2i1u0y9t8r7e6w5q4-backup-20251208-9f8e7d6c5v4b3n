@@ -1519,6 +1519,9 @@
                     <span class="v-title" id="vTitle">Playing Video</span>
                 </div>
                 <div class="v-controls">
+                    <button class="v-ctrl-btn" id="vDirectBtn" onclick="openDirectLink()" title="เปิดลิงก์ตรง (แก้ปัญหาจอดำ / โฆษณาบังบังคับ)" style="margin-right: 4px; display: none; color: var(--gold); border-color: rgba(251, 191, 36, 0.45); background: rgba(251, 191, 36, 0.08);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    </button>
                     <button class="v-ctrl-btn" onclick="refreshVideo()" title="Refresh Video" style="margin-right: 4px;">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
                     </button>
@@ -2211,6 +2214,18 @@
             }
         }
 
+        function openDirectLink() {
+            if (currentEmValue) {
+                const source = detectVideoSource(currentEmValue);
+                if (source && source.url) {
+                    window.open(source.url, '_blank');
+                    showToast("เปิดลิงก์เล่นวิดีโอในแท็บใหม่แล้ว");
+                } else {
+                    showToast("ไม่พบลิงก์วิดีโอภายนอก");
+                }
+            }
+        }
+
         function playVideo(emValue, title) {
             currentEmValue = emValue;
             currentTitle = title;
@@ -2224,6 +2239,16 @@
             if (!source) {
                 showToast("ไม่รู้จักรูปแบบวิดีโอนี้");
                 return;
+            }
+
+            // แสดง/ซ่อนปุ่ม Direct Link Bypass (เฉพาะประเภท iframe embed เท่านั้น)
+            const directBtn = document.getElementById('vDirectBtn');
+            if (directBtn) {
+                if (source.type === 'iframe') {
+                    directBtn.style.display = 'flex';
+                } else {
+                    directBtn.style.display = 'none';
+                }
             }
 
             const titleEl = document.getElementById('vTitle');
@@ -2348,12 +2373,14 @@
             const wrapper = document.getElementById('vWrapper');
             const pipBtn = document.getElementById('vPipBtn');
             const fullBtn = document.getElementById('vFullBtn');
+            const directBtn = document.getElementById('vDirectBtn');
 
             modal.classList.remove('active');
             modal.classList.remove('pip-mode');
             box.classList.remove('pip-active');
             if (pipBtn) pipBtn.style.display = 'flex';
             if (fullBtn) fullBtn.style.display = 'none';
+            if (directBtn) directBtn.style.display = 'none';
             isPiP = false;
 
             // Remove source badge
