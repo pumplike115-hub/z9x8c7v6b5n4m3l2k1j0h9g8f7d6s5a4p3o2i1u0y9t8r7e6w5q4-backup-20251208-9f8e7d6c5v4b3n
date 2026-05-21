@@ -17,8 +17,9 @@ class InteractiveGrid {
         this.activeNodes = [];
         this.lastFrameTime = 0;
 
-        // FPS: low-end=12, mobile=20, desktop=60
-        this.frameInterval = this.isLowEnd ? (1000 / 12) : this.isMobile ? (1000 / 20) : (1000 / 60);
+        // FPS: low-end=12, mobile=15, desktop=60
+        this.frameInterval = this.isLowEnd ? (1000 / 12) : this.isMobile ? (1000 / 15) : (1000 / 60);
+        this._rafId = null;
 
         this.init();
     }
@@ -36,7 +37,26 @@ class InteractiveGrid {
         const memory = navigator.deviceMemory || 4;          // Chrome only
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const verySmall = window.innerWidth <= 480;
+        // Low battery API (Chrome Android)
+        this._checkBattery();
         return reduced || verySmall || (this.isMobile && (cores <= 2 || memory <= 2));
+    }
+
+    _checkBattery() {
+        if (!navigator.getBattery) return;
+        navigator.getBattery().then(bat => {
+            // If battery < 20% and not charging, switch to static mode
+            const goStatic = () => {
+                if (!bat.charging && bat.level < 0.2 && !this.isLowEnd) {
+                    this.isLowEnd = true;
+                    if (this._rafId) { cancelAnimationFrame(this._rafId); this._rafId = null; }
+                    this.drawStaticGrid();
+                }
+            };
+            bat.addEventListener('levelchange', goStatic);
+            bat.addEventListener('chargingchange', goStatic);
+            goStatic();
+        }).catch(() => {});
     }
 
     createCanvas() {
@@ -78,9 +98,13 @@ class InteractiveGrid {
 
         document.addEventListener('visibilitychange', () => {
             this.isVisible = !document.hidden;
+            if (this.isVisible && !this._rafId) {
+                // Resume animation when tab becomes visible again
+                this._rafId = requestAnimationFrame((t) => this.animate(t));
+            }
         });
 
-        this.animate(0);
+        this._rafId = requestAnimationFrame((t) => this.animate(t));
     }
 
     resize(force = false) {
@@ -244,8 +268,9 @@ class InteractiveGrid {
     }
 
     animate(timestamp) {
+        // CRITICAL FIX: truly stop the loop when tab is hidden
         if (!this.isVisible) {
-            requestAnimationFrame((t) => this.animate(t));
+            this._rafId = null; // Let visibilitychange restart it
             return;
         }
 
@@ -257,13 +282,14 @@ class InteractiveGrid {
             this.drawGrid();
         }
 
-        requestAnimationFrame((t) => this.animate(t));
+        this._rafId = requestAnimationFrame((t) => this.animate(t));
     }
 }
 
 window.startBackground = () => {
     if (!window.bgCanvasStarted) {
         window.bgCanvasStarted = true;
-        setTimeout(() => new InteractiveGrid(), 50);
+        // Store instance globally so video player can pause/resume it
+        setTimeout(() => { window.bgCanvasInst = new InteractiveGrid(); }, 50);
     }
 };
