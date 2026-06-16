@@ -289,7 +289,7 @@ class InteractiveGrid {
 window.startBackground = () => {
     if (!window.bgCanvasStarted) {
         window.bgCanvasStarted = true;
-        // Store instance globally so video player can pause/resume it
+        // Store instance globally
         setTimeout(() => { window.bgCanvasInst = new InteractiveGrid(); }, 50);
     }
 };
