@@ -3,7 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GALLERY">
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
     <title>404 Not Found</title>
     <meta name="theme-color" content="#ffffff">
@@ -881,6 +884,10 @@
 
         /* Mobile / Small Tablets */
         @media (max-width: 768px) {
+            .container {
+                padding: 12px !important;
+            }
+
             /* Disable expensive effects on mobile to prevent overheating */
             .spotlight-card, 
             .search-input, 
@@ -921,20 +928,20 @@
                 /* Reset scale */
                 align-items: flex-end;
                 justify-content: center;
-                gap: 8px;
+                gap: 6px;
                 margin-top: 10px;
             }
 
             .podium-item:nth-child(2) .podium-card {
-                width: 140px !important;
+                width: 120px !important;
             }
 
             .podium-item:nth-child(1) .podium-card {
-                width: 110px !important;
+                width: 95px !important;
             }
 
             .podium-item:nth-child(3) .podium-card {
-                width: 100px !important;
+                width: 85px !important;
             }
 
             .rank-badge {
@@ -1203,6 +1210,31 @@
     <script src="data.js"></script>
     <script src="background.js"></script>
     <script>
+        // Robust base64 decoder with UTF-8 support
+        function decodeB64(str) {
+            if (!str) return '';
+            try {
+                return decodeURIComponent(escape(atob(str)));
+            } catch (e) {
+                try {
+                    return atob(str);
+                } catch (err) {
+                    return str;
+                }
+            }
+        }
+
+        // Decode all obfuscated data in-place on startup
+        if (typeof data !== 'undefined' && Array.isArray(data)) {
+            data.forEach(item => {
+                if (item.c) item.c = decodeB64(item.c);
+                if (item.a) item.a = decodeB64(item.a);
+                if (item.cv) item.cv = decodeB64(item.cv);
+                if (item.lk) item.lk = decodeB64(item.lk);
+                if (item.em) item.em = decodeB64(item.em);
+            });
+        }
+
         const SECRET_CODE = 'open';
         let _buf = '', isUnlocked = sessionStorage.getItem('_sid') === '1', _swRegistered = false;
 
@@ -1408,16 +1440,12 @@
         const svgCopy = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
         const svgLink = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
 
-        function getProxiedUrl(raw) {
-            if (!raw) return '';
-            let url;
-            try { url = atob(raw); } catch(e) { url = raw; }
-            // Use weserv for dmm (needs CORS fix) — others load direct first
-            const needsProxy = url.includes('dmm.co.jp') || url.includes('pics.dmm') || url.startsWith('http://');
-            if (needsProxy) {
-                return `https://images.weserv.nl/?url=${encodeURIComponent(url)}`;
-            }
-            return url;
+        function getProxiedUrl(url) {
+            if (!url) return '';
+            // Force https to avoid mixed-content issues
+            const cleanUrl = url.replace(/^http:/i, 'https:');
+            // Mobile optimization: scale width to 360px, compress to webp format, quality 75%
+            return `https://images.weserv.nl/?url=${encodeURIComponent(cleanUrl)}&w=360&q=75&output=webp`;
         }
 
         function getCardHTML(item, imgClass) {
@@ -1707,14 +1735,12 @@
         // retry 0: weserv (handles CORS + hotlink for most CDNs)
         // retry 1: direct URL (works for weserv-blocked domains with no-referrer policy)
         const _PROXIES = [
-            u => `https://images.weserv.nl/?url=${encodeURIComponent(u)}`,
+            u => `https://images.weserv.nl/?url=${encodeURIComponent(u.replace(/^http:/i, 'https:'))}&w=360&q=75&output=webp`,
             u => u,
         ];
 
         function showErrorBox(img) {
-            const rawSrc = img.getAttribute('data-original-src');
-            let originalSrc = rawSrc;
-            try { originalSrc = atob(rawSrc); } catch(e) {}
+            const originalSrc = img.getAttribute('data-original-src');
 
             img.classList.add('error');
             const container = img.parentElement;
