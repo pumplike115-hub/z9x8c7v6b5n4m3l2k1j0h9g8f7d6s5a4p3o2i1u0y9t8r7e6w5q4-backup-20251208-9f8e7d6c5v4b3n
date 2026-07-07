@@ -51,7 +51,7 @@
         }
 
         body {
-            font-family: var(--font-secondary), -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: var(--font-secondary), 'Prompt', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
             background: transparent;
             color: var(--text-primary);
             min-height: 100vh;
@@ -96,6 +96,14 @@
             letter-spacing: -1px;
             filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.4));
             animation: logoGlow 3s ease-in-out infinite;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: transform 0.2s ease;
+        }
+
+        .logo:active {
+            transform: scale(0.97);
         }
 
         @keyframes logoGlow {
@@ -482,18 +490,160 @@
             font-weight: 400;
         }
 
-        .card-link {
-            font-size: 0.75rem;
-            color: var(--accent);
+        .card-review-preview {
+            font-size: 0.85rem;
+            color: #f3f4f6;
             margin-top: 8px;
+            margin-bottom: 4px;
+            background: rgba(139, 92, 246, 0.12);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-left: 3px solid var(--accent);
+            padding: 8px 12px;
+            border-radius: 0 8px 8px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.45;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .card-link {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            color: #c4b5fd;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             text-decoration: none;
-            opacity: 0.8;
-            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .card-link:hover {
-            opacity: 1;
-            text-decoration: underline;
+            background: rgba(139, 92, 246, 0.3);
+            color: #fff;
+            transform: scale(1.05);
+            text-decoration: none;
+        }
+
+        .card-link svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .card-btn-watch {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #d1d5db;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+
+        .card-btn-watch:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .card-btn-watch.active {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #34d399;
+        }
+
+        .card-btn-watch.active:hover {
+            background: rgba(16, 185, 129, 0.25);
+            color: #6ee7b7;
+        }
+
+        .card-btn-watch svg {
+            width: 12px;
+            height: 12px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Watched badge on cover */
+        .watched-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(16, 185, 129, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 8;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .watched-badge.visible {
+            display: flex;
+        }
+
+        /* Shift watched badge if rating badge is also present */
+        .rating-badge + .watched-badge {
+            left: 78px;
+        }
+
+        .watched-badge svg {
+            width: 12px;
+            height: 12px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .watched-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
         }
 
         /* Rank Badge */
@@ -1152,7 +1302,598 @@
         .pin-x { align-self: flex-end; background: none; border: none; color: rgba(255,255,255,.22); cursor: pointer; font-size: .85rem; padding: 0; margin-bottom: -4px; }
         .pin-x:hover { color: rgba(255,255,255,.5); }
 
-        /* Video Player Styles Removed */
+        /* Rating Badge on cover */
+        .rating-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(15, 15, 20, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(251, 191, 36, 0.35);
+            color: #fbbf24;
+            padding: 5px 9px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 8;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .rating-badge svg {
+            width: 13px;
+            height: 13px;
+            fill: currentColor;
+        }
+
+        .header {
+            position: relative;
+            z-index: 1000;
+        }
+
+        /* Filter Bar Styles */
+        .filters-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px auto 0;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .filter-select {
+            display: none !important;
+        }
+
+        .settings-trigger-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(139, 92, 246, 0.1);
+            border-color: rgba(139, 92, 246, 0.2);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .settings-trigger-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* Custom Dropdown Styling */
+        .custom-select-wrapper {
+            position: relative;
+            min-width: 200px;
+            user-select: none;
+            text-align: left;
+        }
+
+        .custom-select-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .custom-select-trigger:hover {
+            border-color: var(--accent);
+            background: rgba(20, 20, 28, 0.85);
+            transform: translateY(-1px);
+        }
+
+        .custom-select-wrapper.open .custom-select-trigger {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.25);
+        }
+
+        .custom-select-arrow {
+            font-size: 0.75rem;
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .custom-select-wrapper.open .custom-select-arrow {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: rgba(20, 20, 28, 0.95);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(139, 92, 246, 0.15);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.98);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            max-height: 280px;
+            overflow-y: auto;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .custom-select-dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-select-dropdown::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-select-dropdown::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 3px;
+        }
+        .custom-select-dropdown::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.5);
+        }
+
+        .custom-select-wrapper.open .custom-select-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .custom-select-option {
+            padding: 11px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .custom-select-option:hover {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--text-primary);
+        }
+
+        .custom-select-option.selected {
+            background: rgba(139, 92, 246, 0.25);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Detail Modal Styles */
+        .detail-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .detail-modal.hidden {
+            display: none;
+        }
+
+        .detail-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .detail-content {
+            position: relative;
+            background: rgba(15, 15, 22, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            max-width: 850px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 2;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(139, 92, 246, 0.1);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+        }
+
+        .detail-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .detail-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .detail-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .detail-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            transform: rotate(90deg);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1.3fr;
+            min-height: 500px;
+        }
+
+        @media (max-width: 768px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            .detail-image-sec {
+                height: 300px;
+            }
+        }
+
+        .detail-image-sec {
+            position: relative;
+            background: #09090f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .detail-image-sec img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .detail-info-sec {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .detail-info-sec {
+                padding: 24px;
+            }
+        }
+
+        .detail-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 16px;
+        }
+
+        .detail-title {
+            font-family: var(--font-primary);
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .detail-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .detail-rating-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 14px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .rating-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .rating-val-display {
+            font-family: var(--font-code);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .review-label, .tags-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .review-text-display {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            color: var(--text-secondary);
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .tags-capsules-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .tag-capsule {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #c4b5fd;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .detail-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: var(--font-primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-link {
+            background: rgba(139, 92, 246, 0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            font-size: 0.85rem;
+        }
+
+        .btn-link:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .detail-actions {
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 20px;
+            margin-top: auto;
+        }
+
+        .btn-save {
+            background: var(--accent);
+            color: white;
+            flex: 1.5;
+        }
+
+        .btn-save:hover {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        .btn-copy {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
+        }
+
+        .btn-copy:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Settings Dialog Styling */
+        .settings-content {
+            max-width: 500px;
+            padding: 30px;
+        }
+
+        .settings-title {
+            font-family: var(--font-primary);
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 12px;
+        }
+
+        .settings-group {
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 20px;
+        }
+
+        .settings-group h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .settings-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .btn-action {
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 8px;
+        }
+
+        .btn-action.btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-action.btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            width: 100%;
+        }
+
+        .btn-danger:hover {
+            background: #ef4444;
+            color: #fff;
+            border-color: #ef4444;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Toggle switch */
+        .lock-settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .3s;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--accent);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .pin-change-sec {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -1162,7 +1903,7 @@
     <div class="container" id="mainContent">
         <header class="header">
             <div class="header-top">
-                <div class="logo">🌙 GALLERY</div>
+                <div class="logo" onclick="goHome()">🌙 GALLERY</div>
             </div>
             <div class="search-container">
                 <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -1173,6 +1914,27 @@
                 <input type="text" class="search-input" id="search" aria-label="Search" placeholder="Search... (press / to focus)"
                     oninput="filterCardsDebounced()">
                 <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
+            </div>
+            <div class="filters-bar">
+                <select id="categoryFilter" onchange="filterCards()" class="filter-select">
+                    <option value="">All Artists / Categories</option>
+                </select>
+                <select id="ratingFilter" onchange="filterCards()" class="filter-select">
+                    <option value="">All Ratings</option>
+                    <option value="9">⭐ 9.0+ Excellent</option>
+                    <option value="8">⭐ 8.0+ Great</option>
+                    <option value="7">⭐ 7.0+ Good</option>
+                    <option value="5">⭐ 5.0+ Average</option>
+                    <option value="unrated">Unrated Only</option>
+                </select>
+                <select id="sortSelect" onchange="filterCards()" class="filter-select">
+                    <option value="">Default Sort</option>
+                    <option value="rating_desc">Highest Rated</option>
+                    <option value="rating_asc">Lowest Rated</option>
+                    <option value="name_asc">Name A-Z</option>
+                    <option value="name_desc">Name Z-A</option>
+                </select>
+
             </div>
         </header>
 
@@ -1205,6 +1967,7 @@
         </div>
     </div>
 
+
     <!-- Video Player System Removed -->
 
     <script src="data.js"></script>
@@ -1224,19 +1987,24 @@
             }
         }
 
-        // Decode all obfuscated data in-place on startup
+        // Decode all obfuscated data in-place on startup if database is obfuscated
+        const isDbObfuscated = typeof databaseIsObfuscated !== 'undefined' && databaseIsObfuscated;
         if (typeof data !== 'undefined' && Array.isArray(data)) {
             data.forEach(item => {
-                if (item.c) item.c = decodeB64(item.c);
-                if (item.a) item.a = decodeB64(item.a);
-                if (item.cv) item.cv = decodeB64(item.cv);
-                if (item.lk) item.lk = decodeB64(item.lk);
-                if (item.em) item.em = decodeB64(item.em);
+                if (isDbObfuscated) {
+                    if (item.c) item.c = decodeB64(item.c);
+                    if (item.a) item.a = decodeB64(item.a);
+                    if (item.cv) item.cv = decodeB64(item.cv);
+                    if (item.lk) item.lk = decodeB64(item.lk);
+                    if (item.em) item.em = decodeB64(item.em);
+                    if (item.description) item.description = decodeB64(item.description);
+                }
             });
         }
 
-        const SECRET_CODE = 'open';
-        let _buf = '', isUnlocked = sessionStorage.getItem('_sid') === '1', _swRegistered = false;
+        let lockEnabled = localStorage.getItem('lock_enabled') !== 'false';
+        let SECRET_CODE = localStorage.getItem('secret_code') || 'open';
+        let _buf = '', isUnlocked = !lockEnabled || sessionStorage.getItem('_sid') === '1', _swRegistered = false;
 
         // URL unlock: yoursite.com/#open  or  ?v=open  (works on mobile)
         (function() {
@@ -1287,7 +2055,7 @@
 
         let _lastEsc = 0;
         document.addEventListener('keydown', (e) => {
-            if (!isUnlocked) return;
+            if (!isUnlocked || !lockEnabled) return;
             const isCtrlShiftX = e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'x';
             const isDoubleEsc = e.key === 'Escape' && (Date.now() - _lastEsc < 500);
             
@@ -1306,9 +2074,8 @@
 
         let _iTimer;
         function resetInactivityTimer() {
-            if (!isUnlocked) return;
+            if (!isUnlocked || !lockEnabled) return;
             clearTimeout(_iTimer);
-            // 30 นาทีถึง lock (เพิ่มจาก 5 นาที เพื่อป้องกัน refresh กลางคัน)
             _iTimer = setTimeout(() => { isUnlocked = false; sessionStorage.removeItem('_sid'); checkStealthMode(); }, 30 * 60 * 1000);
         }
 
@@ -1369,13 +2136,7 @@
             searchInput.focus();
         }
 
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-
+        // Keep search suggestions working nicely
         function updateSearchClear() {
             const searchInput = document.getElementById('search');
             const clearBtn = document.getElementById('searchClear');
@@ -1384,6 +2145,14 @@
             } else {
                 clearBtn.classList.remove('visible');
             }
+        }
+
+        // Keep back to top functioning
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
 
         function updateBackToTop() {
@@ -1404,6 +2173,109 @@
             }
         }
 
+        function goHome() {
+            const searchInput = document.getElementById('search');
+            if (searchInput) searchInput.value = '';
+            updateSearchClear();
+
+            const categorySelect = document.getElementById('categoryFilter');
+            if (categorySelect) {
+                categorySelect.value = '';
+                syncCustomSelect('categoryFilter');
+            }
+
+            const ratingSelect = document.getElementById('ratingFilter');
+            if (ratingSelect) {
+                ratingSelect.value = '';
+                syncCustomSelect('ratingFilter');
+            }
+
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                sortSelect.value = '';
+                syncCustomSelect('sortSelect');
+            }
+
+            filterCards();
+            scrollToTop();
+        }
+
+        // Private Watch History (localStorage-based)
+        let watchHistory = {};
+        try {
+            watchHistory = JSON.parse(localStorage.getItem('card_watch_history')) || {};
+        } catch (e) {
+            console.error('Error loading watch history', e);
+        }
+
+        function saveWatchHistory() {
+            localStorage.setItem('card_watch_history', JSON.stringify(watchHistory));
+        }
+
+        function getWatchCount(code) {
+            return watchHistory[code] || 0;
+        }
+
+        function markWatched(code) {
+            watchHistory[code] = (watchHistory[code] || 0) + 1;
+            saveWatchHistory();
+            updateCardWatchUI(code);
+        }
+
+        function toggleWatched(code) {
+            if (watchHistory[code]) {
+                delete watchHistory[code];
+            } else {
+                watchHistory[code] = 1;
+            }
+            saveWatchHistory();
+            updateCardWatchUI(code);
+        }
+
+        function updateCardWatchUI(code) {
+            const watchCount = getWatchCount(code);
+            const isWatched = watchCount > 0;
+            
+            document.querySelectorAll('.spotlight-card').forEach(card => {
+                const img = card.querySelector('.card-img');
+                if (img && img.alt === code) {
+                    let badge = card.querySelector('.watched-badge');
+                    if (badge) {
+                        if (isWatched) {
+                            badge.classList.add('visible');
+                            badge.title = `Watched ${watchCount} times`;
+                            let countEl = badge.querySelector('.watched-count');
+                            if (watchCount > 1) {
+                                if (!countEl) {
+                                    countEl = document.createElement('span');
+                                    countEl.className = 'watched-count';
+                                    badge.appendChild(countEl);
+                                }
+                                countEl.textContent = watchCount;
+                            } else if (countEl) {
+                                countEl.remove();
+                            }
+                        } else {
+                            badge.classList.remove('visible');
+                            const countEl = badge.querySelector('.watched-count');
+                            if (countEl) countEl.remove();
+                        }
+                    }
+                    
+                    const btn = card.querySelector('.card-btn-watch');
+                    if (btn) {
+                        if (isWatched) {
+                            btn.classList.add('active');
+                            btn.querySelector('span').textContent = `WATCHED (${watchCount}x)`;
+                        } else {
+                            btn.classList.remove('active');
+                            btn.querySelector('span').textContent = 'MARK WATCHED';
+                        }
+                    }
+                }
+            });
+        }
+
         async function copyCode(code) {
             try {
                 if (navigator.clipboard && window.isSecureContext) {
@@ -1417,15 +2289,12 @@
                     document.execCommand('copy');
                     document.body.removeChild(ta);
                 }
+                markWatched(code);
                 playTing();
                 showToast(`✓ ${code}`);
             } catch (err) {
                 showToast('Copy failed');
             }
-        }
-
-        function openLink(url) {
-            if (url) window.open(url, '_blank');
         }
 
         function handleSpotlight(e) {
@@ -1442,9 +2311,7 @@
 
         function getProxiedUrl(url) {
             if (!url) return '';
-            // Force https to avoid mixed-content issues
             const cleanUrl = url.replace(/^http:/i, 'https:');
-            // Mobile optimization: scale width to 360px, compress to webp format, quality 75%
             return `https://images.weserv.nl/?url=${encodeURIComponent(cleanUrl)}&w=360&q=75&output=webp`;
         }
 
@@ -1459,20 +2326,47 @@
 
             const styleAttr = styleVars ? `style="${styleVars}"` : '';
 
+            const ratingBadge = (item.rating !== undefined && item.rating !== null && item.rating !== '' && Number(item.rating) > 0) ? `
+                <div class="rating-badge">
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    ${Number(item.rating).toFixed(1)}
+                </div>
+            ` : '';
+
             const linkBtn = item.lk ? `
                 <a class="card-link" href="${item.lk}" target="_blank" onclick="event.stopPropagation()">${svgLink} VIEW</a>
             ` : '';
             
-            const buttonsContainer = linkBtn ? `
+            const watchCount = getWatchCount(item.c);
+            const isWatched = watchCount > 0;
+
+            const watchedBadge = `
+                <div class="watched-badge ${isWatched ? 'visible' : ''}" title="Watched ${watchCount} times">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    ${watchCount > 1 ? `<span class="watched-count">${watchCount}</span>` : ''}
+                </div>
+            `;
+
+            const watchBtn = `
+                <button class="card-btn-watch ${isWatched ? 'active' : ''}" onclick="event.stopPropagation(); toggleWatched('${item.c}')">
+                    <svg class="icon-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    <span>${isWatched ? `WATCHED (${watchCount}x)` : 'MARK WATCHED'}</span>
+                </button>
+            `;
+            
+            const buttonsContainer = `
                 <div class="card-buttons">
+                    ${watchBtn}
                     ${linkBtn}
                 </div>
-            ` : '';
+            `;
 
             const overlayIcon = svgCopy;
 
             return `
                 <div class="image-container">
+                    ${ratingBadge}
+                    ${watchedBadge}
                     <img src="${proxiedSrc}" 
                          data-original-src="${item.cv}" 
                          alt="${item.c}" 
@@ -1490,6 +2384,7 @@
                 <div class="card-info">
                     <div class="card-code">${item.c}</div>
                     <div class="card-actress">${item.a || ''}</div>
+                    ${item.description ? `<div class="card-review-preview">${item.description}</div>` : ''}
                     ${buttonsContainer}
                 </div>
             `;
@@ -1529,11 +2424,20 @@
 
         function renderPodium() {
             const podium = document.getElementById('podium');
-            const top3 = data.filter(d => d.r).sort((a, b) => a.rank - b.rank);
-            // Order: 2nd, 1st, 3rd (podium style)
+            podium.innerHTML = '';
+            
+            // Get default ranked items only (r: 1, 2, 3)
+            const defaultRanked = data.filter(d => d.r).sort((a, b) => a.r - b.r);
+            const top3 = defaultRanked.slice(0, 3);
+            
+            // Order for podium: 2nd (left), 1st (middle), 3rd (right)
             const order = [top3[1], top3[0], top3[2]];
+            
             order.forEach((item, index) => {
-                if (item) podium.appendChild(createPodiumItem(item, item.r, index));
+                if (item) {
+                    const standingRank = index === 0 ? 2 : index === 1 ? 1 : 3;
+                    podium.appendChild(createPodiumItem(item, standingRank, index));
+                }
             });
         }
 
@@ -1567,7 +2471,7 @@
             return div;
         }
 
-                let currentRenderIndex = 0;
+        let currentRenderIndex = 0;
         const CHUNK_SIZE = 16;
         let activeData = [];
         let infiniteScrollObserver;
@@ -1576,15 +2480,15 @@
             const gallery = document.getElementById('gallery');
             const codeList = document.getElementById('code-list');
             
-            const withCover = activeData.filter(d => !d.r && d.cv);
-            const codeOnly = activeData.filter(d => !d.r && !d.cv);
+            const withCover = activeData.filter(d => d.cv);
+            const codeOnly = activeData.filter(d => !d.cv);
             
             const itemsToRender = withCover.slice(currentRenderIndex, currentRenderIndex + CHUNK_SIZE);
             itemsToRender.forEach(item => gallery.appendChild(createCard(item)));
             
             currentRenderIndex += CHUNK_SIZE;
             
-                        if (currentRenderIndex >= withCover.length) {
+            if (currentRenderIndex >= withCover.length) {
                 if (codeOnly.length > 0 && codeList.children.length === 0) {
                     codeOnly.forEach(item => codeList.appendChild(createCodeItem(item)));
                     document.getElementById('code-only-section').style.display = 'block';
@@ -1606,7 +2510,7 @@
             
             infiniteScrollObserver = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting) {
-                    const withCover = activeData.filter(d => !d.r && d.cv);
+                    const withCover = activeData.filter(d => d.cv);
                     if (currentRenderIndex < withCover.length) {
                         infiniteScrollObserver.disconnect();
                         renderGalleryChunk();
@@ -1629,8 +2533,8 @@
             activeData = items;
             currentRenderIndex = 0;
             
-            const withCover = items.filter(d => !d.r && d.cv);
-            const codeOnly = items.filter(d => !d.r && !d.cv);
+            const withCover = items.filter(d => d.cv);
+            const codeOnly = items.filter(d => !d.cv);
 
             if (withCover.length === 0 && codeOnly.length === 0) {
                 gallery.innerHTML = `
@@ -1663,24 +2567,67 @@
 
         function filterCards() {
             const query = document.getElementById('search').value.toLowerCase().trim();
+            const categorySelect = document.getElementById('categoryFilter').value.toLowerCase().trim();
+            const ratingFilter = document.getElementById('ratingFilter').value;
+            const sortBy = document.getElementById('sortSelect').value;
+
             const podiumSection = document.getElementById('podium-section');
             const galleryDivider = document.getElementById('gallery-divider');
 
-            if (query) {
-                podiumSection.style.display = 'none';
-                galleryDivider.style.display = 'none';
+            const isDefaultView = !query && !categorySelect && !ratingFilter && !sortBy;
 
-                const filtered = data.filter(item =>
-                    item.c.toLowerCase().includes(query) ||
-                    (item.a && item.a.toLowerCase().includes(query))
-                );
-
-                renderGallery(filtered);
-            } else {
+            if (isDefaultView) {
                 podiumSection.style.display = 'block';
                 galleryDivider.style.display = 'block';
-                renderGallery(data);
+            } else {
+                podiumSection.style.display = 'none';
+                galleryDivider.style.display = 'none';
             }
+
+            let filtered = data.filter(item => {
+                // Search query matching
+                const matchesQuery = !query || 
+                    item.c.toLowerCase().includes(query) ||
+                    (item.a && item.a.toLowerCase().includes(query)) ||
+                    (item.description && item.description.toLowerCase().includes(query));
+                
+                // Category matching
+                const matchesCategory = !categorySelect || 
+                    (item.a && item.a.toLowerCase() === categorySelect);
+                
+                // Rating matching
+                let matchesRating = true;
+                if (ratingFilter) {
+                    const isUnrated = item.rating === undefined || item.rating === null || item.rating === '' || Number(item.rating) === 0;
+                    if (ratingFilter === 'unrated') {
+                        matchesRating = isUnrated;
+                    } else {
+                        const rValue = parseFloat(ratingFilter);
+                        matchesRating = !isUnrated && Number(item.rating) >= rValue;
+                    }
+                }
+                
+                return matchesQuery && matchesCategory && matchesRating;
+            });
+
+            // Exclude default podium items from the gallery list below in default view
+            if (isDefaultView) {
+                const defaultPodiumCodes = new Set(data.filter(d => d.r).map(d => d.c));
+                filtered = filtered.filter(item => !defaultPodiumCodes.has(item.c));
+            }
+
+            // Sorting
+            if (sortBy === 'rating_desc') {
+                filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            } else if (sortBy === 'rating_asc') {
+                filtered.sort((a, b) => (a.rating || 999) - (b.rating || 999));
+            } else if (sortBy === 'name_asc') {
+                filtered.sort((a, b) => a.c.localeCompare(b.c));
+            } else if (sortBy === 'name_desc') {
+                filtered.sort((a, b) => b.c.localeCompare(a.c));
+            }
+
+            renderGallery(filtered);
         }
 
         // Intersection Observer for scroll animations
@@ -1689,7 +2636,6 @@
         function setupScrollObserver() {
             if (scrollObserver) scrollObserver.disconnect();
 
-            // Mark elements already above viewport as visible immediately
             document.querySelectorAll('.animate-fade-up, .animate-fade-scale').forEach(el => {
                 const rect = el.getBoundingClientRect();
                 if (rect.bottom < 0) {
@@ -1700,14 +2646,13 @@
             scrollObserver = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        // Add visible immediately — no setTimeout delay that breaks fast scroll
                         entry.target.classList.add('visible');
                         scrollObserver.unobserve(entry.target);
                     }
                 });
             }, {
                 threshold: 0,
-                rootMargin: '0px 0px 60px 0px'  // Trigger 60px BEFORE entering viewport
+                rootMargin: '0px 0px 60px 0px'
             });
 
             document.querySelectorAll('.animate-fade-up, .animate-fade-scale').forEach(el => {
@@ -1723,7 +2668,6 @@
             const container = img.parentElement;
             if (container) {
                 container.classList.add('loaded');
-                // Stop shimmer animation after load to free GPU compositing
                 container.style.willChange = 'auto';
             }
             
@@ -1731,9 +2675,6 @@
             if (errorDiv) errorDiv.remove();
         }
 
-        // Proxy fallback chain for failed images
-        // retry 0: weserv (handles CORS + hotlink for most CDNs)
-        // retry 1: direct URL (works for weserv-blocked domains with no-referrer policy)
         const _PROXIES = [
             u => `https://images.weserv.nl/?url=${encodeURIComponent(u.replace(/^http:/i, 'https:'))}&w=360&q=75&output=webp`,
             u => u,
@@ -1754,7 +2695,7 @@
 
             if (container && !container.querySelector('.image-error')) {
                 container.classList.add('error-state');
-                img.style.display = 'none'; // Hide the failed image element completely to remove default browser broken icon and prevent dragging it!
+                img.style.display = 'none';
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'image-error';
                 const svgImageOff = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><line x1="18" y1="12" x2="21" y2="15"></line><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.05-.22 1.41-.59"></path><path d="M21 15V5a2 2 0 0 0-2-2H9"></path></svg>`;
@@ -1767,7 +2708,6 @@
         }
 
         function _injectAssets() {
-            // Inject Google Fonts (only after unlock)
             if (!document.getElementById('_gf')) {
                 ['https://fonts.googleapis.com','https://fonts.gstatic.com'].forEach((h,i) => {
                     const l = document.createElement('link');
@@ -1777,64 +2717,154 @@
                 });
                 const f = document.createElement('link');
                 f.id = '_gf'; f.rel = 'stylesheet';
-                f.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap';
+                f.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap';
                 document.head.appendChild(f);
             }
-            // Inject preconnect for image proxy (only after unlock)
             if (!document.getElementById('_pc')) {
                 const pc = document.createElement('link');
                 pc.id = '_pc'; pc.rel = 'preconnect';
                 pc.href = 'https://images.weserv.nl';
                 document.head.appendChild(pc);
             }
-            // Inject referrer policy (only after unlock)
             if (!document.getElementById('_rf')) {
                 const m = document.createElement('meta');
                 m.id = '_rf'; m.name = 'referrer'; m.content = 'no-referrer';
                 document.head.appendChild(m);
             }
-            // Register SW (only after unlock)
             if ('serviceWorker' in navigator && !_swRegistered) {
                 _swRegistered = true;
                 navigator.serviceWorker.register('./sw.js').catch(() => {});
             }
         }
 
+
+
+        function syncCustomSelect(selectId) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+
+            select.style.display = 'none';
+
+            let wrapper = select.nextElementSibling;
+            if (!wrapper || !wrapper.classList.contains('custom-select-wrapper')) {
+                wrapper = document.createElement('div');
+                wrapper.className = 'custom-select-wrapper';
+                select.parentNode.insertBefore(wrapper, select.nextSibling);
+            }
+
+            wrapper.innerHTML = '';
+
+            const trigger = document.createElement('div');
+            trigger.className = 'custom-select-trigger';
+            
+            const labelSpan = document.createElement('span');
+            labelSpan.className = 'custom-select-label';
+            
+            const selectedOpt = select.options[select.selectedIndex] || select.options[0];
+            labelSpan.textContent = selectedOpt ? selectedOpt.textContent : '';
+            
+            const arrowSpan = document.createElement('span');
+            arrowSpan.className = 'custom-select-arrow';
+            arrowSpan.innerHTML = '▼';
+            
+            trigger.appendChild(labelSpan);
+            trigger.appendChild(arrowSpan);
+            wrapper.appendChild(trigger);
+
+            const dropdown = document.createElement('div');
+            dropdown.className = 'custom-select-dropdown';
+
+            Array.from(select.options).forEach((opt, idx) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'custom-select-option';
+                optionDiv.textContent = opt.textContent;
+                optionDiv.setAttribute('data-value', opt.value);
+                
+                if (idx === select.selectedIndex) {
+                    optionDiv.classList.add('selected');
+                }
+
+                optionDiv.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    select.value = opt.value;
+                    labelSpan.textContent = opt.textContent;
+                    dropdown.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+                    optionDiv.classList.add('selected');
+                    select.dispatchEvent(new Event('change'));
+                    wrapper.classList.remove('open');
+                });
+
+                dropdown.appendChild(optionDiv);
+            });
+
+            wrapper.appendChild(dropdown);
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+                    if (w !== wrapper) w.classList.remove('open');
+                });
+                wrapper.classList.toggle('open');
+            });
+        }
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+                w.classList.remove('open');
+            });
+        });
+
+        function populateCategoryFilter() {
+            const select = document.getElementById('categoryFilter');
+            select.innerHTML = '<option value="">All Artists / Categories</option>';
+            
+            const artists = new Set();
+            data.forEach(item => {
+                if (item.a) artists.add(item.a);
+            });
+            
+            Array.from(artists).sort().forEach(artist => {
+                const opt = document.createElement('option');
+                opt.value = artist;
+                opt.textContent = artist;
+                select.appendChild(opt);
+            });
+
+            syncCustomSelect('categoryFilter');
+        }
+
         let _pageInit = false;
         function initPage() {
             if (_pageInit) return;
             _pageInit = true;
-            // Add animation to header
             document.querySelector('.header').classList.add('animate-slide-down');
             document.querySelector('.podium-title').classList.add('animate-fade-scale');
 
+            populateCategoryFilter();
             renderPodium();
-            renderGallery(data);
+            filterCards();
 
-            // Initial trigger for visible elements
+            syncCustomSelect('ratingFilter');
+            syncCustomSelect('sortSelect');
+
             setTimeout(() => setupScrollObserver(), 100);
-
-            // Back to top button
             window.addEventListener('scroll', updateBackToTop, { passive: true });
         }
 
-        // Keyboard Shortcuts
         document.addEventListener('keydown', (e) => {
             const searchInput = document.getElementById('search');
             const isTyping = document.activeElement === searchInput;
             
-            // Press "/" or "Ctrl+K" to focus search
             if ((e.key === '/' || (e.ctrlKey && e.key === 'k')) && !isTyping) {
                 e.preventDefault();
                 searchInput.focus();
                 searchInput.select();
             }
             
-            // Press "Esc" to clear search and blur
-            if (e.key === 'Escape' && isTyping) {
-                searchInput.value = '';
-                filterCards();
-                searchInput.blur();
+            if (e.key === 'Escape') {
+                if (isTyping) {
+                    document.activeElement.blur();
+                }
             }
         });
 
