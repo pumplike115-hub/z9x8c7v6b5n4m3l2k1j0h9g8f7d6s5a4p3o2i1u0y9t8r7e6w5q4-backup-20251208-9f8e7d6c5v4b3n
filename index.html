@@ -1073,37 +1073,54 @@
             /* Podium Stacking for Mobile */
             .podium {
                 display: flex;
-                /* Keep flex but adjust logic if needed, or scale down further */
-                transform: none;
-                /* Reset scale */
-                align-items: flex-end;
-                justify-content: center;
-                gap: 6px;
-                margin-top: 10px;
+                flex-direction: column;
+                align-items: center;
+                gap: 24px;
+                margin-top: 20px;
             }
 
-            .podium-item:nth-child(2) .podium-card {
-                width: 120px !important;
+            .podium-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
             }
 
-            .podium-item:nth-child(1) .podium-card {
-                width: 95px !important;
+            .podium-item:nth-child(2) {
+                order: 1; /* Rank 1 */
+            }
+            .podium-item:nth-child(1) {
+                order: 2; /* Rank 2 */
+            }
+            .podium-item:nth-child(3) {
+                order: 3; /* Rank 3 */
             }
 
-            .podium-item:nth-child(3) .podium-card {
-                width: 85px !important;
+            .podium-item .podium-card {
+                width: 75vw !important;
+                max-width: 250px !important;
+                aspect-ratio: 380 / 540;
+            }
+
+            .podium-code {
+                font-size: 1.1rem !important;
+            }
+
+            .podium-actress {
+                font-size: 0.8rem !important;
             }
 
             .rank-badge {
-                width: 30px;
-                height: 30px;
+                width: 32px;
+                height: 32px;
                 font-size: 1rem;
+                margin-top: 10px;
             }
 
             .podium-item:nth-child(2) .rank-badge {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
+                width: 42px;
+                height: 42px;
+                font-size: 1.3rem;
             }
 
             .back-to-top {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v22';
+const CACHE_NAME = 'v24';
 const CACHE_URLS = ['./', './index.html', './data.js', './background.js'];
 
 self.addEventListener('install', (event) => {
