@@ -613,11 +613,6 @@
             display: flex;
         }
 
-        /* Shift watched badge if rating badge is also present */
-        .rating-badge + .watched-badge {
-            left: 78px;
-        }
-
         .watched-badge svg {
             width: 12px;
             height: 12px;
@@ -1319,34 +1314,6 @@
         .pin-x { align-self: flex-end; background: none; border: none; color: rgba(255,255,255,.22); cursor: pointer; font-size: .85rem; padding: 0; margin-bottom: -4px; }
         .pin-x:hover { color: rgba(255,255,255,.5); }
 
-        /* Rating Badge on cover */
-        .rating-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(15, 15, 20, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(251, 191, 36, 0.35);
-            color: #fbbf24;
-            padding: 5px 9px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            z-index: 8;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .rating-badge svg {
-            width: 13px;
-            height: 13px;
-            fill: currentColor;
-        }
-
         .header {
             position: relative;
             z-index: 1000;
@@ -1936,22 +1903,11 @@
                 <select id="categoryFilter" onchange="filterCards()" class="filter-select">
                     <option value="">All Artists / Categories</option>
                 </select>
-                <select id="ratingFilter" onchange="filterCards()" class="filter-select">
-                    <option value="">All Ratings</option>
-                    <option value="9">⭐ 9.0+ Excellent</option>
-                    <option value="8">⭐ 8.0+ Great</option>
-                    <option value="7">⭐ 7.0+ Good</option>
-                    <option value="5">⭐ 5.0+ Average</option>
-                    <option value="unrated">Unrated Only</option>
-                </select>
                 <select id="sortSelect" onchange="filterCards()" class="filter-select">
                     <option value="">Default Sort</option>
-                    <option value="rating_desc">Highest Rated</option>
-                    <option value="rating_asc">Lowest Rated</option>
                     <option value="name_asc">Name A-Z</option>
                     <option value="name_desc">Name Z-A</option>
                 </select>
-
             </div>
         </header>
 
@@ -2013,8 +1969,6 @@
                     if (item.a) item.a = decodeB64(item.a);
                     if (item.cv) item.cv = decodeB64(item.cv);
                     if (item.lk) item.lk = decodeB64(item.lk);
-                    if (item.em) item.em = decodeB64(item.em);
-                    if (item.description) item.description = decodeB64(item.description);
                 }
             });
         }
@@ -2201,12 +2155,6 @@
                 syncCustomSelect('categoryFilter');
             }
 
-            const ratingSelect = document.getElementById('ratingFilter');
-            if (ratingSelect) {
-                ratingSelect.value = '';
-                syncCustomSelect('ratingFilter');
-            }
-
             const sortSelect = document.getElementById('sortSelect');
             if (sortSelect) {
                 sortSelect.value = '';
@@ -2342,14 +2290,7 @@
             if (item.z) styleVars += `--custom-scale: ${item.z}; `;
 
             const styleAttr = styleVars ? `style="${styleVars}"` : '';
-
-            const ratingBadge = (item.rating !== undefined && item.rating !== null && item.rating !== '' && Number(item.rating) > 0) ? `
-                <div class="rating-badge">
-                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                    ${Number(item.rating).toFixed(1)}
-                </div>
-            ` : '';
-
+            
             const linkBtn = item.lk ? `
                 <a class="card-link" href="${item.lk}" target="_blank" onclick="event.stopPropagation()">${svgLink} VIEW</a>
             ` : '';
@@ -2382,7 +2323,6 @@
 
             return `
                 <div class="image-container">
-                    ${ratingBadge}
                     ${watchedBadge}
                     <img src="${proxiedSrc}" 
                          data-original-src="${item.cv}" 
@@ -2401,7 +2341,6 @@
                 <div class="card-info">
                     <div class="card-code">${item.c}</div>
                     <div class="card-actress">${item.a || ''}</div>
-                    ${item.description ? `<div class="card-review-preview">${item.description}</div>` : ''}
                     ${buttonsContainer}
                 </div>
             `;
@@ -2585,13 +2524,12 @@
         function filterCards() {
             const query = document.getElementById('search').value.toLowerCase().trim();
             const categorySelect = document.getElementById('categoryFilter').value.toLowerCase().trim();
-            const ratingFilter = document.getElementById('ratingFilter').value;
             const sortBy = document.getElementById('sortSelect').value;
 
             const podiumSection = document.getElementById('podium-section');
             const galleryDivider = document.getElementById('gallery-divider');
 
-            const isDefaultView = !query && !categorySelect && !ratingFilter && !sortBy;
+            const isDefaultView = !query && !categorySelect && !sortBy;
 
             if (isDefaultView) {
                 podiumSection.style.display = 'block';
@@ -2605,26 +2543,13 @@
                 // Search query matching
                 const matchesQuery = !query || 
                     item.c.toLowerCase().includes(query) ||
-                    (item.a && item.a.toLowerCase().includes(query)) ||
-                    (item.description && item.description.toLowerCase().includes(query));
+                    (item.a && item.a.toLowerCase().includes(query));
                 
                 // Category matching
                 const matchesCategory = !categorySelect || 
                     (item.a && item.a.toLowerCase() === categorySelect);
                 
-                // Rating matching
-                let matchesRating = true;
-                if (ratingFilter) {
-                    const isUnrated = item.rating === undefined || item.rating === null || item.rating === '' || Number(item.rating) === 0;
-                    if (ratingFilter === 'unrated') {
-                        matchesRating = isUnrated;
-                    } else {
-                        const rValue = parseFloat(ratingFilter);
-                        matchesRating = !isUnrated && Number(item.rating) >= rValue;
-                    }
-                }
-                
-                return matchesQuery && matchesCategory && matchesRating;
+                return matchesQuery && matchesCategory;
             });
 
             // Exclude default podium items from the gallery list below in default view
@@ -2634,11 +2559,7 @@
             }
 
             // Sorting
-            if (sortBy === 'rating_desc') {
-                filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-            } else if (sortBy === 'rating_asc') {
-                filtered.sort((a, b) => (a.rating || 999) - (b.rating || 999));
-            } else if (sortBy === 'name_asc') {
+            if (sortBy === 'name_asc') {
                 filtered.sort((a, b) => a.c.localeCompare(b.c));
             } else if (sortBy === 'name_desc') {
                 filtered.sort((a, b) => b.c.localeCompare(a.c));
@@ -2861,7 +2782,6 @@
             renderPodium();
             filterCards();
 
-            syncCustomSelect('ratingFilter');
             syncCustomSelect('sortSelect');
 
             setTimeout(() => setupScrollObserver(), 100);
