@@ -83,6 +83,49 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .install-pwa-btn {
+            position: absolute;
+            right: 0;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            color: #c4b5fd;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            font-family: var(--font-primary);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+            z-index: 10;
+        }
+
+        .install-pwa-btn:hover {
+            background: rgba(139, 92, 246, 0.35);
+            border-color: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .install-pwa-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        @media (max-width: 768px) {
+            .install-pwa-btn {
+                position: static;
+                margin-top: 8px;
+            }
         }
 
         .logo {
@@ -335,6 +378,7 @@
         .image-container {
             width: 100%;
             height: 100%;
+            aspect-ratio: 380 / 540;
             position: relative;
             background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
             overflow: hidden;
@@ -1878,6 +1922,18 @@
             gap: 8px;
             align-items: center;
         }
+
+        /* Interactive scaling feedback */
+        .card-link:active,
+        .card-btn-watch:active,
+        .btn-save:active,
+        .btn-copy:active,
+        .btn-action:active,
+        .settings-trigger-btn:active,
+        .custom-select-trigger:active,
+        .age-btn:active {
+            transform: scale(0.97) !important;
+        }
     </style>
 </head>
 
@@ -1888,6 +1944,10 @@
         <header class="header">
             <div class="header-top">
                 <div class="logo" onclick="goHome()">🌙 GALLERY</div>
+                <button class="install-pwa-btn" id="installPwaBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" style="margin-right: 4px; vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    INSTALL
+                </button>
             </div>
             <div class="search-container">
                 <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -1943,48 +2003,102 @@
 
     <!-- Video Player System Removed -->
 
-    <script src="data.js"></script>
-    <script src="background.js"></script>
     <script>
-        // Robust base64 decoder with UTF-8 support
-        function decodeB64(str) {
+        const VERIFICATION_TOKEN = "t28="; // Updated automatically by obfuscate.js
+
+        function escapeHTML(str) {
             if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function rc4Decrypt(key, base64Str) {
+            if (!base64Str) return '';
             try {
-                return decodeURIComponent(escape(atob(str)));
-            } catch (e) {
-                try {
-                    return atob(str);
-                } catch (err) {
-                    return str;
+                const str = atob(base64Str);
+                let s = [], j = 0, x, res = '';
+                for (let i = 0; i < 256; i++) s[i] = i;
+                for (let i = 0; i < 256; i++) {
+                    j = (j + s[i] + key.charCodeAt(i % key.length)) % 256;
+                    x = s[i]; s[i] = s[j]; s[j] = x;
                 }
+                let i = 0; j = 0;
+                for (let y = 0; y < str.length; y++) {
+                    i = (i + 1) % 256;
+                    j = (j + s[i]) % 256;
+                    x = s[i]; s[i] = s[j]; s[j] = x;
+                    res += String.fromCharCode(str.charCodeAt(y) ^ s[(s[i] + s[j]) % 256]);
+                }
+                return decodeURIComponent(escape(res));
+            } catch (e) {
+                return '';
             }
         }
 
-        // Decode all obfuscated data in-place on startup if database is obfuscated
-        const isDbObfuscated = typeof databaseIsObfuscated !== 'undefined' && databaseIsObfuscated;
-        if (typeof data !== 'undefined' && Array.isArray(data)) {
-            data.forEach(item => {
-                if (isDbObfuscated) {
-                    if (item.c) item.c = decodeB64(item.c);
-                    if (item.a) item.a = decodeB64(item.a);
-                    if (item.cv) item.cv = decodeB64(item.cv);
-                    if (item.lk) item.lk = decodeB64(item.lk);
+        let databaseLoaded = false;
+        function loadDatabase(pin, callback) {
+            if (databaseLoaded) {
+                if (callback) callback(true);
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = 'data.js';
+            script.id = 'db-script';
+            script.onload = () => {
+                const dec = rc4Decrypt(pin, verificationToken);
+                if (dec === 'ok') {
+                    databaseLoaded = true;
+                    const isDbObfuscated = typeof databaseIsObfuscated !== 'undefined' && databaseIsObfuscated;
+                    if (isDbObfuscated && typeof data !== 'undefined' && Array.isArray(data)) {
+                        data.forEach(item => {
+                            if (item.c) item.c = rc4Decrypt(pin, item.c);
+                            if (item.a) item.a = rc4Decrypt(pin, item.a);
+                            if (item.cv) item.cv = rc4Decrypt(pin, item.cv);
+                            if (item.lk) item.lk = rc4Decrypt(pin, item.lk);
+                        });
+                    }
+                    if (callback) callback(true);
+                } else {
+                    script.remove();
+                    if (typeof data !== 'undefined') {
+                        delete window.data;
+                        delete window.sourceData;
+                        delete window.databaseIsObfuscated;
+                        delete window.verificationToken;
+                    }
+                    if (callback) callback(false);
                 }
-            });
+            };
+            script.onerror = () => {
+                showToast('Failed to load database');
+                if (callback) callback(false);
+            };
+            document.body.appendChild(script);
         }
 
         let lockEnabled = localStorage.getItem('lock_enabled') !== 'false';
-        let SECRET_CODE = localStorage.getItem('secret_code') || 'open';
-        let _buf = '', isUnlocked = !lockEnabled || sessionStorage.getItem('_sid') === '1', _swRegistered = false;
+        let isUnlocked = !lockEnabled || sessionStorage.getItem('_sid') === '1';
+        let _buf = '', _swRegistered = false;
 
         // URL unlock: yoursite.com/#open  or  ?v=open  (works on mobile)
         (function() {
             const h = window.location.hash.slice(1);
             const q = new URLSearchParams(window.location.search).get('v');
-            if (h === SECRET_CODE || q === SECRET_CODE) {
-                isUnlocked = true;
-                sessionStorage.setItem('_sid', '1');
-                history.replaceState(null, '', window.location.pathname);
+            const potentialPin = h || q;
+            if (potentialPin && rc4Decrypt(potentialPin, VERIFICATION_TOKEN) === 'ok') {
+                loadDatabase(potentialPin, (success) => {
+                    if (success) {
+                        isUnlocked = true;
+                        sessionStorage.setItem('_sid', '1');
+                        sessionStorage.setItem('_pin', potentialPin);
+                        history.replaceState(null, '', window.location.pathname);
+                        checkStealthMode();
+                    }
+                });
             }
         })();
 
@@ -2005,7 +2119,6 @@
                 decoy.classList.add('hidden');
                 content.classList.remove('content-hidden');
                 _injectAssets();
-                if (window.startBackground) window.startBackground();
                 initPage();
                 resetInactivityTimer();
             } else {
@@ -2019,9 +2132,25 @@
         document.addEventListener('keydown', (e) => {
             if (isUnlocked) return;
             if (!document.getElementById('pinModal').classList.contains('hidden')) return;
-            _buf += e.key.toLowerCase();
-            if (_buf.length > SECRET_CODE.length) _buf = _buf.slice(-SECRET_CODE.length);
-            if (_buf === SECRET_CODE) { isUnlocked = true; sessionStorage.setItem('_sid', '1'); checkStealthMode(); _buf = ''; }
+            if (e.key.length === 1) {
+                _buf += e.key.toLowerCase();
+                if (_buf.length > 20) _buf = _buf.slice(-20);
+                for (let len = 1; len <= _buf.length; len++) {
+                    const potentialPin = _buf.slice(-len);
+                    if (rc4Decrypt(potentialPin, VERIFICATION_TOKEN) === 'ok') {
+                        _buf = '';
+                        loadDatabase(potentialPin, (success) => {
+                            if (success) {
+                                isUnlocked = true;
+                                sessionStorage.setItem('_sid', '1');
+                                sessionStorage.setItem('_pin', potentialPin);
+                                checkStealthMode();
+                            }
+                        });
+                        break;
+                    }
+                }
+            }
         });
 
         let _lastEsc = 0;
@@ -2067,8 +2196,20 @@
         function _hidePin() { document.getElementById('pinModal').classList.add('hidden'); document.getElementById('pinInp').value = ''; }
         function _doPin() {
             const v = document.getElementById('pinInp').value.toLowerCase().trim();
-            if (v === SECRET_CODE) { isUnlocked = true; sessionStorage.setItem('_sid', '1'); _hidePin(); checkStealthMode(); }
-            else { const i = document.getElementById('pinInp'); i.value = ''; i.classList.add('err'); setTimeout(() => i.classList.remove('err'), 400); }
+            loadDatabase(v, (success) => {
+                if (success) {
+                    isUnlocked = true;
+                    sessionStorage.setItem('_sid', '1');
+                    sessionStorage.setItem('_pin', v);
+                    _hidePin();
+                    checkStealthMode();
+                } else {
+                    const i = document.getElementById('pinInp');
+                    i.value = '';
+                    i.classList.add('err');
+                    setTimeout(() => i.classList.remove('err'), 400);
+                }
+            });
         }
         document.getElementById('pinInp').addEventListener('keydown', e => { if (e.key === 'Enter') _doPin(); if (e.key === 'Escape') _hidePin(); });
         document.getElementById('pinBtn').addEventListener('click', _doPin);
@@ -2326,7 +2467,7 @@
                     ${watchedBadge}
                     <img src="${proxiedSrc}" 
                          data-original-src="${item.cv}" 
-                         alt="${item.c}" 
+                         alt="${escapeHTML(item.c)}" 
                          class="card-img ${imgClass}" 
                          ${styleAttr} 
                          loading="lazy" 
@@ -2339,8 +2480,8 @@
                 </div>
                 <div class="copy-overlay">${overlayIcon}</div>
                 <div class="card-info">
-                    <div class="card-code">${item.c}</div>
-                    <div class="card-actress">${item.a || ''}</div>
+                    <div class="card-code">${escapeHTML(item.c)}</div>
+                    <div class="card-actress">${escapeHTML(item.a || '')}</div>
                     ${buttonsContainer}
                 </div>
             `;
@@ -2370,8 +2511,8 @@
             const stand = document.createElement('div');
             stand.className = 'podium-stand';
             stand.innerHTML = `
-                <div class="podium-code">${item.c}</div>
-                <div class="podium-actress">${item.a || ''}</div>
+                <div class="podium-code">${escapeHTML(item.c)}</div>
+                <div class="podium-actress">${escapeHTML(item.a || '')}</div>
             `;
             div.appendChild(stand);
 
@@ -2420,8 +2561,8 @@
             const overlayIcon = svgCopy;
 
             div.innerHTML = `
-                <div class="code-item-title">${item.c}</div>
-                <div class="code-item-subtitle">${item.a || 'Unknown'}</div>
+                <div class="code-item-title">${escapeHTML(item.c)}</div>
+                <div class="code-item-subtitle">${escapeHTML(item.a || 'Unknown')}</div>
                 <div class="copy-overlay">${overlayIcon}</div>
             `;
             return div;
@@ -2673,6 +2814,49 @@
                 _swRegistered = true;
                 navigator.serviceWorker.register('./sw.js').catch(() => {});
             }
+
+            // Dynamically load background.js after unlocking
+            if (!document.getElementById('_bgScript')) {
+                const script = document.createElement('script');
+                script.id = '_bgScript';
+                script.src = 'background.js';
+                script.onload = () => {
+                    if (window.startBackground) window.startBackground();
+                };
+                document.body.appendChild(script);
+            } else {
+                if (window.startBackground) window.startBackground();
+            }
+
+            // PWA Install Prompt handling
+            if (!window.pwaInstallHandlerSetup) {
+                window.pwaInstallHandlerSetup = true;
+                let deferredPrompt;
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    const btn = document.getElementById('installPwaBtn');
+                    if (btn) btn.style.display = 'flex';
+                });
+
+                const installBtn = document.getElementById('installPwaBtn');
+                if (installBtn) {
+                    installBtn.addEventListener('click', async () => {
+                        if (!deferredPrompt) return;
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        console.log(`[PWA] Install outcome: ${outcome}`);
+                        deferredPrompt = null;
+                        installBtn.style.display = 'none';
+                    });
+                }
+
+                window.addEventListener('appinstalled', () => {
+                    console.log('[PWA] Installed successfully');
+                    if (installBtn) installBtn.style.display = 'none';
+                    showToast('✓ Installed successfully!');
+                });
+            }
         }
 
 
@@ -2806,7 +2990,20 @@
         });
 
         // Start
-        checkStealthMode();
+        const savedPin = sessionStorage.getItem('_pin');
+        if (isUnlocked) {
+            const pinToUse = savedPin || 'open';
+            loadDatabase(pinToUse, (success) => {
+                if (success) {
+                    checkStealthMode();
+                } else {
+                    isUnlocked = false;
+                    checkStealthMode();
+                }
+            });
+        } else {
+            checkStealthMode();
+        }
     </script>
 </body>
 </html>
