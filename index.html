@@ -664,10 +664,17 @@
             z-index: 8;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
+                    border: 0;
+            cursor: pointer;
+            font-family: inherit;
         }
 
         .watched-badge.visible {
             display: flex;
+        }
+
+        .watched-badge:active {
+            transform: scale(0.92);
         }
 
         .watched-badge svg {
@@ -2700,13 +2707,15 @@
         }
 
         function toggleWatched(code) {
-            if (watchHistory[code]) {
+            const wasWatched = !!watchHistory[code];
+            if (wasWatched) {
                 delete watchHistory[code];
             } else {
                 watchHistory[code] = 1;
             }
             saveWatchHistory();
             updateCardWatchUI(code);
+            showToast(wasWatched ? `Unwatched ${code}` : `Watched ${code}`);
         }
 
         function updateCardWatchUI(code) {
@@ -2734,6 +2743,7 @@
                             }
                         } else {
                             badge.classList.remove('visible');
+                            badge.setAttribute('aria-label', 'Mark ' + code + ' watched');
                             const countEl = badge.querySelector('.watched-count');
                             if (countEl) countEl.remove();
                         }
@@ -2746,6 +2756,7 @@
                             btn.querySelector('span').textContent = `WATCHED (${watchCount}x)`;
                         } else {
                             btn.classList.remove('active');
+                            btn.setAttribute('aria-label', 'Mark ' + code + ' watched');
                             btn.querySelector('span').textContent = 'MARK WATCHED';
                         }
                     }
@@ -2819,10 +2830,10 @@
             const isWatched = watchCount > 0;
 
             const watchedBadge = `
-                <div class="watched-badge ${isWatched ? 'visible' : ''}" title="Watched ${watchCount} times">
+                <button class="watched-badge ${isWatched ? 'visible' : ''}" type="button" title="Watched ${watchCount} times - tap to unwatch" aria-label="${isWatched ? `Unwatch ${item.c}` : `Mark ${item.c} watched`}" onclick="event.stopPropagation(); toggleWatched('${item.c}')">
                     <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     ${watchCount > 1 ? `<span class="watched-count">${watchCount}</span>` : ''}
-                </div>
+                </button>
             `;
 
             const watchBtn = `
