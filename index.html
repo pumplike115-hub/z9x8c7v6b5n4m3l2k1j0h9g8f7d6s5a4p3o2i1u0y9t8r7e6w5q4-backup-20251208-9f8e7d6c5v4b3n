@@ -1489,7 +1489,7 @@
         .content-hidden { display: none !important; }
 
         /* Decoy: mimics real Nginx 404 */
-        .decoy-screen { position: fixed; inset: 0; background: #fff; color: #000; font-family: Times, serif; font-size: medium; z-index: 99999; }
+        .decoy-screen { position: fixed; inset: 0; box-sizing: border-box; min-height: 100vh; min-height: 100svh; padding: calc(18px + var(--safe-top)) calc(8px + var(--safe-right)) calc(8px + var(--safe-bottom)) calc(8px + var(--safe-left)); background: #fff; color: #000; font-family: Times, serif; font-size: medium; z-index: 99999; overflow: auto; -webkit-overflow-scrolling: touch; }
         .decoy-screen.hidden { display: none; }
 
         /* PIN unlock modal */
