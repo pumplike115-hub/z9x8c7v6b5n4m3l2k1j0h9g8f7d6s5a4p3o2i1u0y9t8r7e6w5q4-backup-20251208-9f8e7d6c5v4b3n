@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">System Viewer icon</title>
+  <desc id="desc">A dark rounded square with a luminous layered aperture mark.</desc>
+  <defs>
+    <radialGradient id="bg" cx="36%" cy="24%" r="86%">
+      <stop offset="0" stop-color="#27233f"/>
+      <stop offset=".46" stop-color="#10101a"/>
+      <stop offset="1" stop-color="#050507"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="102" y1="96" x2="414" y2="424" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset=".28" stop-color="#c4b5fd"/>
+      <stop offset=".65" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="soft" x1="128" y1="384" x2="384" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#312e81"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.55 0 0 0 0 0.36 0 0 0 0 1 0 0 0 .55 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="118" fill="url(#bg)"/>
+  <path d="M90 390c52 44 128 66 198 48 70-19 121-71 141-139 18-62 6-123-27-170 58 72 59 178 0 250-69 84-193 99-280 34-12-9-22-17-32-23Z" fill="#000" opacity=".22"/>
+  <circle cx="256" cy="256" r="156" fill="none" stroke="url(#ring)" stroke-width="22" opacity=".95" filter="url(#glow)"/>
+  <circle cx="256" cy="256" r="99" fill="none" stroke="url(#soft)" stroke-width="16" opacity=".82"/>
+  <path d="M155 256c27-55 61-82 101-82s74 27 101 82c-27 55-61 82-101 82s-74-27-101-82Z" fill="#090914" stroke="url(#ring)" stroke-width="16" stroke-linejoin="round"/>
+  <circle cx="256" cy="256" r="42" fill="url(#ring)"/>
+  <circle cx="256" cy="256" r="18" fill="#050507"/>
+  <path d="M151 156 108 116M361 156l43-40M151 356l-43 40M361 356l43 40" stroke="#a78bfa" stroke-width="12" stroke-linecap="round" opacity=".72"/>
+</svg>

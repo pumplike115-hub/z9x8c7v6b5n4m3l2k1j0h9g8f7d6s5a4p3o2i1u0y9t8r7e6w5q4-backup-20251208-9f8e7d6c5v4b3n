@@ -6,12 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="GALLERY">
+    <meta name="apple-mobile-web-app-title" content="Viewer">
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
     <title>404 Not Found</title>
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#050507">
+    <meta name="color-scheme" content="dark">
+    <meta name="format-detection" content="telephone=no">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><radialGradient id='bg' cx='50%' cy='50%' r='50%'><stop offset='0%' stop-color='%231f1b2e' /><stop offset='100%' stop-color='%2309070f' /></radialGradient><linearGradient id='glow' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%23a78bfa' /><stop offset='100%' stop-color='%238b5cf6' /></linearGradient></defs><circle cx='256' cy='256' r='240' fill='url(%23bg)' stroke='url(%23glow)' stroke-width='8' /><circle cx='256' cy='256' r='140' fill='none' stroke='url(%23glow)' stroke-width='6' opacity='0.8' /><path d='M 122 216 L 390 216' fill='none' stroke='url(%23glow)' stroke-width='5' opacity='0.7' /><path d='M 122 296 L 390 296' fill='none' stroke='url(%23glow)' stroke-width='5' opacity='0.7' /><path d='M 256 116 L 256 396' fill='none' stroke='url(%23glow)' stroke-width='6' /><path d='M 256 116 C 180 170 180 342 256 396' fill='none' stroke='url(%23glow)' stroke-width='5' opacity='0.85' /><path d='M 256 116 C 332 170 332 342 256 396' fill='none' stroke='url(%23glow)' stroke-width='5' opacity='0.85' /></svg>">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
     <style>
         * {
             margin: 0;
@@ -49,6 +53,10 @@
             /* Glass Effect */
             --glass-bg: rgba(15, 15, 20, 0.7);
             --glass-border: rgba(255, 255, 255, 0.08);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
         }
 
         body {
@@ -56,8 +64,10 @@
             background: transparent;
             color: var(--text-primary);
             min-height: 100vh;
+            min-height: 100svh;
             position: relative;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         html {
@@ -67,7 +77,7 @@
         .container {
             max-width: 1600px;
             margin: 0 auto;
-            padding: 20px;
+            padding: calc(20px + var(--safe-top)) calc(20px + var(--safe-right)) calc(28px + var(--safe-bottom)) calc(20px + var(--safe-left));
             position: relative;
             z-index: 1;
         }
@@ -304,8 +314,10 @@
         }
 
         .spotlight-card:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(139, 92, 246, 0.25);
+            --card-hover-y: -8px;
+            --card-hover-scale: 1.02;
+            transform: translateY(var(--card-hover-y)) scale(var(--card-hover-scale));
+            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.52), 0 0 34px rgba(139, 92, 246, 0.2);
             border-color: var(--card-border-hover);
         }
 
@@ -484,11 +496,11 @@
         }
 
         .spotlight-card:hover .card-img.flipped {
-            transform: scale(calc(var(--custom-scale, 1) * 1.05)) rotate(180deg);
+            transform: scale(calc(var(--custom-scale, 1) * 1.035)) rotate(180deg);
         }
 
         .spotlight-card:hover .card-img {
-            transform: scale(calc(var(--custom-scale, 1) * 1.08));
+            transform: scale(calc(var(--custom-scale, 1) * 1.055));
             filter: brightness(1.1);
             will-change: transform;
         }
@@ -954,7 +966,7 @@
         /* Toast */
         .toast {
             position: fixed;
-            bottom: 40px;
+            bottom: calc(40px + var(--safe-bottom));
             left: 50%;
             transform: translateX(-50%) translateY(20px) scale(0.9);
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.95) 0%, rgba(99, 102, 241, 0.95) 100%);
@@ -980,8 +992,8 @@
         /* Back to Top Button */
         .back-to-top {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: calc(30px + var(--safe-bottom));
+            right: calc(30px + var(--safe-right));
             width: 54px;
             height: 54px;
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(99, 102, 241, 0.9) 100%);
@@ -1075,7 +1087,7 @@
         /* Mobile / Small Tablets */
         @media (max-width: 768px) {
             .container {
-                padding: 12px !important;
+                padding: calc(12px + var(--safe-top)) calc(12px + var(--safe-right)) calc(22px + var(--safe-bottom)) calc(12px + var(--safe-left)) !important;
             }
 
             /* Disable expensive effects on mobile to prevent overheating */
@@ -1166,8 +1178,8 @@
             .back-to-top {
                 width: 45px;
                 height: 45px;
-                bottom: 20px;
-                right: 20px;
+                bottom: calc(20px + var(--safe-bottom));
+                right: calc(20px + var(--safe-right));
             }
 
             .age-btn {
@@ -1211,10 +1223,122 @@
             }
 
             .container {
-                padding: 15px;
+                padding: calc(15px + var(--safe-top)) calc(10px + var(--safe-right)) calc(24px + var(--safe-bottom)) calc(10px + var(--safe-left));
             }
         }
 
+
+        @media (hover: none) and (pointer: coarse) {
+            .spotlight-card:hover {
+                transform: none;
+            }
+
+            .card-info {
+                opacity: 1;
+                transform: none;
+                padding: 12px;
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.35) 56%, transparent 100%);
+            }
+
+            .copy-overlay {
+                opacity: 0.88;
+                transform: translateY(0);
+            }
+
+            .card-buttons {
+                gap: 6px;
+            }
+
+            .card-link,
+            .card-btn-watch {
+                min-height: 32px;
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+            }
+
+            .spotlight-card:hover,
+            .code-item:hover,
+            .btn:hover {
+                transform: none !important;
+            }
+        }
+
+        /* Desktop hover motion polish */
+        @media (hover: hover) and (pointer: fine) {
+            .spotlight-card {
+                transform-origin: center center;
+                transition:
+                    transform 560ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 560ms cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 320ms ease,
+                    background-color 320ms ease;
+            }
+
+            .spotlight-card:hover {
+                --card-hover-y: -10px;
+                --card-hover-scale: 1.025;
+                transform: translateY(var(--card-hover-y)) scale(var(--card-hover-scale));
+                box-shadow: 0 26px 58px rgba(0, 0, 0, 0.55), 0 0 38px rgba(139, 92, 246, 0.22);
+            }
+
+            .card-img {
+                backface-visibility: hidden;
+                transform-origin: center center;
+                transition:
+                    opacity 420ms ease,
+                    visibility 420ms ease,
+                    transform 760ms cubic-bezier(0.16, 1, 0.3, 1),
+                    filter 520ms ease;
+            }
+
+            .spotlight-card:hover .card-img {
+                transform: scale(calc(var(--custom-scale, 1) * 1.055));
+                filter: brightness(1.08) saturate(1.04);
+            }
+
+            .spotlight-card:hover .card-img.flipped {
+                transform: scale(calc(var(--custom-scale, 1) * 1.035)) rotate(180deg);
+            }
+
+            .card-info {
+                transition:
+                    opacity 360ms ease,
+                    transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .copy-overlay {
+                transition:
+                    opacity 300ms ease,
+                    transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
+                    background-color 260ms ease;
+            }
+        }
+
+        .spotlight-card:focus-visible,
+        .code-item:focus-visible,
+        .custom-select-trigger:focus-visible,
+        .btn:focus-visible,
+        .install-pwa-btn:focus-visible,
+        .search-clear:focus-visible,
+        .back-to-top:focus-visible {
+            outline: 2px solid rgba(167, 139, 250, 0.86);
+            outline-offset: 3px;
+            box-shadow: 0 0 0 6px rgba(139, 92, 246, 0.16);
+        }
+
+        .gallery-status.visible::before {
+            animation: statusPulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { transform: scale(0.85); opacity: 0.55; }
+            50% { transform: scale(1.25); opacity: 1; }
+        }
         /* Animations */
         @keyframes slideDown {
             from {
@@ -1250,14 +1374,18 @@
         }
 
         .animate-fade-up {
+            --reveal-y: 20px;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: translateY(calc(var(--reveal-y) + var(--card-hover-y, 0px))) scale(var(--card-hover-scale, 1));
+            transition:
+                opacity 520ms ease,
+                transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .animate-fade-up.visible {
+            --reveal-y: 0px;
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(calc(var(--reveal-y) + var(--card-hover-y, 0px))) scale(var(--card-hover-scale, 1));
         }
 
         /* Age Modal */
@@ -1346,7 +1474,7 @@
         .decoy-screen.hidden { display: none; }
 
         /* PIN unlock modal */
-        .pin-modal { position: fixed; inset: 0; z-index: 999998; display: flex; align-items: center; justify-content: center; }
+        .pin-modal { position: fixed; inset: 0; z-index: 999998; display: flex; align-items: center; justify-content: center; padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left); }
         .pin-modal.hidden { display: none; }
         .pin-box { background: rgba(8,8,8,.94); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 16px 18px 14px; display: flex; flex-direction: column; gap: 10px; min-width: 210px; box-shadow: 0 10px 40px rgba(0,0,0,.8); }
         .pin-row { display: flex; gap: 8px; }
@@ -1519,7 +1647,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: calc(20px + var(--safe-top)) calc(20px + var(--safe-right)) calc(20px + var(--safe-bottom)) calc(20px + var(--safe-left));
         }
 
         .detail-modal.hidden {
@@ -1541,7 +1669,7 @@
             border-radius: 24px;
             max-width: 850px;
             width: 100%;
-            max-height: 90vh;
+            max-height: calc(90svh - var(--safe-top) - var(--safe-bottom));
             overflow-y: auto;
             z-index: 2;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(139, 92, 246, 0.1);
@@ -1785,6 +1913,198 @@
             border-color: rgba(255, 255, 255, 0.2);
         }
 
+
+        .gallery-status {
+            grid-column: 1 / -1;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 26px 12px 4px;
+            min-height: 48px;
+        }
+
+        .gallery-status.visible {
+            display: flex;
+        }
+
+        .gallery-status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 16px rgba(139, 92, 246, 0.7);
+        }
+
+        .ios-install-hint {
+            position: fixed;
+            left: calc(14px + var(--safe-left));
+            right: calc(14px + var(--safe-right));
+            bottom: calc(14px + var(--safe-bottom));
+            z-index: 100001;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: rgba(12, 12, 18, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 12px 12px 12px 16px;
+            color: var(--text-primary);
+            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.55), 0 0 28px rgba(139, 92, 246, 0.16);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .ios-install-hint.visible {
+            display: flex;
+        }
+
+        .ios-install-text {
+            font-size: 0.86rem;
+            line-height: 1.35;
+            color: #e5e7eb;
+        }
+
+        .ios-install-text strong {
+            color: #fff;
+            font-weight: 800;
+        }
+
+        .ios-install-close {
+            flex: none;
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 12px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+        }
+
+        .quick-detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .quick-detail-chip {
+            border: 1px solid rgba(139, 92, 246, 0.26);
+            background: rgba(139, 92, 246, 0.12);
+            color: #d8b4fe;
+            border-radius: 999px;
+            padding: 7px 11px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                position: sticky;
+                top: 0;
+                top: var(--safe-top);
+                z-index: 20000;
+                margin: calc(-12px - var(--safe-top)) calc(-12px - var(--safe-right)) 18px calc(-12px - var(--safe-left));
+                padding: calc(10px + var(--safe-top)) calc(12px + var(--safe-right)) 12px calc(12px + var(--safe-left));
+                gap: 10px;
+                background: linear-gradient(to bottom, rgba(5, 5, 7, 0.98), rgba(5, 5, 7, 0.82));
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                backdrop-filter: blur(18px);
+                -webkit-backdrop-filter: blur(18px);
+            }
+
+            .header-top {
+                min-height: 34px;
+            }
+
+            .logo {
+                font-size: 1.45rem !important;
+                filter: none !important;
+            }
+
+            .search-input {
+                padding-top: 14px;
+                padding-bottom: 14px;
+                border-radius: 16px;
+            }
+
+            .filters-bar {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                justify-content: flex-start;
+                gap: 8px;
+                max-width: none;
+                margin-top: 0;
+                padding-bottom: 2px;
+                scrollbar-width: none;
+            }
+
+            .filters-bar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .custom-select-wrapper {
+                min-width: 165px;
+                flex: 0 0 auto;
+            }
+
+            .custom-select-trigger {
+                padding: 9px 12px;
+                border-radius: 12px;
+            }
+
+            .detail-modal.quick-sheet {
+                align-items: flex-end;
+                padding: 0;
+            }
+
+            .quick-sheet .detail-overlay {
+                background: rgba(0, 0, 0, 0.68);
+            }
+
+            .quick-sheet .detail-content {
+                width: 100%;
+                max-width: none;
+                max-height: calc(88svh - var(--safe-top));
+                border-radius: 22px 22px 0 0;
+                border-left: 0;
+                border-right: 0;
+                border-bottom: 0;
+                animation: sheetUp 0.24s ease-out;
+            }
+
+            .quick-sheet .detail-grid {
+                min-height: 0;
+            }
+
+            .quick-sheet .detail-image-sec {
+                height: min(42svh, 360px);
+            }
+
+            .quick-sheet .detail-info-sec {
+                padding: 22px calc(18px + var(--safe-right)) calc(22px + var(--safe-bottom)) calc(18px + var(--safe-left));
+                gap: 16px;
+            }
+
+            .quick-sheet .detail-title {
+                font-size: 1.45rem;
+            }
+
+            .quick-sheet .detail-actions {
+                position: sticky;
+                bottom: 0;
+                background: linear-gradient(to top, rgba(15, 15, 22, 0.98), rgba(15, 15, 22, 0.78));
+                padding-bottom: max(2px, var(--safe-bottom));
+            }
+        }
+
+        @keyframes sheetUp {
+            from { transform: translateY(18px); opacity: 0.7; }
+            to { transform: translateY(0); opacity: 1; }
+        }
         /* Settings Dialog Styling */
         .settings-content {
             max-width: 500px;
@@ -1945,7 +2265,7 @@
         <header class="header">
             <div class="header-top">
                 <div class="logo" onclick="goHome()">🌙 GALLERY</div>
-                <button class="install-pwa-btn" id="installPwaBtn">
+                <button class="install-pwa-btn" id="installPwaBtn" type="button" aria-label="Install app">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" style="margin-right: 4px; vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     INSTALL
                 </button>
@@ -1958,7 +2278,7 @@
                 </svg>
                 <input type="text" class="search-input" id="search" aria-label="Search" placeholder="Search... (press / to focus)"
                     oninput="filterCardsDebounced()">
-                <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
+                <button class="search-clear" id="searchClear" type="button" aria-label="Clear search" onclick="clearSearch()">×</button>
             </div>
             <div class="filters-bar">
                 <select id="categoryFilter" onchange="filterCards()" class="filter-select">
@@ -1983,20 +2303,41 @@
         <div class="section-divider" id="gallery-divider">— ALL ITEMS —</div>
         <div class="results-counter" id="resultsCounter"></div>
         <div class="gallery" id="gallery"></div>
+        <div class="gallery-status" id="galleryStatus" aria-live="polite"></div>
 
         <section class="code-only-section" id="code-only-section">
             <div class="section-divider">— CODE ONLY —</div>
             <div class="code-list" id="code-list"></div>
         </section>
     </div>
+    <div class="detail-modal quick-sheet hidden" id="quickDetailModal" role="dialog" aria-modal="true" aria-label="Item details">
+        <div class="detail-overlay" onclick="closeQuickDetail()"></div>
+        <div class="detail-content">
+            <button class="detail-close" type="button" aria-label="Close details" onclick="closeQuickDetail()">×</button>
+            <div class="detail-grid">
+                <div class="detail-image-sec" id="quickDetailImage"></div>
+                <div class="detail-info-sec">
+                    <div class="detail-header">
+                        <div class="detail-title" id="quickDetailTitle"></div>
+                        <div class="detail-subtitle" id="quickDetailSubtitle"></div>
+                    </div>
+                    <div class="quick-detail-meta" id="quickDetailMeta"></div>
+                    <div class="detail-actions">
+                        <button class="btn btn-save" type="button" id="quickCopyBtn">COPY CODE</button>
+                        <a class="btn btn-copy" id="quickOpenLink" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">OPEN LINK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="toast" id="toast"></div>
-    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
-    <div class="pin-modal hidden" id="pinModal">
+    <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top" onclick="scrollToTop()">↑</button>
+    <div class="pin-modal hidden" id="pinModal" role="dialog" aria-modal="true" aria-label="Access key">
         <div class="pin-box">
-            <button class="pin-x" id="pinX">✕</button>
+            <button class="pin-x" id="pinX" type="button" aria-label="Close">✕</button>
             <div class="pin-row">
                 <input class="pin-inp" id="pinInp" type="password" placeholder="Access key" autocomplete="off" autocorrect="off" spellcheck="false">
-                <button class="pin-btn" id="pinBtn">→</button>
+                <button class="pin-btn" id="pinBtn" type="button" aria-label="Unlock">→</button>
             </div>
         </div>
     </div>
@@ -2050,7 +2391,8 @@
             script.src = 'data.js';
             script.id = 'db-script';
             script.onload = () => {
-                const dec = rc4Decrypt(pin, verificationToken);
+                const activeVerificationToken = window.verificationToken || VERIFICATION_TOKEN;
+                const dec = rc4Decrypt(pin, activeVerificationToken);
                 if (dec === 'ok') {
                     databaseLoaded = true;
                     const isDbObfuscated = typeof databaseIsObfuscated !== 'undefined' && databaseIsObfuscated;
@@ -2404,6 +2746,14 @@
             }
         }
 
+        function handleKeyboardActivation(e, action) {
+            if (e.target !== e.currentTarget) return;
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                action();
+            }
+        }
+
         function handleSpotlight(e) {
             const card = e.currentTarget;
             const rect = card.getBoundingClientRect();
@@ -2434,7 +2784,7 @@
             const styleAttr = styleVars ? `style="${styleVars}"` : '';
             
             const linkBtn = item.lk ? `
-                <a class="card-link" href="${item.lk}" target="_blank" onclick="event.stopPropagation()">${svgLink} VIEW</a>
+                <a class="card-link" href="${item.lk}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" onclick="event.stopPropagation()">${svgLink} VIEW</a>
             ` : '';
             
             const watchCount = getWatchCount(item.c);
@@ -2448,7 +2798,7 @@
             `;
 
             const watchBtn = `
-                <button class="card-btn-watch ${isWatched ? 'active' : ''}" onclick="event.stopPropagation(); toggleWatched('${item.c}')">
+                <button class="card-btn-watch ${isWatched ? 'active' : ''}" type="button" aria-label="${isWatched ? `Watched ${watchCount} times` : 'Mark watched'}" onclick="event.stopPropagation(); toggleWatched('${item.c}')">
                     <svg class="icon-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     <span>${isWatched ? `WATCHED (${watchCount}x)` : 'MARK WATCHED'}</span>
                 </button>
@@ -2487,7 +2837,96 @@
                 </div>
             `;
         }
+        function isTouchExperience() {
+            return window.matchMedia('(hover: none) and (pointer: coarse)').matches || window.innerWidth <= 768;
+        }
 
+        function handleCardActivate(item) {
+            if (isTouchExperience()) {
+                openQuickDetail(item);
+            } else {
+                copyCode(item.c);
+            }
+        }
+
+        function openQuickDetail(item) {
+            const modal = document.getElementById('quickDetailModal');
+            if (!modal) return;
+            const imgBox = document.getElementById('quickDetailImage');
+            const title = document.getElementById('quickDetailTitle');
+            const subtitle = document.getElementById('quickDetailSubtitle');
+            const meta = document.getElementById('quickDetailMeta');
+            const copyBtn = document.getElementById('quickCopyBtn');
+            const openLink = document.getElementById('quickOpenLink');
+            const imgClass = item.f ? 'flipped' : '';
+            const proxiedSrc = item.cv ? getProxiedUrl(item.cv) : '';
+            let styleVars = '';
+            if (item.p) styleVars += `--custom-pos: ${item.p}; `;
+            else if (item.center) styleVars += '--custom-pos: center top; ';
+            if (item.z) styleVars += `--custom-scale: ${item.z}; `;
+
+            imgBox.innerHTML = proxiedSrc
+                ? `<img src="${proxiedSrc}" alt="${escapeHTML(item.c)}" class="${imgClass}" style="${styleVars}" referrerpolicy="no-referrer" decoding="async">`
+                : '<div class="image-error">No image</div>';
+            title.textContent = item.c || '';
+            subtitle.textContent = item.a || 'Unknown';
+            meta.innerHTML = '';
+            const watchCount = getWatchCount(item.c);
+            const chips = [watchCount ? `Watched ${watchCount}x` : 'Not watched', item.r ? `Rank ${item.r}` : 'Gallery item'];
+            chips.forEach(text => {
+                const chip = document.createElement('span');
+                chip.className = 'quick-detail-chip';
+                chip.textContent = text;
+                meta.appendChild(chip);
+            });
+            copyBtn.onclick = () => copyCode(item.c);
+            if (item.lk) {
+                openLink.href = item.lk;
+                openLink.style.display = 'inline-flex';
+            } else {
+                openLink.removeAttribute('href');
+                openLink.style.display = 'none';
+            }
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeQuickDetail() {
+            const modal = document.getElementById('quickDetailModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function updateGalleryStatus() {
+            const status = document.getElementById('galleryStatus');
+            if (!status) return;
+            const withCover = activeData.filter(d => d.cv);
+            if (withCover.length === 0 || currentRenderIndex >= withCover.length) {
+                status.classList.remove('visible');
+                status.textContent = '';
+                return;
+            }
+            status.textContent = `Loading more (${Math.min(currentRenderIndex, withCover.length)} / ${withCover.length})`;
+            status.classList.add('visible');
+        }
+
+        function maybeShowIosInstallHint() {
+            const hint = document.getElementById('iosInstallHint');
+            if (!hint || localStorage.getItem('ios_install_hint_dismissed') === '1') return;
+            const ua = navigator.userAgent || '';
+            const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+            if (isIOS && !isStandalone) {
+                setTimeout(() => hint.classList.add('visible'), 1200);
+            }
+        }
+
+        function dismissIosInstallHint() {
+            localStorage.setItem('ios_install_hint_dismissed', '1');
+            const hint = document.getElementById('iosInstallHint');
+            if (hint) hint.classList.remove('visible');
+        }
         function createPodiumItem(item, rank, index) {
             const div = document.createElement('div');
             div.className = 'podium-item animate-fade-up';
@@ -2495,10 +2934,14 @@
 
             const card = document.createElement('div');
             card.className = 'spotlight-card podium-card';
-            card.onclick = () => copyCode(item.c);
+            card.onclick = () => handleCardActivate(item);
+            card.onkeydown = (e) => handleKeyboardActivation(e, () => handleCardActivate(item));
             card.onmousemove = handleSpotlight;
             card.setAttribute('draggable', 'false');
             card.setAttribute('ondragstart', 'return false;');
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', `Open ${item.c}`);
 
             const imgClass = item.f ? 'flipped' : '';
             card.innerHTML = getCardHTML(item, imgClass);
@@ -2542,10 +2985,14 @@
         function createCard(item) {
             const card = document.createElement('div');
             card.className = 'spotlight-card card animate-fade-up';
-            card.onclick = () => copyCode(item.c);
+            card.onclick = () => handleCardActivate(item);
+            card.onkeydown = (e) => handleKeyboardActivation(e, () => handleCardActivate(item));
             card.onmousemove = handleSpotlight;
             card.setAttribute('draggable', 'false');
             card.setAttribute('ondragstart', 'return false;');
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', `Open ${item.c}`);
 
             const imgClass = item.f ? 'flipped' : '';
             card.innerHTML = getCardHTML(item, imgClass);
@@ -2556,8 +3003,12 @@
             const div = document.createElement('div');
             div.className = 'code-item animate-fade-scale';
             div.onclick = () => copyCode(item.c);
+            div.onkeydown = (e) => handleKeyboardActivation(e, () => copyCode(item.c));
             div.setAttribute('draggable', 'false');
             div.setAttribute('ondragstart', 'return false;');
+            div.setAttribute('role', 'button');
+            div.setAttribute('tabindex', '0');
+            div.setAttribute('aria-label', `Copy ${item.c}`);
             
             const overlayIcon = svgCopy;
 
@@ -2595,6 +3046,7 @@
             
             setupScrollObserver();
             setupInfiniteScroll();
+            updateGalleryStatus();
         }
 
         function setupInfiniteScroll() {
@@ -2647,6 +3099,7 @@
                     </div>
                 `;
                 updateResultsCounter(0, data.length);
+                updateGalleryStatus();
                 return;
             }
 
@@ -2879,6 +3332,9 @@
 
             const trigger = document.createElement('div');
             trigger.className = 'custom-select-trigger';
+            trigger.setAttribute('role', 'combobox');
+            trigger.setAttribute('tabindex', '0');
+            trigger.setAttribute('aria-expanded', 'false');
             
             const labelSpan = document.createElement('span');
             labelSpan.className = 'custom-select-label';
@@ -2896,23 +3352,28 @@
 
             const dropdown = document.createElement('div');
             dropdown.className = 'custom-select-dropdown';
+            dropdown.setAttribute('role', 'listbox');
 
             Array.from(select.options).forEach((opt, idx) => {
                 const optionDiv = document.createElement('div');
                 optionDiv.className = 'custom-select-option';
+                optionDiv.setAttribute('role', 'option');
+                optionDiv.setAttribute('aria-selected', 'false');
                 optionDiv.textContent = opt.textContent;
                 optionDiv.setAttribute('data-value', opt.value);
                 
                 if (idx === select.selectedIndex) {
                     optionDiv.classList.add('selected');
+                    optionDiv.setAttribute('aria-selected', 'true');
                 }
 
                 optionDiv.addEventListener('click', (e) => {
                     e.stopPropagation();
                     select.value = opt.value;
                     labelSpan.textContent = opt.textContent;
-                    dropdown.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+                    dropdown.querySelectorAll('.custom-select-option').forEach(o => { o.classList.remove('selected'); o.setAttribute('aria-selected', 'false'); });
                     optionDiv.classList.add('selected');
+                    optionDiv.setAttribute('aria-selected', 'true');
                     select.dispatchEvent(new Event('change'));
                     wrapper.classList.remove('open');
                 });
@@ -2922,10 +3383,17 @@
 
             wrapper.appendChild(dropdown);
 
+            trigger.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger.click(); }
+                if (e.key === 'Escape') { wrapper.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
+            });
+
             trigger.addEventListener('click', (e) => {
                 e.stopPropagation();
                 document.querySelectorAll('.custom-select-wrapper').forEach(w => {
                     if (w !== wrapper) w.classList.remove('open');
+                    const trigger = w.querySelector('.custom-select-trigger');
+                    if (trigger) trigger.setAttribute('aria-expanded', 'false');
                 });
                 wrapper.classList.toggle('open');
             });
@@ -2934,6 +3402,8 @@
         document.addEventListener('click', () => {
             document.querySelectorAll('.custom-select-wrapper').forEach(w => {
                 w.classList.remove('open');
+                    const trigger = w.querySelector('.custom-select-trigger');
+                    if (trigger) trigger.setAttribute('aria-expanded', 'false');
             });
         });
 
@@ -2971,6 +3441,7 @@
 
             setTimeout(() => setupScrollObserver(), 100);
             window.addEventListener('scroll', updateBackToTop, { passive: true });
+            maybeShowIosInstallHint();
         }
 
         document.addEventListener('keydown', (e) => {
@@ -2984,6 +3455,7 @@
             }
             
             if (e.key === 'Escape') {
+                closeQuickDetail();
                 if (isTyping) {
                     document.activeElement.blur();
                 }
@@ -3006,5 +3478,9 @@
             checkStealthMode();
         }
     </script>
+    <div class="ios-install-hint" id="iosInstallHint" role="status" aria-live="polite">
+        <div class="ios-install-text"><strong>Install on iPhone</strong><br>Tap Share, then Add to Home Screen.</div>
+        <button class="ios-install-close" type="button" aria-label="Dismiss install hint" onclick="dismissIosInstallHint()">×</button>
+    </div>
 </body>
 </html>

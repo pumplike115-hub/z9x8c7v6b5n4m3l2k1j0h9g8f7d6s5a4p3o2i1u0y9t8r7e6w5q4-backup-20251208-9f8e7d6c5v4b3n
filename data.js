@@ -1,734 +1,734 @@
-const databaseIsObfuscated = true;
-const verificationToken = "t28=";
+var databaseIsObfuscated = false;
+var verificationToken = "t28=";
 
-const sourceData = [
+var sourceData = [
     {
-        "c": "i1eiA3IgJ2U=",
-        "a": "gWWGMStxNwX+Qg==",
-        "cv": "sHCfICwuOHj+TklIs60E92XZ4CR3M4yTRxj+KwpkJU/OO944XBJnaiG7jecbkhGWQSLP057I9Vg=",
+        "c": "SSIS-402",
+        "a": "Yamate Ria",
+        "cv": "https://img72.pixhost.to/images/45/283985539_i523757.jpg",
         "lk": "",
         "r": 1
     },
     {
-        "c": "ikuyFHIkJ2U=",
-        "a": "nnGAMTt1NxL+Tkc=",
-        "cv": "sHCfICwuOHj+TklLsK0E92XZ4CR3M4yTRxj+KwpkJU/JPMYlVRVrZCa4iOh0pE2QQSTC1omM70/6",
+        "c": "ROYD-002",
+        "a": "Fukada Eimi",
+        "cv": "https://img41.pixhost.to/images/327/145626660_i431829.jpg",
         "lk": "",
         "r": 2
     },
     {
-        "c": "i1CqAgw5LmWv",
-        "a": "l2OeIj40TiL5Qg==",
-        "cv": "sHCfICwuOHj+TklGsa0E92XZ4CR3M4yTRxj+KwpkJU/MPsAlVxhraiO4ie5xpE2RSibP0oWM70/6",
+        "c": "STARS-928",
+        "a": "Ogura Yuna",
+        "cv": "https://img90.pixhost.to/images/601/395876705_i583565.jpg",
         "lk": "",
         "r": 3
     },
     {
-        "c": "i1WiA3IkJ2Y=",
-        "a": "OLxysOel9+8Ww5f+YTvefqUlb++E/UBXiMk2qtWztthY7kmOhJnH",
-        "cv": "sHCfICwuOHj+TklNsq0E92XZ4CR3M4yTRxj+KwpkJU/IO8UlXBNsYCS3iO4bkheTSiXL1J7I9Vg=",
+        "c": "SQIS-001",
+        "a": "นักแสดงหลายคน",
+        "cv": "https://img23.pixhost.to/images/254/82220960_i378010.jpg",
         "lk": ""
     },
     {
-        "c": "i1CqAgw5IW+l",
-        "a": "l2OeIj40TiL5Qg==",
-        "cv": "sHCfICwuOHj+TklIt60E92XZ4CR3M4yTRxj+KwpkJU/LPMAlVxFtZSa4jed2pE2RQSPL1IOM70/6",
+        "c": "STARS-682",
+        "a": "Ogura Yuna",
+        "cv": "https://img76.pixhost.to/images/121/303726392_i536103.jpg",
         "lk": ""
     },
     {
-        "c": "nEW4A3InIWc=",
-        "a": "jGWIODZ2djn2A2Me8/o=",
-        "cv": "sHCfICwuOHj+TklGta0E92XZ4CR3M4yTRxj+KwpkJU/ON8MlUBRqZCW8jO5ypE2RSyLM04mM70/6",
+        "c": "DASS-360",
+        "a": "Tachibana Mary",
+        "cv": "https://img94.pixhost.to/images/492/454612206_i597679.jpg",
         "lk": ""
     },
     {
-        "c": "nFKqGnIiJGQ=",
-        "a": "jGufIyp/fnfFVkcM4A==",
-        "cv": "sHCfICwuOHj+TklGsa0E92XZ4CR3M4yTRxj+KwpkJU/MPsAlVxhraiO5jut9pE2RSibN0oGM70/6",
+        "c": "DVAJ-633",
+        "a": "Totsuki Ruisa",
+        "cv": "https://img90.pixhost.to/images/601/395877059_i583761.jpg",
         "lk": ""
     },
     {
-        "c": "nEW4A3IgJmM=",
-        "a": "gXGGOTF7NwX+Tls=",
-        "cv": "sHCfICwuOHj+TklGt60E92XZ4CR3M4yTRxj+KwpkJU/OOMUlUBZnYia4iOZ3pE2SQiLL0IGM70/6",
+        "c": "DASS-414",
+        "a": "Yumino Rimu",
+        "cv": "https://img96.pixhost.to/images/464/479026683_i607141.jpg",
         "lk": ""
     },
     {
-        "c": "nUa8GHIkJ2Y=",
-        "a": "nnGBOTJ7ZT63cUcX7g==",
-        "cv": "sHCfICwuOHj+TklHua0E92XZ4CR3M4yTRxj+KwpkJU/INsclVxdpYCS3hut1pE2RRSTJ1oaM70/6",
+        "c": "EBWH-001",
+        "a": "Fujimori Riho",
+        "cv": "https://img88.pixhost.to/images/286/367209851_i571326.jpg",
         "lk": ""
     },
     {
-        "c": "j0WqEXIhIGE=",
-        "a": "i2yCIjB5fjnyA2MW9A==",
-        "cv": "sHCfICwuOHj+TklOr/Md5nXe/CMtaZfTARzyLQhyeVjOPMQlUhJpYSW4iOZ1pE2SRyfK3IiM70/6",
+        "c": "WAAA-576",
+        "a": "Shiromine Miu",
+        "cv": "https://img1.pixhost.to/images/8425/637316681_i652088.jpg",
         "lk": ""
     },
     {
-        "c": "kVSxCnIlJm4=",
-        "a": "i2WAJS11Nxr4TkFTocIa8T3o+i12dpc=",
-        "cv": "sHCfICwuOHj+TklHuK0E92XZ4CR3M4yTRxj+KwpkJU/LPsM/SxJmZyS9i+x1yXvNRy3K0ICUq1Xtog==",
+        "c": "IPZZ-119",
+        "a": "Sakura Momo, Ano Yuzuko",
+        "cv": "https://img89.pixhost.to/images/1025/385035212_i580406.jpg",
         "lk": ""
     },
     {
-        "c": "kEmlfWklJQ==",
-        "a": "lW2fMTF9Nxb8QkAa",
-        "cv": "sHCfICwuOHj+TklPr/Md5nXe/CMtaZfTARzyLQhyeVLKIcQ7XBloaiy3iIEtzRWcSiXOytrS4g==",
+        "c": "HMN-612",
+        "a": "Mitani Akane",
+        "cv": "https://img0.pixhost.to/images/20/518868896_i618804.jpg",
         "lk": ""
     },
     {
-        "c": "lU2vFXItIGI=",
-        "a": "jGWAMTd1ZD/+A30X7vYf8Q==",
-        "cv": "sHCfICwuOHj+TklJs60E92XZ4CR3M4yTRxj+KwpkJU/POd44VxhpZSC6jOcbkhCdSibC1J7I9Vg=",
+        "c": "MIDE-975",
+        "a": "Takahashi Shouko",
+        "cv": "https://img62.pixhost.to/images/57/239774429_i498380.jpg",
         "lk": ""
     },
     {
-        "c": "lUGyFHIhJGU=",
-        "a": "k22ZOSx8fjr2A3wa7u0V",
-        "cv": "sHCfICwuOHj+TklMta0E92XZ4CR3M4yTRxj+KwpkJU/JOcMlVRNuYi2+j+18pE2QQi3D1oiM70/6",
+        "c": "MEYD-532",
+        "a": "Kirishima Reona",
+        "cv": "https://img34.pixhost.to/images/372/120090138_i408928.jpg",
         "lk": ""
     },
     {
-        "c": "iEKuA3IkImA=",
-        "a": "i2WFP39NYjr2",
-        "cv": "sHCfICwuOHj+TklGta0E92XZ4CR3M4yTRxj+KwpkJU/COcIlUBRmZiW5iO19pE2RSy3P04GM70/6",
+        "c": "PFES-057",
+        "a": "Sano Yuma",
+        "cv": "https://img94.pixhost.to/images/873/458417639_i598571.jpg",
         "lk": ""
     },
     {
-        "c": "lFGnBXInJWM=",
-        "a": "mWuCcAZhZT78Qg==",
-        "cv": "sHCfICwuOHj+TklGua0E92XZ4CR3M4yTRxj+KwpkJU/IP8glUBhqYi25jO50pE2SQyXD14eM70/6",
+        "c": "LULU-324",
+        "a": "Aoi Yurika",
+        "cv": "https://img98.pixhost.to/images/219/494097200_i610937.jpg",
         "lk": ""
     },
     {
-        "c": "lU2qEnInL2I=",
-        "a": "jHeeOjZ9Nx/4TUEU4A==",
-        "cv": "sHCfICwuOHj+TklKr/Md5nXe/CMtaZfTARzyLQhyeVLDN8MlURdmaiO2jep1pE2SQSTD04aM70/6",
+        "c": "MIAB-385",
+        "a": "Tsujii Honoka",
+        "cv": "https://img5.pixhost.to/images/2992/568878341_i631976.jpg",
         "lk": ""
     },
     {
-        "c": "nEW4A3IhImY=",
-        "a": "nnGBOTJ7ZT63cUcX7g==",
-        "cv": "sHCfICwuOHj+TklHt60E92XZ4CR3M4yTRxj+KwpkJU/OOMclURdsZCe5jO1xpE2SQSTK0IOM70/6",
+        "c": "DASS-551",
+        "a": "Fujimori Riho",
+        "cv": "https://img86.pixhost.to/images/466/562637235_i631043.jpg",
         "lk": ""
     },
     {
-        "c": "kVSxCnIkJWQ=",
-        "a": "mW+KIjY0QyTiTlsY6A==",
-        "cv": "sHCfICwuOHj+TklHtK0E92XZ4CR3M4yTRxj+KwpkJU/OPN45UBRsaiW3jecbkhGSQifI157I9Vg=",
+        "c": "IPZZ-023",
+        "a": "Akari Tsumugi",
+        "cv": "https://img85.pixhost.to/images/42/345281939_i560223.jpg",
         "lk": ""
     },
     {
-        "c": "kVSzfWYkJw==",
-        "a": "i2WAJS11Nxr4TkE=",
-        "cv": "sHCfICwuOHj+TklIta0E92XZ4CR3M4yTRxj+KwpkJU/PNt44XRNpYSe8i+sbkhGWSybK1J7I9Vg=",
+        "c": "IPX-900",
+        "a": "Sakura Momo",
+        "cv": "https://img74.pixhost.to/images/58/292733255_i529300.jpg",
         "lk": ""
     },
     {
-        "c": "mVKkAHIkJmM=",
-        "a": "mW+KOX9ZfiPkVkUW",
-        "cv": "sHCfICwuOHj+TklOsa0E92XZ4CR3M4yTRxj+KwpkJU/MPN4+VxNuZCe3jYEtyRCUQi3JytrS4g==",
+        "c": "AVOP-014",
+        "a": "Akai Mitsuki",
+        "cv": "https://img10.pixhost.to/images/62/43206393_i240083.jpg",
         "lk": ""
     },
     {
-        "c": "lU2qEnIlImM=",
-        "a": "kGWfMTF7Nw7iSg==",
-        "cv": "sHCfICwuOHj+TklGtK0E92XZ4CR3M4yTRxj+KwpkJU/LPcYlUBdsYiC5i+hwpE2SQiXI3ImM70/6",
+        "c": "MIAB-154",
+        "a": "Hatano Yui",
+        "cv": "https://img95.pixhost.to/images/137/462047564_i600289.jpg",
         "lk": ""
     },
     {
-        "c": "lU2mG3IlIm4=",
-        "a": "kXCYJTR1fjT/Sg4y5Oo=",
-        "cv": "sHCfICwuOHj+TklGtK0E92XZ4CR3M4yTRxj+KwpkJU/ON8UlUBdrZCe2ielzpE2SQibK04OM70/6",
+        "c": "MIMK-159",
+        "a": "Itsukaichi Mei",
+        "cv": "https://img95.pixhost.to/images/494/465638777_i603073.jpg",
         "lk": ""
     },
     {
-        "c": "kEqvfWYtJg==",
-        "a": "lWWOND40Wjj6TEUQ",
-        "cv": "sHCfICwuOHj+TklKtK0E92XZ4CR3M4yTRxj+KwpkJU/MOt44VBlmayO7juYbkhCcQCPC0J7I9Vg=",
+        "c": "HND-991",
+        "a": "Maeda Momoko",
+        "cv": "https://img55.pixhost.to/images/64/208897508_i482684.jpg",
         "lk": ""
     },
     {
-        "c": "nFKmHXImIm8=",
-        "a": "OLxysOel9+8Ww5f+YTvefqUlb++E/UBXiMk2qtWztthY7kmOhJnH",
-        "cv": "sHCfICwuOHj+TklOr/Md5nXe/CMtaZfTARzyLQhyeVbPOcglUhBsYS24huZzpE2SRiDJ0ICM70/6",
+        "c": "DVMM-258",
+        "a": "นักแสดงหลายคน",
+        "cv": "https://img1.pixhost.to/images/6579/612396887_i645340.jpg",
         "lk": ""
     },
     {
-        "c": "j0WqEXIkIWI=",
-        "a": "lWWOND40Wjj6TEUQ",
-        "cv": "sHCfICwuOHj+TklKtK0E92XZ4CR3M4yTRxj+KwpkJU/MOt44VBlmayy7jOobkhCcQSXN3J7I9Vg=",
+        "c": "WAAA-065",
+        "a": "Maeda Momoko",
+        "cv": "https://img55.pixhost.to/images/64/208898524_i483078.jpg",
         "lk": ""
     },
     {
-        "c": "i0+mGnIiImU=",
-        "a": "jGWIODZ2djn2A2UG7vYf/zGRwj5qdp3cIx77Kx90",
-        "cv": "sHCfICwuOHj+TklOr/Md5nXe/CMtaZfTARzyLQhyeVbDPcklUhBmYya9iu1xpE2SRiLI14SM70/6",
+        "c": "SKMJ-652",
+        "a": "Tachibana Kyouka, Miike Koharu",
+        "cv": "https://img1.pixhost.to/images/6938/618123435_i647234.jpg",
         "lk": ""
     },
     {
-        "c": "i0ygFHIsLmA=",
-        "a": "nnGAMTt1NxL+Tkc=",
-        "cv": "sHCfICwuOHj+TklLsK0E92XZ4CR3M4yTRxj+KwpkJU/PON47UBJtYSC8jOobkhCXQiHJ057I9Vg=",
+        "c": "SHKD-897",
+        "a": "Fukada Eimi",
+        "cv": "https://img41.pixhost.to/images/56/143334224_i430437.jpg",
         "lk": ""
     },
     {
-        "c": "nFKmHXImIGE=",
-        "a": "OLxysOel9+8Ww5f+YTvefqUlb++E/UBXiMk2qtWztthY7kmOhJnH",
-        "cv": "sHCfICwuOHj+TklOr/Md5nXe/CMtaZfTARzyLQhyeVfMNsQlUhNmYCy/jOdypE2SRyXK1ImM70/6",
+        "c": "DVMM-276",
+        "a": "นักแสดงหลายคน",
+        "cv": "https://img1.pixhost.to/images/7685/628281296_i650009.jpg",
         "lk": ""
     },
     {
-        "c": "iFS7FHInI2c=",
-        "a": "knGHOT4=",
-        "cv": "sHCfICwuOHj+TklOsa0E92XZ4CR3M4yTRxj+KwpkJU/OOd4+VhhmZie9iIEtyRGTRyLMytrS4g==",
+        "c": "PPPD-340",
+        "a": "Julia",
+        "cv": "https://img10.pixhost.to/images/47/42984336_i257576.jpg",
         "lk": ""
     },
     {
-        "c": "m0W8FHIiJGc=",
-        "a": "i2yCJD5mdnfOVlsX6A==",
-        "cv": "sHCfICwuOHj+TklGta0E92XZ4CR3M4yTRxj+KwpkJU/LPMglUBRuZyK5jehzpE2RSyDP04aM70/6",
+        "c": "CAWD-630",
+        "a": "Shitara Yuuhi",
+        "cv": "https://img94.pixhost.to/images/129/450567367_i595576.jpg",
         "lk": ""
     },
     {
-        "c": "i0ulFXIjI2c=",
-        "a": "i2WYMTRhZTa3Ylce",
-        "cv": "sHCfICwuOHj+TklOr/Md5nXe/CMtaZfTARzyLQhyeVXLP8QlURlnYiK/jOlxpE2SQS3N3YWM70/6",
+        "c": "SONE-740",
+        "a": "Sasakura Aya",
+        "cv": "https://img1.pixhost.to/images/5115/589061275_i638795.jpg",
         "lk": ""
     },
     {
-        "c": "n1KjfWogLg==",
-        "a": "jGufIyp/fnfFVkcM4A==",
-        "cv": "sHCfICwuOHj+TklHtq0E92XZ4CR3M4yTRxj+KwpkJU/OPMclVxRpZCW+jet0pE2RRCLI1IKM70/6",
+        "c": "GVH-549",
+        "a": "Totsuki Ruisa",
+        "cv": "https://img87.pixhost.to/images/426/357610350_i567202.jpg",
         "lk": ""
     },
     {
-        "c": "i1eiA3IhL2E=",
-        "a": "i2WCOz40XDbgQkUW9eI=",
-        "cv": "sHCfICwuOHj+TklHs60E92XZ4CR3M4yTRxj+KwpkJU/KIcI5VBdmZSO4ioEtzhGWQiPCytrS4g==",
+        "c": "SSIS-586",
+        "a": "Saika Kawakita",
+        "cv": "https://img82.pixhost.to/images/0/330687764_i552068.jpg",
         "lk": ""
     },
     {
-        "c": "lkC5EXIkIm4=",
-        "a": "lW2DMS11Nx/4TUEU4A==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXrqzL90zh2LHHGIhYCXvE/x66q9vw==",
+        "c": "NDRA-059",
+        "a": "Mihara Honoka",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ndra059/ndra059pl.jpg",
         "lk": ""
     },
     {
-        "c": "lVysA3IjJ2I=",
-        "a": "k22FMTJ9Nx/+TU8=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzRjuh8llzDASLK0Z/K2g+r/a21v+NY4Y516RskkrY=",
+        "c": "MXGS-705",
+        "a": "Kinami Hina",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/h_068mxgs705/h_068mxgs705pl.jpg",
         "lk": ""
     },
     {
-        "c": "kU++GRRBOmemEQ==",
-        "a": "l3CEIjY0Wj7uVg==",
-        "cv": "sHCfICwuOHjgVFlR+e0M5mWf7D8saojRCx79PghvIk+Pfp1lBUUtfSa+jOtryxWLV1DKwfKaoAbf4IX9/dJX9IM0qE0gmqm2zjZXZyMUyZEx5/XEmAVHNgOjrX2LV4TEK4H4B8ZTQg77iYTsVnc8/Ai/jhzhoOMlTybsGSrclNVEchoslki0MUHnOUAsaUd+HCRt2FHZcf8=",
+        "c": "IKUIKU-012",
+        "a": "Otori Miyu",
+        "cv": "https://www.xnxxx.ch/wp-content/uploads/2025/01/%E0%B8%9B%E0%B8%81-xnxxx_%E0%B9%90%E0%B9%91_%E0%B9%92%E0%B9%94_%E0%B9%92%E0%B9%90%E0%B9%92%E0%B9%95.webp",
         "lk": ""
     },
     {
-        "c": "l1auE3IgIGQ=",
-        "a": "imGEPj40XD7lSl0X6O4V",
-        "cv": "sHCfICwuOHj6RkoW4K4X+nODoTZ1d5eFRhz2ZQBkMgmbIZB8Dk4nJnnskaopmQuXRSHCy9TH417oqbTjsuAI",
+        "c": "OREC-473",
+        "a": "Reona Kirishima",
+        "cv": "https://media-cdn2.avjoy.me/media/avjoytmb/tmb/3748/default.jpg",
         "lk": "",
         "p": "53% top"
     },
     {
-        "c": "lUKoA3IkJm8=",
-        "a": "nnGBOTY0RTb5UU8RraM592nC+jpqPbmS",
-        "cv": "sHCfICwuOHj0R0BR6+IC83Ta+nlgcpXTHwG+KQJvIgWUet5/FE0xM3D9kex0yRaLQiDVlNL94GCp9vWgvvMc/Is0vRskkrY=",
+        "c": "MFCS-018",
+        "a": "Fujii Ranran, Mitsumi An",
+        "cv": "https://cdn.javmiku.com/wp-content/uploads/2022/05/pb_e_435mfcs-018.jpg",
         "lk": ""
     },
     {
-        "c": "i1elGXIiIWQ=",
-        "a": "6i4E7+I=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWf90LdyzReLAWaUjYaUtk/x66q9vw==",
+        "c": "SSNI-663",
+        "a": "Miru (Sakamichi Miru)",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ssni663/ssni663pl.jpg",
         "lk": ""
     },
     {
-        "c": "lUCkHnIkL2M=",
-        "a": "lWGMJS19",
-        "cv": "sHCfICwuOHj0R0BR6+IC83Ta+nlgcpXTHwG+KQJvIgWUet5/FE0xM3D9kex0yRGLQyXVidTN6w+t9fj5qPxBu8ti",
+        "c": "MDON-084",
+        "a": "Meguri",
+        "cv": "https://cdn.javmiku.com/wp-content/uploads/2025/10/mdon00084pl.jpg",
         "lk": ""
     },
     {
-        "c": "m0W8FHIkI2M=",
-        "a": "kXCEJX9Zdi7iSEc=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfS3t36kgyxCQXSyZhcfGtQuptazjsuAI",
+        "c": "CAWD-044",
+        "a": "Itou Mayuki",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/9cawd044/9cawd044pl.jpg",
         "lk": ""
     },
     {
-        "c": "qmWFcDZ3fz75TF0a",
-        "a": "qmWFcDZ3fz75TF0a",
-        "cv": "sHCfICwuOHjgVFlR4OcB8mnV+TNufIqXDQXjJgxiM06ZYZwlDUw/NXH9kbMhn03RHzrJ0oOUtwizr7Cq",
+        "c": "ran ichinose",
+        "a": "ran ichinose",
+        "cv": "https://www.adultdvdmarketplace.com/images/medium/363627.jpg",
         "lk": ""
     },
     {
-        "c": "6DzbaG4hSGakEw==",
-        "a": "lWuGPzR1NwT2SE8W",
-        "cv": "sHCfICwuOHjgQlwe8usds3zC5jZtMIiTGh/gPgxzJU6cfN5dJXE6EDnn07lri0vWHHqJkNHQ9hL76KestPUduN52qgZ80uH+viAgbzdg39hppbfkh1dkf0L4sU/Bf9uKCJWuX58XbhOupM+nADAXuD+iyi2x5K5+Gxa5Eh+Ew40HPzYx0nnkdRb4bGpuInYzWG8r2EDOPrxsJas568YKUTrsjnk=",
+        "c": "080815_130",
+        "a": "Momoka Sakai",
+        "cv": "https://warashi-asian-pornstars.fr/WAPdB-img/pornostars-f-galeries/32000/32816/large/wapdb-momoka-sakai-pornostar-asiatique.warashi-asian-pornstars.fr-32816-002.jpg",
         "lk": "",
         "p": "left"
     },
     {
-        "c": "7zfffQ1RWBnWDh5O",
-        "a": "imGEPj40XD7lSl0X6O4V",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeYARb6PgxteQGXb4VvEVNxIXf7yrt9zxCLAXaPkNWbsQv3te396KFBu8ti",
+        "c": "734-REONA-01",
+        "a": "Reona Kirishima",
+        "cv": "https://pics.dmm.co.jp/digital/amateur/scute944/scute944jp-001.jpg",
         "lk": "",
         "p": "90% top"
     },
     {
-        "c": "nk6iHnIkIGQ=",
-        "a": "lW2RJTR1YDa3aVsR",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXLk17B0zBeLFH+TioCVtk/x66q9vw==",
+        "c": "FJIN-073",
+        "a": "Mizukawa Jun",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/fjin073/fjin073pl.jpg",
         "lk": ""
     },
     {
-        "c": "nFKqGnIjJm4=",
-        "a": "lWWZJTJ7NwXyQg==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXD437Rzyh2LFmObjoeTvE/x66q9vw==",
+        "c": "DVAJ-719",
+        "a": "Marumo Rea",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/dvaj719/dvaj719pl.jpg",
         "lk": ""
     },
     {
-        "c": "j0WqEXIgJWA=",
-        "a": "kXCYJTR1fjT/Sg4y5Oo=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWPv379wyROLBXSbhYSQsk/x66q9vw==",
+        "c": "WAAA-427",
+        "a": "Itsukaichi Mei",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/waaa427/waaa427pl.jpg",
         "lk": ""
     },
     {
-        "c": "lU2gAnIkJGY=",
-        "a": "lWuZOX9cfjn2SEE=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXnn1ax0yBWLH3yRloCRtE/x66q9vw==",
+        "c": "MIKR-031",
+        "a": "Mori Hinako",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/mikr031/mikr031pl.jpg",
         "lk": ""
     },
     {
-        "c": "ikuyFHImLmI=",
-        "a": "lWuGPzF1cDa3cE8N6O0V",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWbhx7p2whGLAHqDgIKbsE/x66q9vw==",
+        "c": "ROYD-295",
+        "a": "Momonaga Sarina",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/royd295/royd295pl.jpg",
         "lk": ""
     },
     {
-        "c": "i0ulFXItIWQ=",
-        "a": "mX6ePT40Wj78Qg==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWfh0Lt9zReLAXqUgYmUtk/x66q9vw==",
+        "c": "SONE-963",
+        "a": "Azuma Mika",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/sone963/sone963pl.jpg",
         "lk": ""
     },
     {
-        "c": "i0CmFnIkJGA=",
-        "a": "mWuCcBJ9ZTL+",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfSX92rMiyxeTXSSJgN3EtQyqtazjsuAI",
+        "c": "SDMF-037",
+        "a": "Aoi Mirei",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/1sdmf037/1sdmf037pl.jpg",
         "lk": ""
     },
     {
-        "c": "i1eiA3IsL2A=",
-        "a": "kGuFNzBhNxb+",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWf91618wxOLAWaTl4iask/x66q9vw==",
+        "c": "SSIS-887",
+        "a": "Hongou Ai",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ssis887/ssis887pl.jpg",
         "lk": ""
     },
     {
-        "c": "klG6fWYiLg==",
-        "a": "jGWIODZ2djn2A2Me8/o=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfX77z+dywgvOB2TD0onS6RH3tac=",
+        "c": "JUQ-969",
+        "a": "Tachibana Mary",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/juq969/juq969pl.jpg",
         "lk": ""
     },
     {
-        "c": "j0WqEXIgLmA=",
-        "a": "lWuZOX9cfjn2SEE=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWPv379wwhOLBXSbhYSbsk/x66q9vw==",
+        "c": "WAAA-497",
+        "a": "Mori Hinako",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/waaa497/waaa497pl.jpg",
         "lk": ""
     },
     {
-        "c": "i1CqAgs5ImOl",
-        "a": "k2WGOTR9NwXySg==",
-        "cv": "sHCfICwuOHj0R0BR6+IC83Ta+nlgcpXTHwG+KQJvIgWUet5/FE0xM3D9kex0yRKLQiHV1cPW5E3p8PT/qPxBu8ti",
+        "c": "START-542",
+        "a": "Kamiki Rei",
+        "cv": "https://cdn.javmiku.com/wp-content/uploads/2026/04/1start542pl.jpg",
         "lk": ""
     },
     {
-        "c": "lUWqHnItJGc=",
-        "a": "kXCYJTR1fjT/Sg4y5Oo=",
-        "cv": "sHCfICwuOHjgVFlR6+IC+nzF7jVibp3SCx7+ZQ5uIAWIfd5sEU0yfXzRkbYbyhOVQ3ibhd6StQau9bCh9ucKs8s=",
+        "c": "MAAN-930",
+        "a": "Itsukaichi Mei",
+        "cv": "https://www.javdatabase.com/covers/full/h_/h_1711maan00930pl.webp",
         "lk": ""
     },
     {
-        "c": "nEe9fW0tLw==",
-        "a": "nnGAJTd1ZTa3bkcR4A==",
-        "cv": "sHCfICwuOHj0R0BR6+IC83Ta+nlgcpXTHwG+KQJvIgWUet5/FE0xM3D9kex0yRKLQiHVlNL94GCv8vepu+ZC44I9q18+hQ==",
+        "c": "DCV-298",
+        "a": "Fukuhara Mina",
+        "cv": "https://cdn.javmiku.com/wp-content/uploads/2026/04/pb_e_277dcv-298.jpg",
         "lk": "",
         "p": "0% top"
     },
     {
-        "c": "lUGyFHItJWA=",
-        "a": "mWmKPTY0QyTiQU8M4A==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXnrx7p9yROLH3CDgImQsk/x66q9vw==",
+        "c": "MEYD-927",
+        "a": "Amami Tsubasa",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/meyd927/meyd927pl.jpg",
         "lk": ""
     },
     {
-        "c": "kFGlBBw5I2Wj",
-        "a": "OLxysOel9+8Ww5f+YTvefqUlb++E/UBXiMk2qtWztthY7kmOhJnH",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXz70KonzxaQXX2PisTBsQ2ptazjsuAI",
+        "c": "HUNTC-424",
+        "a": "นักแสดงหลายคน",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/huntc424/huntc424pl.jpg",
         "lk": ""
     },
     {
-        "c": "i0CmHXImJWc=",
-        "a": "OLxysOel9+8Ww5f+YTvefqUlb++E/UBXiMk2qtWztthY7kmOhJnH",
-        "cv": "sHCfICwuOHj0R0BR6+IC83Ta+nlgcpXTHwG+KQJvIgWUet5/FE0xM3D9kex0yRKLQiTV1cPG6FKt9fL/6OAD/9F14g==",
+        "c": "SDMM-220",
+        "a": "นักแสดงหลายคน",
+        "cv": "https://cdn.javmiku.com/wp-content/uploads/2026/01/1sdmm00220pl.jpg",
         "lk": ""
     },
     {
-        "c": "kVSxCnIkImY=",
-        "a": "mWmKPTY0QyTiQU8M4A==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfX3+xKR0zhWLG2WAnoCXtE/x66q9vw==",
+        "c": "IPZZ-051",
+        "a": "Amami Tsubasa",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ipzz051/ipzz051pl.jpg",
         "lk": ""
     },
     {
-        "c": "lU2vEXIlIG4=",
-        "a": "kWeDOTF7ZDK3YkEW",
-        "cv": "sHCfICwuOHj0R0BR6+IC83Ta+nlgcpXTHwG+KQJvIgWUet5/FE0xM3D9kex0yRGLQiDVidnG5A6q/LCh9voftg==",
+        "c": "MIDA-179",
+        "a": "Ichinose Aoi",
+        "cv": "https://cdn.javmiku.com/wp-content/uploads/2025/05/mida179pl.jpg",
         "lk": ""
     },
     {
-        "c": "lU+mAHIiJGE=",
-        "a": "lW2FMSxhfD63a0cU4PEB",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXnl065yyBKLH36XlIaRs0/x66q9vw==",
+        "c": "MKMP-636",
+        "a": "Minasuki Hikaru",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/mkmp636/mkmp636pl.jpg",
         "lk": ""
     },
     {
-        "c": "ikuyFHIlI2E=",
-        "a": "kXCYJTR1fjT/Sg4y5Oo=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWbhx7p1zxKLAHqDgIGWs0/x66q9vw==",
+        "c": "ROYD-146",
+        "a": "Itsukaichi Mei",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/royd146/royd146pl.jpg",
         "lk": ""
     },
     {
-        "c": "nEW4A3IjL2A=",
-        "a": "jGWIODZ2djn2A2Me8/o=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXDvza1zwxOLFnSJl4eask/x66q9vw==",
+        "c": "DASS-787",
+        "a": "Tachibana Mary",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/dass787/dass787pl.jpg",
         "lk": ""
     },
     {
-        "c": "j0WqEXIiJG4=",
-        "a": "kXCYJTR1fjT/Sg4y5Oo=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWPv379yyB2LBXSbhYaRvE/x66q9vw==",
+        "c": "WAAA-639",
+        "a": "Itsukaichi Mei",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/waaa639/waaa639pl.jpg",
         "lk": ""
     },
     {
-        "c": "i0ulFXIiImI=",
-        "a": "lmuYMTR1Nx/+WkEN6A==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWfh0LtyzhGLAXqUgYaXsE/x66q9vw==",
+        "c": "SONE-655",
+        "a": "Nosaka Hiyori",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/sone655/sone655pl.jpg",
         "lk": ""
     },
     {
-        "c": "lUmsGHIkIGA=",
-        "a": "OLxysOel9+8Ww5f+YTvefqUlb++E/UBXiMk2qtWztthY7kmOhJnH",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeYARb6PgxteRaTapRlSxAzP3Pmju50zBOLQ3iXg9iStQ+q8qq99aJBu8ti",
+        "c": "MMGH-077",
+        "a": "นักแสดงหลายคน",
+        "cv": "https://pics.dmm.co.jp/digital/video/1mmgh00077/1mmgh00077jp-2.jpg",
         "lk": "",
         "p": "middle"
     },
     {
-        "c": "nkfZAA9COmOvGxdGtrE=",
-        "a": "OL1vsOe19+4fw5bcYTvNfqQ4b++L/UBNiMkS",
-        "cv": "sHCfICwuOHj+TklR8vYE9HzHoTRscNeVBRD0Lx4uZFDION46UA4YESbe7ohpzxycSyzN1p2Tq1Xtog==",
+        "c": "FC2PPV-4889972",
+        "a": "ไม่รู้จัก",
+        "cv": "https://img.supjav.com/images/2026/04/FC2PPV-4889972-1.jpg",
         "lk": "",
         "p": "middle"
     },
     {
-        "c": "kVSzfWYjJg==",
-        "a": "mW+KIjY0QyTiTlsY6A==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfX3+xudzygvNAm3D04HS6RH3tac=",
+        "c": "IPX-971",
+        "a": "Akari Tsumugi",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ipx971/ipx971pl.jpg",
         "lk": ""
     },
     {
-        "c": "kFekFB45Jmak",
-        "a": "l2OeIj40Xz78QlwW",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXz90bolyhWXXX2Ji9TDtA6utazjsuAI",
+        "c": "HSODA-113",
+        "a": "Ogura Hikari",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/hsoda113/hsoda113pl.jpg",
         "lk": ""
     },
     {
-        "c": "kEmlfWgsIw==",
-        "a": "kXCYJTR1fjT/Sg4y5Oo=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzj0Ol8zwvMH3vN3ITS6RH3tac=",
+        "c": "HMN-784",
+        "a": "Itsukaichi Mei",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/hmn784/hmn784pl.jpg",
         "lk": ""
     },
     {
-        "c": "lUm7BnIkJ2U=",
-        "a": "lW2FMSxxNxb8QlwW",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXnjzqh0yxaLH3iKkoCSt0/x66q9vw==",
+        "c": "MMPV-002",
+        "a": "Minase Akari",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/mmpv002/mmpv002pl.jpg",
         "lk": ""
     },
     {
-        "c": "kEmlfWkhJA==",
-        "a": "lmWFMSxxNxblSl0K",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzj0OhxyAvMH3vM0YPS6RH3tac=",
+        "c": "HMN-653",
+        "a": "Nanase Arisu",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/hmn653/hmn653pl.jpg",
         "lk": ""
     },
     {
-        "c": "nEW4A3InIGM=",
-        "a": "lW2fMTF9Nxb8QkAa",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXDvza13zBCLFnSJl4OVsU/x66q9vw==",
+        "c": "DASS-374",
+        "a": "Mitani Akane",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/dass374/dass374pl.jpg",
         "lk": ""
     },
     {
-        "c": "lVG5FHInJG4=",
-        "a": "kGWFMX9cfjryUE8U6A==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeYARb6PgxteRaTapRlS0wrNma+ju13wgvJB3GI1ICRtgbtqe6nqPc=",
+        "c": "MURD-339",
+        "a": "Hana Himesaki",
+        "cv": "https://pics.dmm.co.jp/digital/video/mudr00339/mudr00339pl.jpg",
         "lk": ""
     },
     {
-        "c": "nFKqGnIiI28=",
-        "a": "l3GAMX9Gfjk=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXD437RyzxyLFmObjoaWvU/x66q9vw==",
+        "c": "DVAJ-648",
+        "a": "Ouka Rin",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/dvaj648/dvaj648pl.jpg",
         "lk": ""
     },
     {
-        "c": "kVSxCnIgI2c=",
-        "a": "nnGBOSx1fCK3bk8W",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfX3+xKRwzxSLG2WAnoSWtU/x66q9vw==",
+        "c": "IPZZ-440",
+        "a": "Fujisaku Mai",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ipzz440/ipzz440pl.jpg",
         "lk": ""
     },
     {
-        "c": "i0ulFXIhJW4=",
-        "a": "lXGZMTR1ej63elsK6uI=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWfh0LtxyR2LAXqUgYWQvE/x66q9vw==",
+        "c": "SONE-529",
+        "a": "Murakami Yuuka",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/sone529/sone529pl.jpg",
         "lk": ""
     },
     {
-        "c": "lkWoBHIlJmA=",
-        "a": "i2WYMTRhZTa3Ylce",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzRjO1zlUXHBiTL05/K2g2u8q6su+Re4Ix16RskkrY=",
+        "c": "NACT-117",
+        "a": "Sasakura Aya",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/h_237nact117/h_237nact117pl.jpg",
         "lk": ""
     },
     {
-        "c": "lVysA3IlI2ev",
-        "a": "lWWfIyp5diXiA2Ue8vYZ9w==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzRjuh8llzDASTO1IiN7WCt8/igoPcc4I81vUUizLu+9g==",
+        "c": "MXGS-1408",
+        "a": "Matsumaru Kasumi",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/h_068mxgs1408/h_068mxgs1408pl.jpg",
         "lk": ""
     },
     {
-        "c": "lU2nG3ImIGA=",
-        "a": "lW2FMSxxNxb8QlwW",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzRj+xwy0nNHn7I04eN7WCs9/T9tfkDuokyskUizLu+9g==",
+        "c": "MILK-277",
+        "a": "Minase Akari",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/h_1240milk277/h_1240milk277pl.jpg",
         "lk": ""
     },
     {
-        "c": "lVK4FHIgL2A=",
-        "a": "gXGAOX9Gfjn4",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXn4zbpwwxOLH2OJgISask/x66q9vw==",
+        "c": "MVSD-487",
+        "a": "Yuki Rino",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/mvsd487/mvsd487pl.jpg",
         "lk": ""
     },
     {
-        "c": "kEumEXIkIGA=",
-        "a": "k22ZOSx8fjr2A3wa7u0V",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzh0790zBOLGnqXhYCVsk/x66q9vw==",
+        "c": "HOMA-077",
+        "a": "Kirishima Reona",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/homa077/homa077pl.jpg",
         "lk": ""
     },
     {
-        "c": "i0ulFXIjIWQ=",
-        "a": "k2WcMTR9Yza3cE8W6uI=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfS390bAhzBKXXSyJi97HsgmutazjsuAI",
+        "c": "SONE-763",
+        "a": "Kawakita Saika",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/9sone763/9sone763pl.jpg",
         "lk": ""
     },
     {
-        "c": "lkm4HHIkJWI=",
-        "a": "l3GAMX9Gfjk=",
-        "cv": "sHCfICwuOHj9QlgY5q0a+2me+CcufpeSHBT9PkJ0JgyVb5V5SxNuYCGhj+9rlUnXHjjK1oWM70/6",
+        "c": "NMSL-025",
+        "a": "Ouka Rin",
+        "cv": "https://javgg.net/wp-content/uploads/2025/11/nmsl-025.jpg",
         "lk": ""
     },
     {
-        "c": "mUClfWgnJA==",
-        "a": "nnGBOTJ7ZT63cUcX7g==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXXq0Ol3yAvFFnvN14PS6RH3tac=",
+        "c": "ADN-733",
+        "a": "Fujimori Riho",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/adn733/adn733pl.jpg",
         "lk": ""
     },
     {
-        "c": "mVCiFHIgL2Y=",
-        "a": "lm2CPSpmdnfWSE8N6A==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXX617pwwxWLE2GTgISatE/x66q9vw==",
+        "c": "ATID-481",
+        "a": "Niimura Akari",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/atid481/atid481pl.jpg",
         "lk": ""
     },
     {
-        "c": "lU2gAnIkIW4=",
-        "a": "lWuZOX9cfjn2SEE=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXnn1ax0zR2LH3yRloCUvE/x66q9vw==",
+        "c": "MIKR-069",
+        "a": "Mori Hinako",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/mikr069/mikr069pl.jpg",
         "lk": ""
     },
     {
-        "c": "kEmlfWknLg==",
-        "a": "lmWFMSxxNxblSl0K",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzj0Oh3wgvMH3vM14nS6RH3tac=",
+        "c": "HMN-639",
+        "a": "Nanase Arisu",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/hmn639/hmn639pl.jpg",
         "lk": ""
     },
     {
-        "c": "mUClfWggIQ==",
-        "a": "i2yCIjB5fjnyA2MW9A==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXXq0OlwzQvFFnvN0IbS6RH3tac=",
+        "c": "ADN-746",
+        "a": "Shiromine Miu",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/adn746/adn746pl.jpg",
         "lk": ""
     },
     {
-        "c": "i0WmFXImJmA=",
-        "a": "mWuCcAZhZT78QgIy6O0V7Wja5ndLdJOdGgQ=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWfv07t2yhOLAXSXgYKTsk/x66q9vw==",
+        "c": "SAME-217",
+        "a": "Aoi Yurika,Minasuki Hikaru",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/same217/same217pl.jpg",
         "lk": ""
     },
     {
-        "c": "klG5fWghJA==",
-        "a": "i2WfIyp/fnfZQkE=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfX77zOlxyAvOB2fN0YPS6RH3tac=",
+        "c": "JUR-753",
+        "a": "Satsuki Nao",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/jur753/jur753pl.jpg",
         "lk": ""
     },
     {
-        "c": "iE6qHXIkJWE=",
-        "a": "l2+KcA19eQ==",
-        "cv": "sHCfICwuOHj0R0BR6+IC83Ta+nlgcpXTHwG+KQJvIgWUet5/FE0xM3D9kex0yRGLQyTVjO+TvQ6pq62+tKBf4Ykw9VlgiKGp",
+        "c": "PJAM-026",
+        "a": "Oka Rin",
+        "cv": "https://cdn.javmiku.com/wp-content/uploads/2025/11/h_1814nmsl00025pl.jpg",
         "lk": ""
     },
     {
-        "c": "i1eiA3IhJGI=",
-        "a": "gWWGMStxNwX+Qg==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWf9161xyBGLAWaTl4WRsE/x66q9vw==",
+        "c": "SSIS-535",
+        "a": "Yamate Ria",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ssis535/ssis535pl.jpg",
         "lk": ""
     },
     {
-        "c": "i0ulFXIkImQ=",
-        "a": "lmWFMStnYjr4UUdf0+oG9w==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWfh0Lt0zheLAXqUgYCXtk/x66q9vw==",
+        "c": "SONE-053",
+        "a": "Nanatsumori Riri",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/sone053/sone053pl.jpg",
         "lk": ""
     },
     {
-        "c": "kEmlfWgnJA==",
-        "a": "k2WYJTY0XSL5",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzj0Ol3yAvMH3vN14PS6RH3tac=",
+        "c": "HMN-733",
+        "a": "Kasui Jun",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/hmn733/hmn733pl.jpg",
         "lk": ""
     },
     {
-        "c": "nEW4FHIjJmc=",
-        "a": "nnGAMTt1NxL+Tkc=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXDvzbpzyhSLFnSJgIeTtU/x66q9vw==",
+        "c": "DASD-710",
+        "a": "Fukada Eimi",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/dasd710/dasd710pl.jpg",
         "lk": ""
     },
     {
-        "c": "nEW4A3IlJmE=",
-        "a": "lW2fMTF9Nxb8QkAa",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXDvza11yhKLFnSJl4GTs0/x66q9vw==",
+        "c": "DASS-116",
+        "a": "Mitani Akane",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/dass116/dass116pl.jpg",
         "lk": ""
     },
     {
-        "c": "i1CqAgs5JWSg",
-        "a": "k2WGOTR9NwXySg==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfSX9yr82jxaXRTrLl8TD90uv9ve9tL4Fodw=",
+        "c": "START-237",
+        "a": "Kamiki Rei",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/1start237/1start237pl.jpg",
         "lk": ""
     },
     {
-        "c": "i13GYWYk",
-        "a": "lWGHPzttNx/+SkAeoc4V7HbC",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXzRj+93iF2VSyXVjO+TtAzuvPH06OAD/9F14g==",
+        "c": "SY-190",
+        "a": "Melody Hiina Marks",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/h_113sy190/h_113sy190pl.jpg",
         "lk": ""
     },
     {
-        "c": "iEKuA3IlJ2A=",
-        "a": "nnGeMX9fdjLzRgIy6PcH63XQrxZwdZGICRPy",
-        "cv": "sHCfICwuOHj9QlgY5q0a+2me+CcufpeSHBT9PkJ0JgyVb5V5SxNuYCGhjuhri0LBATjL1IeM70/6",
+        "c": "PFES-107",
+        "a": "Fuua Kaede,Mitsuha Ashitaba",
+        "cv": "https://javgg.net/wp-content/uploads/2025/06/pfes-107.jpg",
         "lk": ""
     },
     {
-        "c": "klG5fW4jIQ==",
-        "a": "nnGBOTJ7ZT63cUcX7g==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfX77zO9zzQvOB2fL04bS6RH3tac=",
+        "c": "JUR-176",
+        "a": "Fujimori Riho",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/jur176/jur176pl.jpg",
         "lk": ""
     },
     {
-        "c": "nFKqGnIhJGQ=",
-        "a": "nnGBOTJ7ZT63cUcX7g==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXD437RxyBfXHTqektHIsAyutq+9tL4Fodw=",
+        "c": "DVAJ-533",
+        "a": "Fujimori Riho",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/dvaj533so/dvaj533sopl.jpg",
         "lk": ""
     },
     {
-        "c": "nV2qHnImJ2M=",
-        "a": "lW2SMTJ7Yzi3cVsW",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXH337B2yxCLF2ybioKSsU/x66q9vw==",
+        "c": "EYAN-204",
+        "a": "Miyamoto Rui",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/eyan204/eyan204pl.jpg",
         "lk": ""
     },
     {
-        "c": "nkfZfQ9EQWOuEx1MtLM=",
-        "a": "mX2K",
-        "cv": "sHCfICwuOHjxRUQe960X8XCe6zh0c5STCRW8eF0zYE/IPsM8VBRxFFe8k44UrQmQSyXJ14WSq1Xtog==",
+        "c": "FC2-PPV4903350",
+        "a": "Aya",
+        "cv": "https://ffjav.com/download/2026/202605/FC2-PPV-4903350.jpg",
         "lk": ""
     },
     {
-        "c": "kEW8EXInJGM=",
-        "a": "lWuZOX9cfjn2SEE=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfSXm36klyBeQXSSShcfDtgyptazjsuAI",
+        "c": "HAWA-334",
+        "a": "Mori Hinako",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/1hawa334/1hawa334pl.jpg",
         "lk": ""
     },
     {
-        "c": "j0WqEXIiImQ=",
-        "a": "kXCYJTR1fjT/Sg4y5Oo=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWPv379yzheLBXSbhYaXtk/x66q9vw==",
+        "c": "WAAA-653",
+        "a": "Itsukaichi Mei",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/waaa653/waaa653pl.jpg",
         "lk": ""
     },
     {
-        "c": "ikuyFHInJWA=",
-        "a": "l3CEIjY0Wj7uVg==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWbhx7p3yROLAHqDgIOQsk/x66q9vw==",
+        "c": "ROYD-327",
+        "a": "Otori Miyu",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/royd327/royd327pl.jpg",
         "lk": ""
     },
     {
-        "c": "lU2vEXIhLmc=",
-        "a": "lWuGPyt1Nxr+V10K6upYzXXY4TgjUJmFHQ==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXnn2r9xwhSLH3yehYWbtU/x66q9vw==",
+        "c": "MIDA-590",
+        "a": "Momota Mitsuki,Shino Mayu",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/mida590/mida590pl.jpg",
         "lk": ""
     },
     {
-        "c": "kVSzfWgmIA==",
-        "a": "mWmKPTY0QyTiQU8M4A==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfX3+xul2zAvNAm3N1ofS6RH3tac=",
+        "c": "IPX-727",
+        "a": "Amami Tsubasa",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ipx727/ipx727pl.jpg",
         "lk": ""
     },
     {
-        "c": "nFKqGnIjJmY=",
-        "a": "k2uAPzF7fnfEVkAe7g==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXD437RzyhWLFmObjoeTtE/x66q9vw==",
+        "c": "DVAJ-711",
+        "a": "Kokonoi Sunao",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/dvaj711/dvaj711pl.jpg",
         "lk": ""
     },
     {
-        "c": "i1eiA3IsJ2M=",
-        "a": "gWWGMStxNwX+Qg==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWf91618yxCLAWaTl4iSsU/x66q9vw==",
+        "c": "SSIS-804",
+        "a": "Yamate Ria",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ssis804/ssis804pl.jpg",
         "lk": ""
     },
     {
-        "c": "kVSzfWgjJw==",
-        "a": "k2WFMTJ9Nxr2Sg==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfX3+xulzywvNAm3N04DS6RH3tac=",
+        "c": "IPX-770",
+        "a": "Kanami Mai",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ipx770/ipx770pl.jpg",
         "lk": ""
     },
     {
-        "c": "ikuyFHIlIGM=",
-        "a": "kXCYJTR1fjT/Sg4y5Oo=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWbhx7p1zBCLAHqDgIGVsU/x66q9vw==",
+        "c": "ROYD-174",
+        "a": "Itsukaichi Mei",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/royd174/royd174pl.jpg",
         "lk": ""
     },
     {
-        "c": "i1eiA3ItImY=",
-        "a": "k2WcMTR9Yza3cE8W6uI=",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWf91619zhWLAWaTl4mXtE/x66q9vw==",
+        "c": "SSIS-951",
+        "a": "Kawakita Saika",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/ssis951/ssis951pl.jpg",
         "lk": ""
     },
     {
-        "c": "i0qkA3ImJ2A=",
-        "a": "j2WfMTF1dTK3a0ER7g==",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfWfg0a12yxOLAXuVl4KSsk/x66q9vw==",
+        "c": "SNOS-207",
+        "a": "Watanabe Hono",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/snos207/snos207pl.jpg",
         "lk": ""
     },
     {
-        "c": "nEW4A3IkJW4=",
+        "c": "DASS-029",
         "a": "",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXDvza10yR2LFnSJl4CQvE/x66q9vw==",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/dass029/dass029pl.jpg",
         "lk": ""
     },
     {
-        "c": "m06kFHIgJG4=",
+        "c": "CJOD-439",
         "a": "",
-        "cv": "sHCfICwuOHjnSk0Mr+cZ8zPS4HlpbdeRBx/8ZQBuIAmfIZBuEU0qfXfk0bpwyB2LEX+VgISRvE/x66q9vw==",
+        "cv": "https://pics.dmm.co.jp/mono/movie/adult/cjod439/cjod439pl.jpg",
         "lk": ""
     }
 ];
@@ -743,4 +743,11 @@ function shuffleArray(arr) {
 
 const _t3 = sourceData.filter(d => d.r && d.r <= 3).sort((a, b) => a.r - b.r);
 const _rest = shuffleArray(sourceData.filter(d => !d.r || d.r > 3));
-const data = [..._t3, ..._rest];
+var data = [..._t3, ..._rest];
+
+if (typeof window !== 'undefined') {
+    window.databaseIsObfuscated = databaseIsObfuscated;
+    window.verificationToken = verificationToken;
+    window.sourceData = sourceData;
+    window.data = data;
+}
