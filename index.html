@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Viewer">
@@ -2381,7 +2381,77 @@
     <!-- Video Player System Removed -->
 
     <script>
-        const VERIFICATION_TOKEN = "t28="; // Updated automatically by obfuscate.js
+        const VERIFICATION_HASH = "o93o5f6v2RziKiuF7NhW/YRhRTucC8gYy6RIVTZSqWU="; // Updated automatically by obfuscate.js
+
+        function arrayBufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            const len = bytes.byteLength;
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        async function verifyPasscode(pin) {
+            try {
+                if (!VERIFICATION_HASH) return true;
+                const encoder = new TextEncoder();
+                const pinBuffer = encoder.encode(pin);
+                const keyBuffer = await crypto.subtle.digest('SHA-256', pinBuffer);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', keyBuffer);
+                const hashBase64 = arrayBufferToBase64(hashBuffer);
+                return hashBase64 === VERIFICATION_HASH;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        async function decryptDatabase(pin) {
+            if (typeof dbCiphertext === 'undefined') {
+                throw new Error('Database is missing ciphertext');
+            }
+            const encoder = new TextEncoder();
+            const pinBuffer = encoder.encode(pin);
+            const keyBuffer = await crypto.subtle.digest('SHA-256', pinBuffer);
+            
+            const aesKey = await crypto.subtle.importKey(
+                'raw',
+                keyBuffer,
+                { name: 'AES-GCM' },
+                false,
+                ['decrypt']
+            );
+            
+            const ciphertextBuffer = base64ToArrayBuffer(dbCiphertext);
+            const authTagBuffer = base64ToArrayBuffer(dbAuthTag);
+            const combinedBuffer = new Uint8Array(ciphertextBuffer.byteLength + authTagBuffer.byteLength);
+            combinedBuffer.set(new Uint8Array(ciphertextBuffer), 0);
+            combinedBuffer.set(new Uint8Array(authTagBuffer), ciphertextBuffer.byteLength);
+            
+            const decrypted = await crypto.subtle.decrypt(
+                {
+                    name: 'AES-GCM',
+                    iv: base64ToArrayBuffer(dbIv),
+                    tagLength: 128
+                },
+                aesKey,
+                combinedBuffer
+            );
+            
+            const decodedText = new TextDecoder().decode(decrypted);
+            return JSON.parse(decodedText);
+        }
 
         function escapeHTML(str) {
             if (!str) return '';
@@ -2393,27 +2463,17 @@
                 .replace(/'/g, '&#039;');
         }
 
-        function rc4Decrypt(key, base64Str) {
-            if (!base64Str) return '';
-            try {
-                const str = atob(base64Str);
-                let s = [], j = 0, x, res = '';
-                for (let i = 0; i < 256; i++) s[i] = i;
-                for (let i = 0; i < 256; i++) {
-                    j = (j + s[i] + key.charCodeAt(i % key.length)) % 256;
-                    x = s[i]; s[i] = s[j]; s[j] = x;
+        function processData(sourceData) {
+            function shuffleArray(arr) {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
                 }
-                let i = 0; j = 0;
-                for (let y = 0; y < str.length; y++) {
-                    i = (i + 1) % 256;
-                    j = (j + s[i]) % 256;
-                    x = s[i]; s[i] = s[j]; s[j] = x;
-                    res += String.fromCharCode(str.charCodeAt(y) ^ s[(s[i] + s[j]) % 256]);
-                }
-                return decodeURIComponent(escape(res));
-            } catch (e) {
-                return '';
+                return arr;
             }
+            const _t3 = sourceData.filter(d => d.r && d.r <= 3).sort((a, b) => a.r - b.r);
+            const _rest = shuffleArray(sourceData.filter(d => !d.r || d.r > 3));
+            return [..._t3, ..._rest];
         }
 
         let databaseLoaded = false;
@@ -2425,29 +2485,23 @@
             const script = document.createElement('script');
             script.src = 'data.js';
             script.id = 'db-script';
-            script.onload = () => {
-                const activeVerificationToken = window.verificationToken || VERIFICATION_TOKEN;
-                const dec = rc4Decrypt(pin, activeVerificationToken);
-                if (dec === 'ok') {
-                    databaseLoaded = true;
-                    const isDbObfuscated = typeof databaseIsObfuscated !== 'undefined' && databaseIsObfuscated;
-                    if (isDbObfuscated && typeof data !== 'undefined' && Array.isArray(data)) {
-                        data.forEach(item => {
-                            if (item.c) item.c = rc4Decrypt(pin, item.c);
-                            if (item.a) item.a = rc4Decrypt(pin, item.a);
-                            if (item.cv) item.cv = rc4Decrypt(pin, item.cv);
-                            if (item.lk) item.lk = rc4Decrypt(pin, item.lk);
-                        });
+            script.onload = async () => {
+                try {
+                    const isDbEncrypted = typeof databaseIsEncrypted !== 'undefined' && databaseIsEncrypted;
+                    if (isDbEncrypted) {
+                        const decryptedData = await decryptDatabase(pin);
+                        window.data = processData(decryptedData);
+                        databaseLoaded = true;
+                        if (callback) callback(true);
+                    } else {
+                        window.data = typeof data !== 'undefined' ? data : [];
+                        databaseLoaded = true;
+                        if (callback) callback(true);
                     }
-                    if (callback) callback(true);
-                } else {
+                } catch (e) {
+                    console.error('Decryption failed:', e);
                     script.remove();
-                    if (typeof data !== 'undefined') {
-                        delete window.data;
-                        delete window.sourceData;
-                        delete window.databaseIsObfuscated;
-                        delete window.verificationToken;
-                    }
+                    if (typeof data !== 'undefined') delete window.data;
                     if (callback) callback(false);
                 }
             };
@@ -2459,22 +2513,24 @@
         }
 
         let lockEnabled = localStorage.getItem('lock_enabled') !== 'false';
-        // Never persist an unlocked session or its passcode. A refresh always locks the app.
         let isUnlocked = false;
         let _buf = '', _swRegistered = false;
 
         // URL unlock: yoursite.com/#open
-        (function() {
+        (async function() {
             const h = window.location.hash.slice(1);
             const potentialPin = h;
-            if (potentialPin && rc4Decrypt(potentialPin, VERIFICATION_TOKEN) === 'ok') {
-                loadDatabase(potentialPin, (success) => {
-                    if (success) {
-                        isUnlocked = true;
-                        history.replaceState(null, '', window.location.pathname);
-                        checkStealthMode();
-                    }
-                });
+            if (potentialPin) {
+                const verified = await verifyPasscode(potentialPin);
+                if (verified) {
+                    loadDatabase(potentialPin, (success) => {
+                        if (success) {
+                            isUnlocked = true;
+                            history.replaceState(null, '', window.location.pathname);
+                            checkStealthMode();
+                        }
+                    });
+                }
             }
         })();
 
@@ -2505,7 +2561,7 @@
             updateTabTitle();
         }
 
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener('keydown', async (e) => {
             if (isUnlocked) return;
             if (!document.getElementById('pinModal').classList.contains('hidden')) return;
             if (e.key.length === 1) {
@@ -2513,7 +2569,8 @@
                 if (_buf.length > 20) _buf = _buf.slice(-20);
                 for (let len = 1; len <= _buf.length; len++) {
                     const potentialPin = _buf.slice(-len);
-                    if (rc4Decrypt(potentialPin, VERIFICATION_TOKEN) === 'ok') {
+                    const verified = await verifyPasscode(potentialPin);
+                    if (verified) {
                         _buf = '';
                         loadDatabase(potentialPin, (success) => {
                             if (success) {
