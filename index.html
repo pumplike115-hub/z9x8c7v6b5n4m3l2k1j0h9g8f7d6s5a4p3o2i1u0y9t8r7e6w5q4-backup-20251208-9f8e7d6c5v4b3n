@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -2459,20 +2459,18 @@
         }
 
         let lockEnabled = localStorage.getItem('lock_enabled') !== 'false';
-        let isUnlocked = !lockEnabled || sessionStorage.getItem('_sid') === '1';
+        // Never persist an unlocked session or its passcode. A refresh always locks the app.
+        let isUnlocked = false;
         let _buf = '', _swRegistered = false;
 
-        // URL unlock: yoursite.com/#open  or  ?v=open  (works on mobile)
+        // URL unlock: yoursite.com/#open
         (function() {
             const h = window.location.hash.slice(1);
-            const q = new URLSearchParams(window.location.search).get('v');
-            const potentialPin = h || q;
+            const potentialPin = h;
             if (potentialPin && rc4Decrypt(potentialPin, VERIFICATION_TOKEN) === 'ok') {
                 loadDatabase(potentialPin, (success) => {
                     if (success) {
                         isUnlocked = true;
-                        sessionStorage.setItem('_sid', '1');
-                        sessionStorage.setItem('_pin', potentialPin);
                         history.replaceState(null, '', window.location.pathname);
                         checkStealthMode();
                     }
@@ -2520,8 +2518,6 @@
                         loadDatabase(potentialPin, (success) => {
                             if (success) {
                                 isUnlocked = true;
-                                sessionStorage.setItem('_sid', '1');
-                                sessionStorage.setItem('_pin', potentialPin);
                                 checkStealthMode();
                             }
                         });
@@ -2543,8 +2539,7 @@
             
             if (isCtrlShiftX || isDoubleEsc) {
                 e.preventDefault();
-                isUnlocked = false;
-                sessionStorage.removeItem('_sid');
+                lockApp();
                 checkStealthMode();
                 showToast('Locked!');
             }
@@ -2554,7 +2549,15 @@
         function resetInactivityTimer() {
             if (!isUnlocked || !lockEnabled) return;
             clearTimeout(_iTimer);
-            _iTimer = setTimeout(() => { isUnlocked = false; sessionStorage.removeItem('_sid'); checkStealthMode(); }, 30 * 60 * 1000);
+            _iTimer = setTimeout(() => { lockApp(); checkStealthMode(); }, 30 * 60 * 1000);
+        }
+
+        function lockApp() {
+            isUnlocked = false;
+            _buf = '';
+            clearTimeout(_iTimer);
+            sessionStorage.removeItem('_sid');
+            sessionStorage.removeItem('_pin');
         }
 
         ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(ev => {
@@ -2577,8 +2580,6 @@
             loadDatabase(v, (success) => {
                 if (success) {
                     isUnlocked = true;
-                    sessionStorage.setItem('_sid', '1');
-                    sessionStorage.setItem('_pin', v);
                     _hidePin();
                     checkStealthMode();
                 } else {
@@ -3498,17 +3499,8 @@
         });
 
         // Start
-        const savedPin = sessionStorage.getItem('_pin');
         if (isUnlocked) {
-            const pinToUse = savedPin || 'open';
-            loadDatabase(pinToUse, (success) => {
-                if (success) {
-                    checkStealthMode();
-                } else {
-                    isUnlocked = false;
-                    checkStealthMode();
-                }
-            });
+            checkStealthMode();
         } else {
             checkStealthMode();
         }
